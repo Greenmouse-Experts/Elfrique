@@ -477,6 +477,20 @@
                         <a><i class="bi bi-circle"></i><span>e-Visa</span></a>
                     </router-link>
                 </li>
+                <li>
+                    <router-link to="/superadmin/ielts" class="routers"
+                        ><a
+                        ><i class="bi bi-circle"></i><span>IELTS</span></a
+                        ></router-link
+                    >
+                </li>
+                <li>
+                    <router-link to="/superadmin/tour-sales" class="routers"
+                        ><a
+                        ><i class="bi bi-circle"></i><span>Sales Analytics</span></a
+                        ></router-link
+                    >
+                </li>
             </ul>
         </li>
         <!--evisa-->
