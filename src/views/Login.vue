@@ -115,11 +115,11 @@ export default {
                 this.$router.push('/organiser/dashboard');
               }
               if (data.user.role == "admin") {
-                this.$router.push('/superadmin/dashboard');
+                this.$router.push('/organiser/dashboard');
               }
               //this.$router.push('/user/dashboard');
             },
-            error => {gi
+            error => {
               this.loading = false;
               this.message =
                 (error.response && error.response.data && error.response.data.message) ||

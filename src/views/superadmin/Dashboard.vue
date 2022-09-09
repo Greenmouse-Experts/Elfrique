@@ -1,9 +1,9 @@
 <template>
-    <title>Dashboard | Elfrique - Super Admin</title>
-    <dash-header/>
-    
-    <!--------Main Content--------->
-    <main id="main" class="main">
+  <title>Dashboard | Elfrique - Super Admin</title>
+  <dash-header />
+
+  <!--------Main Content--------->
+  <main id="main" class="main">
     <!--Page Title-->
     <div class="pagetitle">
       <h1>SuperAdmin Dashboard</h1>
@@ -262,25 +262,12 @@
                     ></button>
                   </div>
                   <div class="card-body card-table">
-                    <div class="buttons-table">
-                      <!-- <button type="button">Copy</button> -->
-                      <button type="button" @click="exportCSV(voteContest)">
-                        CSV
-                      </button>
-                      <!-- <button type="button">Excel</button> -->
-                      <button @click="tableToExcel('vote', 'Vote')">
-                        Excel
-                      </button>
-                      <!-- <button type="button">PDF</button>
-                      <button type="button">Print</button> -->
-                    </div>
-                    <div class="search-table">
-                      <form>
-                        <input type="text" placeholder="Search..." />
-                      </form>
-                    </div>
                     <!--Table-->
-                    <table ref="vote" class="table datatable card-table-table">
+                    <table
+                      ref="vote"
+                      class="table datatable card-table-table"
+                      id="voteTable"
+                    >
                       <thead>
                         <tr>
                           <th scope="col">#</th>
@@ -308,19 +295,6 @@
                         </tr>
                       </tbody>
                     </table>
-                    <!-- <nav>
-                                            <ul class="pagination pagination-md">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link"><span aria-hidden="true">&laquo;</span></a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link"><span aria-hidden="true">&raquo;</span></a>
-                                                </li>
-                                            </ul>
-                                        </nav> -->
                   </div>
                 </div>
               </div>
@@ -348,21 +322,12 @@
                     ></button>
                   </div>
                   <div class="card-body card-table">
-                    <div class="buttons-table">
-                      <button type="button">CSV</button>
-                      <button @click="tableToExcel('event', 'Event')">
-                        Excel
-                      </button>
-                      <!-- <button type="button">PDF</button>
-                      <button type="button">Print</button> -->
-                    </div>
-                    <div class="search-table">
-                      <form>
-                        <input type="text" placeholder="Search..." />
-                      </form>
-                    </div>
                     <!--Table-->
-                    <table ref="event" class="table datatable card-table-table">
+                    <table
+                      ref="event"
+                      class="table datatable card-table-table"
+                      id="eventTable"
+                    >
                       <thead>
                         <tr>
                           <th scope="col">#</th>
@@ -388,19 +353,6 @@
                         </tr>
                       </tbody>
                     </table>
-                    <!-- <nav>
-                                            <ul class="pagination pagination-md">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link"><span aria-hidden="true">&laquo;</span></a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link"><span aria-hidden="true">&raquo;</span></a>
-                                                </li>
-                                            </ul>
-                                        </nav> -->
                   </div>
                 </div>
               </div>
@@ -428,22 +380,12 @@
                     ></button>
                   </div>
                   <div class="card-body card-table">
-                    <div class="buttons-table">
-                      <!-- <button type="button">Copy</button> -->
-                      <button type="button">CSV</button>
-                      <button @click="tableToExcel('form', 'Form')">
-                        Excel
-                      </button>
-                      <!-- <button type="button">PDF</button>
-                      <button type="button">Print</button> -->
-                    </div>
-                    <div class="search-table">
-                      <form>
-                        <input type="text" placeholder="Search..." />
-                      </form>
-                    </div>
                     <!--Table-->
-                    <table ref="form" class="table datatable card-table-table">
+                    <table
+                      ref="form"
+                      class="table datatable card-table-table"
+                      id="formTable"
+                    >
                       <thead>
                         <tr>
                           <th scope="col">#</th>
@@ -469,19 +411,6 @@
                         </tr>
                       </tbody>
                     </table>
-                    <!-- <nav>
-                                            <ul class="pagination pagination-md">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link"><span aria-hidden="true">&laquo;</span></a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link"><span aria-hidden="true">&raquo;</span></a>
-                                                </li>
-                                            </ul>
-                                        </nav> -->
                   </div>
                 </div>
               </div>
@@ -509,24 +438,10 @@
                     ></button>
                   </div>
                   <div class="card-body card-table">
-                    <div class="buttons-table">
-                      <!-- <button type="button">Copy</button> -->
-                      <button type="button">CSV</button>
-                      <button @click="tableToExcel('trivia', 'Trivia')">
-                        Excel
-                      </button>
-                      <!-- <button type="button">PDF</button>
-                      <button type="button">Print</button> -->
-                    </div>
-                    <div class="search-table">
-                      <form>
-                        <input type="text" placeholder="Search..." />
-                      </form>
-                    </div>
-                    <!--Table-->
                     <table
                       ref="trivia"
                       class="table datatable card-table-table"
+                      id="triviaTable"
                     >
                       <thead>
                         <tr>
@@ -553,19 +468,6 @@
                         </tr>
                       </tbody>
                     </table>
-                    <!-- <nav>
-                                            <ul class="pagination pagination-md">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link"><span aria-hidden="true">&laquo;</span></a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link"><span aria-hidden="true">&raquo;</span></a>
-                                                </li>
-                                            </ul>
-                                        </nav> -->
                   </div>
                 </div>
               </div>
@@ -596,21 +498,6 @@
                     />
                   </div>
                   <div class="card-body card-table">
-                    <div class="buttons-table">
-                      <!-- <button type="button">Copy</button> -->
-                      <button type="button">CSV</button>
-                      <!-- <button type="button">Excel</button> -->
-                      <button @click="tableToExcel('referral', 'Refer')">
-                        Excel
-                      </button>
-                      <!-- <button type="button">PDF</button>
-                      <button type="button">Print</button> -->
-                    </div>
-                    <div class="search-table">
-                      <form>
-                        <input type="text" placeholder="Search..." />
-                      </form>
-                    </div>
                     <!--Table-->
                     <p class="text-center p-text">People you referred</p>
                     <table
@@ -634,36 +521,11 @@
                         </tr>
                       </tbody>
                     </table>
-                    <!-- <nav>
-                                            <ul class="pagination pagination-md">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link"><span aria-hidden="true">&laquo;</span></a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link"><span aria-hidden="true">&raquo;</span></a>
-                                                </li>
-                                            </ul>
-                                        </nav> -->
                   </div>
                 </div>
                 <!--Your Referral Earnings-->
                 <div class="card">
                   <div class="card-body card-table">
-                    <div class="buttons-table">
-                      <!-- <button type="button">Copy</button> -->
-                      <button type="button">CSV</button>
-                      <!-- <button type="button">Excel</button> -->
-                      <button type="button">PDF</button>
-                      <button type="button">Print</button>
-                    </div>
-                    <div class="search-table">
-                      <form>
-                        <input type="text" placeholder="Search..." />
-                      </form>
-                    </div>
                     <!--Table-->
                     <p class="text-center p-text">Your referral earnings</p>
                     <table class="table datatable card-table-table">
@@ -686,19 +548,6 @@
                         </tr>
                       </tbody>
                     </table>
-                    <!-- <nav>
-                                            <ul class="pagination pagination-md">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link"><span aria-hidden="true">&laquo;</span></a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link"><span aria-hidden="true">&raquo;</span></a>
-                                                </li>
-                                            </ul>
-                                        </nav> -->
                   </div>
                 </div>
               </div>
@@ -723,19 +572,6 @@
                     ></button>
                   </div>
                   <div class="card-body card-table">
-                    <div class="buttons-table">
-                      <!-- <button type="button">Copy</button> -->
-                      <button type="button">CSV</button>
-                      <!-- <button type="button">Excel</button> -->
-                      <button type="button">PDF</button>
-                      <button type="button">Print</button>
-                    </div>
-                    <div class="search-table">
-                      <form>
-                        <input type="text" placeholder="Search..." />
-                      </form>
-                    </div>
-                    <!--Table-->
                     <table class="table datatable card-table-table">
                       <thead>
                         <tr>
@@ -764,19 +600,6 @@
                         </tr>
                       </tbody>
                     </table>
-                    <!-- <nav>
-                                            <ul class="pagination pagination-md">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link"><span aria-hidden="true">&laquo;</span></a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link"><span aria-hidden="true">&raquo;</span></a>
-                                                </li>
-                                            </ul>
-                                        </nav> -->
                   </div>
                 </div>
               </div>
@@ -787,25 +610,25 @@
     </section>
   </main>
 
-    <dash-footer/>
+  <dash-footer />
 </template>
 
 <style scoped src="@/assets/css/dashStyle.css"></style>
 
 <script>
-    import Header from './dash-header.vue'
-    import Footer from './dash-footer.vue'
-    import VoteService from '../../service/vote.service'
-    import EventService from '../../service/event.service'
-    import FormService from '../../service/form.service'
-    import TriviaService from '../../service/trivia.service'
-    export default {
-      name: "Elfrique",
-      components:{
-      'dash-header': Header,
-      'dash-footer': Footer,
-      },
-      data() {
+import Header from "./dash-header.vue";
+import Footer from "./dash-footer.vue";
+import VoteService from "../../service/vote.service";
+import EventService from "../../service/event.service";
+import FormService from "../../service/form.service";
+import TriviaService from "../../service/trivia.service";
+export default {
+  name: "Elfrique",
+  components: {
+    "dash-header": Header,
+    "dash-footer": Footer,
+  },
+  data() {
     return {
       ref_Id: "",
       referral: "",
@@ -846,94 +669,63 @@
   },
 
   created() {
+    VoteService.getAllContestForAdmin().then((response) => {
+      this.voteContest = response.data.voteContests;
+      this.votes = this.voteContest.length;
+      //console.log(this.voteContest);
+      setTimeout(function () {
+        $("#voteTable").DataTable({
+          dom: "Bfrtip",
+          pageLength: 10,
+          buttons: ["copy", "csv", "excel", "pdf", "print"],
+        });
+      }, 1000);
+    });
+    EventService.allEventsforAdmin().then((response) => {
+      this.events = response.data.events;
+      this.event = this.events.length;
+      setTimeout(function () {
+        $("#eventTable").DataTable({
+          dom: "Bfrtip",
+          pageLength: 10,
+          buttons: ["copy", "csv", "excel", "pdf", "print"],
+        });
+      }, 1000);
+    });
+    FormService.allFormForAdmin().then((response) => {
+      this.eventForm = response.data.form;
+      this.form = this.eventForm.length;
+      setTimeout(function () {
+        $("#formTable").DataTable({
+          dom: "Bfrtip",
+          pageLength: 10,
+          buttons: ["copy", "csv", "excel", "pdf", "print"],
+        });
+      }, 1000);
+    });
 
-            VoteService.getAllContestForAdmin().then(response => {
-                this.voteContest = response.data.voteContests;
-                this.votes = this.voteContest.length;
-                console.log(this.voteContest);
-            })
-             EventService.allEventsforAdmin().then(response => {
-                this.events = response.data.events;
-                this.event = this.events.length;
-            })
-             FormService.allFormForAdmin().then(response => {
-                this.eventForm = response.data.form;
-                this.form = this.eventForm.length;
-                
-            })
-
-             TriviaService.getAllTrivias().then(response => {
-                this.trivias = response.data.trivias;
-                this.trivia = this.trivias.length;
-            })
-            
-
-
-        },
-
-  methods: {
-    exportCSV(array) {
-      let csvContent = "data:text/csv;charset=utf-8,";
-      csvContent += [
-        Object.keys(array[0]).join(";"),
-        ...array.map((item) => Object.values(item).join(";")),
-      ]
-        .join("\n")
-        
-        .replace(/(^\[)|(\]$)/gm, "");
-
-      const data = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", data);
-      link.setAttribute("download", "export.csv");
-      link.click();
-    },
-    tableToExcel(table, name) {
-      let tableName = table;
-      if (tableName == "vote") {
-          if (!table.nodeType) table = this.$refs.vote;
-        var ctx = { worksheet: name || "Worksheet", table: table.innerHTML };
-        window.location.href =
-            this.uri + this.base64(this.format(this.template, ctx));
-        }
-
-        if (tableName == "form") {
-          if (!table.nodeType) table = this.$refs.form;
-        var ctx = { worksheet: name || "Worksheet", table: table.innerHTML };
-        window.location.href =
-            this.uri + this.base64(this.format(this.template, ctx));
-        }
-
-        if (tableName == "trivia") {
-          if (!table.nodeType) table = this.$refs.trivia;
-        var ctx = { worksheet: name || "Worksheet", table: table.innerHTML };
-        window.location.href =
-            this.uri + this.base64(this.format(this.template, ctx));
-        }
-        if (tableName == "event") {
-          if (!table.nodeType) table = this.$refs.event;
-        var ctx = { worksheet: name || "Worksheet", table: table.innerHTML };
-        window.location.href =
-            this.uri + this.base64(this.format(this.template, ctx));
-        }
-
-        if (tableName == "referrer") {
-          if (!table.nodeType) table = this.$refs.referrer;
-        var ctx = { worksheet: name || "Worksheet", table: table.innerHTML };
-        window.location.href =
-            this.uri + this.base64(this.format(this.template, ctx));
-        }
-
-    },
+    TriviaService.getAllTrivias().then((response) => {
+      this.trivias = response.data.trivias;
+      this.trivia = this.trivias.length;
+      setTimeout(function () {
+        $("#triviaTable").DataTable({
+          dom: "Bfrtip",
+          pageLength: 10,
+          buttons: ["copy", "csv", "excel", "pdf", "print"],
+        });
+      }, 1000);
+    });
   },
 
-     mounted() {
-         if (!this.currentUser) {
-            this.$router.push('/login');
+  methods: {},
+
+  mounted() {
+    if (!this.currentUser) {
+      this.$router.push("/login");
     }
-     },
-      mounted(){
-        window.scrollTo(0,0)
-      }
-    }
+  },
+  mounted() {
+    window.scrollTo(0, 0);
+  },
+};
 </script>

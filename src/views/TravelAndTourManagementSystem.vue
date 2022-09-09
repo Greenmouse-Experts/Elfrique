@@ -19,34 +19,34 @@
                 <div class="tab-content" id="nav-tabContent">
                     <!--Flight-->
                     <div class="tab-pane tabOne fade show active" id="nav-flight" role="tabpanel" aria-labelledby="nav-flight-tab">
-                        <form>
+                        <form @submit.prevent="searchFlight">
                             <div class="row mb-3">
                                 <div class="col-lg-3">
-                                    <select>
-                                        <option>Round Trip</option>
-                                        <option>One-way</option>
-                                        <option>Multi-city</option>
+                                    <select v-model="flight.FlightSearchType">
+                                        <option value="Return">Round Trip</option>
+                                        <option value="Oneway">One-way</option>
+                                        <option value="Multidestination">Multi-city</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-3">
-                                    <select>
-                                        <option>Economy</option>
-                                        <option>Premium Economy</option>
-                                        <option>Business</option>
-                                        <option>First Class</option>
+                                    <select v-model="flight.Ticketclass">
+                                        <option value="Y">Economy</option>
+                                        <option value="W">Premium Economy</option>
+                                        <option value="J">Business</option>
+                                        <option value="F">First Class</option>
                                     </select>
                                 </div>
                                 <div class="col-lg-2">
                                     <label class="label-number">Adult (Above 12 years)</label>
-                                    <input class="input-number" type="number">
+                                    <input v-model="flight.Adults" class="input-number" type="number">
                                 </div>
                                 <div class="col-lg-2">
                                     <label class="label-number">Children (2-12 years)</label>
-                                    <input class="input-number" type="number">
+                                    <input v-model="flight.Children" class="input-number" type="number">
                                 </div>
                                 <div class="col-lg-2">
                                     <label class="label-number">Infant (Below 2 years)</label>
-                                    <input class="input-number" type="number">
+                                    <input v-model="flight.Infants" class="input-number" type="number">
                                 </div>
                             </div>
                             <div class="row justify-content-center">
@@ -57,11 +57,17 @@
                                         </div>
                                         <div class="col-lg-6 div-input">
                                             <label>From</label>
-                                            <input type="text" placeholder="City or Airport">
+                                            <input v-model="flight.Itineraries.Departure" @keyup="formatCity" type="text" list="cityName" placeholder="City or Airport">
+                                            <datalist id="cityName">
+                                                <option v-for="item in cityList" :key="item" :value="item.City+' - '+item.AirportName+' - '+item.AirportCode" />
+                                            </datalist>
                                         </div>
                                         <div class="col-lg-6 div-input">
                                             <label>To</label>
-                                            <input type="text" placeholder="City or Airport">
+                                            <input v-model="flight.Itineraries.Destination" @keyup="formatDCity" type="text" list="destinationCity" placeholder="City or Airport">
+                                            <datalist id="destinationCity">
+                                                <option v-for="item in DcityList" :key="item" :value="item.City+' - '+item.AirportName+' - '+item.AirportCode" />
+                                            </datalist>
                                         </div>
                                         
                                     </div>
@@ -70,11 +76,11 @@
                                     <div class="row g-1">
                                         <div class="col-lg-6 div-input">
                                             <label>Depart</label>
-                                            <input type="date">
+                                            <input v-model="flight.Itineraries.DepartureDate" type="date">
                                         </div>
-                                        <div class="col-lg-6 div-input">
+                                        <div v-if="flight.FlightSearchType == 'Return'" class="col-lg-6 div-input">
                                             <label>Return</label>
-                                            <input type="date">
+                                            <input v-model="flight.Itineraries.ReturnDate" type="date">
                                         </div>
                                         
                                     </div>
@@ -82,11 +88,12 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-lg-12 text-center mt-2">
-                                            <router-link to="/travel-tour-page" class="routers">
+                                            <button type="submit"><i class="bi bi-search"></i></button>
+                                            <!-- <router-link to="/travel-tour-page" class="routers">
                                                 <a>
                                                     <button type="submit"><i class="bi bi-search"></i></button>
                                                 </a>
-                                            </router-link>
+                                            </router-link> -->
                                         </div>
                                     </div>
                                 </div>
@@ -429,6 +436,9 @@
     import Header from './elfrique-header.vue'
     import Newsletter from './elfrique-newsletter.vue'
     import Footer from './elfrique-footer.vue'
+import axios from 'axios'
+import { _API_URL } from "../configs";
+import moment from 'moment';
     export default {
       name: "Elfrique",
       components:{
@@ -436,8 +446,140 @@
       'elfrique-newsletter':Newsletter,
       'elfrique-footer':Footer,
       },
+      data() {
+        return {
+            flight: {
+                FlightSearchType: '',
+                Adults: '0',
+                Children: '0',
+                Infants: '0',
+                Ticketclass: '',
+                TargetCurrency: "NGN",
+                Itineraries: {
+                    Departure: '',
+                    Destination: '',
+                    DepartureDate: ''
+                }
+            },
+            airportCityList: []
+        }
+      },
+      computed: {
+        cityList(){
+            if(this.flight.Itineraries.Departure != ''){
+                return this.airportCityList.filter((items) => {
+                return this.flight.Itineraries.Departure
+                    .toLowerCase()
+                    .split(" ")
+                    .every((v) => items.City.toLowerCase().includes(v));
+                });
+            }
+        },
+        DcityList(){
+            if(this.flight.Itineraries.Destination != ''){
+                return this.airportCityList.filter((items) => {
+                return this.flight.Itineraries.Destination
+                    .toLowerCase()
+                    .split(" ")
+                    .every((v) => items.City.toLowerCase().includes(v));
+                });
+            }
+        }
+      },
+      created() {
+        axios.get(`${_API_URL}flight/airports`).then((res) => {
+            //console.log(res)
+            this.airportCityList = res.data
+        })
+      },
+      methods: {
+        formatCity(){
+            this.flight.Itineraries.Departure = this.flight.Itineraries.Departure.toString()
+            this.flight.Itineraries.Departure = this.flight.Itineraries.Departure.charAt(0).toUpperCase() + this.flight.Itineraries.Departure.slice(1)
+        },
+        formatDCity(){
+            this.flight.Itineraries.Destination = this.flight.Itineraries.Destination.toString()
+            this.flight.Itineraries.Destination = this.flight.Itineraries.Destination.charAt(0).toUpperCase() + this.flight.Itineraries.Destination.slice(1)
+        },
+        searchFlight(){
+            let from = this.flight.Itineraries.Departure.slice(-3)
+            let to = this.flight.Itineraries.Destination.slice(-3)
+            const dataForm = {
+                'searchType': this.flight.FlightSearchType,
+                'adultsCount': this.flight.Adults,
+                'childrenCount': this.flight.Children,
+                'infantCount': this.flight.Infants,
+                'ticketClass': this.flight.Ticketclass,
+                'currency': "NGN",
+                'from': from,
+                'to': to,
+                'departureDate':  moment(this.flight.Itineraries.DepartureDate).format('L')
+            }
+            console.log(dataForm)
+           
+            axios.post(`${_API_URL}flight/search`, dataForm, {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }).then(res => {
+                //console.log(res.data.flightSearchResult)
+                let sendData = JSON.stringify(res.data.flightSearchResult)
+                const dataForm = JSON.stringify({
+                    'searchType': this.flight.FlightSearchType,
+                    'adultsCount': this.flight.Adults,
+                    'childrenCount': this.flight.Children,
+                    'infantCount': this.flight.Infants,
+                    'ticketClass': this.flight.Ticketclass,
+                    'currency': "NGN",
+                    'from': from,
+                    'to': to,
+                    'departureDate':  moment(this.flight.Itineraries.DepartureDate).format('LL')
+                })
+                this.$router.push({
+                    name: "TravelAndTourPage",
+                    params: {
+                        data: sendData,
+                        form: dataForm
+                    }
+                })
+            })
+        }
+      },
       mounted(){
         window.scrollTo(0,0)
       }
     }
 </script>
+
+<style>
+    input[list]:focus {
+        outline: none;
+    }
+    input[list] + div[list] {
+        display: none;
+        position: absolute;
+        width: 100%;
+        max-height: 164px;
+        overflow-y: auto;
+        max-width: 330px;
+        background: #FFF;
+        border: var(--border);
+        border-top: none;
+      border-radius: 0 0 5px 5px;
+      box-shadow: 0 3px 3px -3px #333;
+        z-index: 100;
+    }
+    input[list] + div[list] span {
+        display: block;
+        padding: 7px 5px 7px 20px;
+        color: #069;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    input[list] + div[list] span:not(:last-child) {
+      border-bottom: 1px solid #EEE;
+    }
+    input[list] + div[list] span:hover {
+        background: rgba(100, 120, 140, .2);
+    }
+</style>

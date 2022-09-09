@@ -396,7 +396,7 @@ const routes = [
   },
   // Hamzat Page Travel And Tour Page
   {
-    path: "/travel-tour-page",
+    path: "/search-flight-result",
     name: "TravelAndTourPage",
     component: TravelAndTourPage,
   },

@@ -151,11 +151,11 @@
         >
       </li>
       <!-- Hamzat Update -->
-      <li class="nav-item">
+      <li v-if="currentUser.role == 'admin'" class="nav-item">
         <router-link to="/superadmin/dashboard" class="routers"
           ><a class="nav-link collapsed">
             <img src="@/assets/images/menu-dashboard.png" />
-            <span>Superadmin Dashboard</span>
+            <span>Superadmin</span>
           </a></router-link
         >
       </li>
@@ -680,9 +680,9 @@
     computed: {
       currentUser() {
         const user = JSON.parse(localStorage.getItem("user"));
-        console.log(user);
+        //console.log(user);
         if (user) {
-          console.log(user);
+          //console.log(user);
           return user;
         }
       },
