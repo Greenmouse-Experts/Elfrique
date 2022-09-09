@@ -150,7 +150,7 @@
                     <div class="col-lg-10">
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="clear">
+                                <div class="clear" style="95%">
                                     <div class="text">
                                         <p>
                                             Filter 
