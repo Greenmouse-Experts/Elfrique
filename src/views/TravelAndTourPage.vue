@@ -727,9 +727,10 @@ export default {
     };
   },
   created() {
-    console.log(this.flightResult);
-    this.flightResult = JSON.parse(this.$route.params.data)
+    
+    this.flightResult = this.$route.params.data
     this.formResult = JSON.parse(this.$route.params.form)
+    console.log(this.flightResult);
   },
   methods: {
     getFlightData(item) {
