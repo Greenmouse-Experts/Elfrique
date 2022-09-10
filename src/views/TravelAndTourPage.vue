@@ -15,28 +15,37 @@
             <div class="col-md-4">
               <div class="text">
                 <p>
-                  {{formResult.from}}
+                  {{ formResult.from }}
                   <span>
                     <i class="bi bi-arrow-left-right"></i>
                   </span>
-                  <span class="niger"> {{formResult.to}} </span>
+                  <span class="niger"> {{ formResult.to }} </span>
                 </p>
               </div>
             </div>
             <div class="col-md-4">
               <div class="text">
-                <p>{{formResult.departureDate}}</p>
+                <p>{{ formResult.departureDate }}</p>
               </div>
             </div>
             <div class="col-md-4">
               <div class="text">
-                <p><span v-if="formResult.adultsCount != '0'">{{formResult.adultsCount}} Adult, </span> 
-                    <span v-if="formResult.childrenCount != '0'">{{formResult.childrenCount}} Children, </span> 
-                    <span v-if="formResult.infantCount != '0'">{{formResult.infantCount}} Infant, </span> 
-                    <span v-if="formResult.ticketClass == 'Y'">Economy</span>
-                    <span v-if="formResult.ticketClass == 'W'">Premium Economy</span>
-                    <span v-if="formResult.ticketClass == 'J'">Business</span>
-                    <span v-if="formResult.ticketClass == 'F'">First Class</span>
+                <p>
+                  <span v-if="formResult.adultsCount != '0'"
+                    >{{ formResult.adultsCount }} Adult,
+                  </span>
+                  <span v-if="formResult.childrenCount != '0'"
+                    >{{ formResult.childrenCount }} Children,
+                  </span>
+                  <span v-if="formResult.infantCount != '0'"
+                    >{{ formResult.infantCount }} Infant,
+                  </span>
+                  <span v-if="formResult.ticketClass == 'Y'">Economy</span>
+                  <span v-if="formResult.ticketClass == 'W'"
+                    >Premium Economy</span
+                  >
+                  <span v-if="formResult.ticketClass == 'J'">Business</span>
+                  <span v-if="formResult.ticketClass == 'F'">First Class</span>
                 </p>
               </div>
             </div>
@@ -173,7 +182,9 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" id="close" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="close" data-bs-dismiss="modal">
+            Close
+          </button>
         </div>
       </div>
     </div>
@@ -213,63 +224,122 @@
                     aria-labelledby="nav-Cheapest-tab"
                   >
                     <div v-if="flightResult.length > 0">
-                        <div class="learnt" v-for="item in flightResult" :key="item">
-                            <div class="row">
-                              <div class="col-md-1">
-                                <div class="pull">
-                                  <img
-                                    :src="item.FlightCombination.FlightModels[0].AirlineLogoUrl"
-                                    style="width: 88%;"
-                                    draggable="false"
-                                  />
-                                </div>
-                              </div>
-                              <div class="col-md-3">
-                                <div class="pull">
-                                  <p>{{item.FlightCombination.FlightModels[0].AirlineName}}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="pull">
-                                  <p>{{getTime(item.FlightCombination.FlightModels[0].DepartureTime)}} ({{item.FlightCombination.FlightModels[0].DepartureCode}})</p>
-                                  <p>{{item.FlightCombination.FlightModels[0].DepartureName}}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="pull">
-                                  <p>{{getDiff(item.FlightCombination.FlightModels[0].FlightLegs[0].StartTime, item.FlightCombination.FlightModels[0].FlightLegs[0].EndTime)}}</p>
-                                  <p>{{item.FlightCombination.FlightModels[0].Stops}} Stop</p>
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="pull">
-                                  <p>{{getTime(item.FlightCombination.FlightModels[0].ArrivalTime)}} ({{item.FlightCombination.FlightModels[0].ArrivalCode}})</p>
-                                  <p>{{item.FlightCombination.FlightModels[0].ArrivalName}}</p>
-                                </div>
-                              </div>
-                              <div class="col-md-2">
-                                <div class="pull">
-                                  <p>{{getNPrice(item.FlightCombination.Price.Amount)}}</p>
-                                  <button
-                                    type="button"
-                                    @click="getFlightData(item)"
-                                    class="lenn"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal1"
-                                  >
-                                    View
-                                  </button>
-                                </div>
-                              </div>
+                      <div
+                        class="learnt"
+                        v-for="item in flightResult"
+                        :key="item"
+                      >
+                        <div class="row">
+                          <div class="col-md-1">
+                            <div class="pull">
+                              <img
+                                :src="
+                                  item.FlightCombination.FlightModels[0]
+                                    .AirlineLogoUrl
+                                "
+                                style="width: 88%"
+                                draggable="false"
+                              />
                             </div>
                           </div>
-                    </div>
-                    <div v-else style="text-align:center;">
-                        <div class="learnt">
-                            No Flight found for this trip
+                          <div class="col-md-3">
+                            <div class="pull">
+                              <p>
+                                {{
+                                  item.FlightCombination.FlightModels[0]
+                                    .AirlineName
+                                }}
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="pull">
+                              <p>
+                                {{
+                                  getTime(
+                                    item.FlightCombination.FlightModels[0]
+                                      .DepartureTime
+                                  )
+                                }}
+                                ({{
+                                  item.FlightCombination.FlightModels[0]
+                                    .DepartureCode
+                                }})
+                              </p>
+                              <p>
+                                {{
+                                  item.FlightCombination.FlightModels[0]
+                                    .DepartureName
+                                }}
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="pull">
+                              <p>
+                                {{
+                                  getDiff(
+                                    item.FlightCombination.FlightModels[0]
+                                      .FlightLegs[0].StartTime,
+                                    item.FlightCombination.FlightModels[0]
+                                      .FlightLegs[0].EndTime
+                                  )
+                                }}
+                              </p>
+                              <p>
+                                {{
+                                  item.FlightCombination.FlightModels[0].Stops
+                                }}
+                                Stop
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="pull">
+                              <p>
+                                {{
+                                  getTime(
+                                    item.FlightCombination.FlightModels[0]
+                                      .ArrivalTime
+                                  )
+                                }}
+                                ({{
+                                  item.FlightCombination.FlightModels[0]
+                                    .ArrivalCode
+                                }})
+                              </p>
+                              <p>
+                                {{
+                                  item.FlightCombination.FlightModels[0]
+                                    .ArrivalName
+                                }}
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <div class="pull">
+                              <p>
+                                {{
+                                  getNPrice(item.FlightCombination.Price.Amount)
+                                }}
+                              </p>
+                              <button
+                                type="button"
+                                @click="getFlightData(item)"
+                                class="lenn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModal1"
+                              >
+                                View
+                              </button>
+                            </div>
+                          </div>
                         </div>
+                      </div>
                     </div>
-                    
+                    <div v-else style="text-align: center">
+                      <div class="learnt">No Flight found for this trip</div>
+                    </div>
                   </div>
                   <!-- <div
                     class="tab-pane tabOne fade"
@@ -516,7 +586,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">
-            Departure flight : {{from}} - {{to}}
+            Departure flight : {{ from }} - {{ to }}
           </h5>
           <button
             type="button"
@@ -532,7 +602,7 @@
               <div class="row">
                 <div class="col-md-2">
                   <div class="teuday">
-                    <p>{{goingDate}}</p>
+                    <p>{{ goingDate }}</p>
                   </div>
                 </div>
                 <div class="col-md-1">
@@ -548,20 +618,21 @@
                 <div class="col-md-3">
                   <div class="lent">
                     <p>
-                      <b> {{departTime}} - {{arriveTime}} </b>
+                      <b> {{ departTime }} - {{ arriveTime }} </b>
                     </p>
                     <p>
-                      {{departName}} ({{departCode}}) -
-                     {{arriveName}} ({{arriveCode}})
+                      {{ departName }} ({{ departCode }}) - {{ arriveName }} ({{
+                        arriveCode
+                      }})
                     </p>
                   </div>
                 </div>
                 <div class="col-md-2">
                   <div>
                     <p>
-                      <b> {{ticketName}} </b>
+                      <b> {{ ticketName }} </b>
                     </p>
-                    <p>{{duration}}</p>
+                    <p>{{ duration }}</p>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -571,21 +642,31 @@
                       <div class="adult">
                         <p>
                           Traveler(s)
-                          <span> {{price}} </span>
+                          <span> {{ price }} </span>
                         </p>
-                        <p v-if="adult != '' " class="clo">{{adult}}</p>
-                        <p v-if="children != '' " class="clo">{{children}}</p>
-                        <p v-if="infant != '' " class="clo">{{infant}}</p>
-                      </div>
-                      <div class="adult">
-                        <p class="text-center to">
-                          Total
-                          <span> {{price}} </span>
+                        <p v-if="adult != ''">
+                          {{ adult }}
+                          <span>{{ adultPrice }}</span>
+                        </p>
+                        <p v-if="children != ''">
+                          {{ children }}
+                          <span>{{ childrenPrice }}</span>
+                        </p>
+                        <p v-if="infant != ''">
+                          {{ infant }}
+                          <span>{{ infantPrice }}</span>
                         </p>
                         <p class="clo"></p>
                       </div>
                       <div class="adult">
-                        <p v-for="(item) in rules" :key="item">* {{item}}</p>
+                        <p class="text-center to">
+                          Total
+                          <span> {{ price }} </span>
+                        </p>
+                        <p class="clo"></p>
+                      </div>
+                      <div class="adult">
+                        <p v-for="item in rules" :key="item">* {{ item }}</p>
                         <button>Book</button>
                       </div>
                     </div>
@@ -610,7 +691,7 @@ import Header from "./elfrique-header.vue";
 import Newsletter from "./elfrique-newsletter.vue";
 import Footer from "./elfrique-footer.vue";
 import moment from "moment";
-import momentDurationFormatSetup from "moment-duration-format"
+import momentDurationFormatSetup from "moment-duration-format";
 export default {
   name: "Elfrique",
   components: {
@@ -623,69 +704,101 @@ export default {
       flightResult: JSON.parse(this.$route.params.data),
       formResult: JSON.parse(this.$route.params.form),
       flightLogo: "",
-      flightName: '',
-      departName: '',
-      departTime: '',
-      departCode: '',
-      arriveName: '',
-      arriveTime: '',
-      arriveCode: '',
-      ticketName: '',
-      duration: '',
-      adult: '',
-      children: '', 
-      infant: '',
-      price: '',
-      rules: '',
-      from: '',
-      to: '',
-      goingDate: ''
+      flightName: "",
+      departName: "",
+      departTime: "",
+      departCode: "",
+      arriveName: "",
+      arriveTime: "",
+      arriveCode: "",
+      ticketName: "",
+      duration: "",
+      adult: "",
+      children: "",
+      infant: "",
+      price: "",
+      rules: "",
+      from: "",
+      to: "",
+      goingDate: "",
+      adultPrice: "",
+      childrenPrice: "",
+      infantPrice: "",
     };
   },
   created() {
     console.log(this.flightResult);
   },
   methods: {
-    getFlightData(item){
-      console.log(item)
-      this.flightLogo = item.FlightCombination.FlightModels[0].AirlineLogoUrl
-      this.flightName = item.FlightCombination.FlightModels[0].AirlineName
-      this.departName = item.FlightCombination.FlightModels[0].FlightLegs[0].DepartureName
-      this.departTime = this.getTime(item.FlightCombination.FlightModels[0].DepartureTime)
-      this.departCode = item.FlightCombination.FlightModels[0].FlightLegs[0].DepartureCode
-      this.arriveName = item.FlightCombination.FlightModels[0].FlightLegs[0].DestinationName
-      this.arriveTime = this.getTime(item.FlightCombination.FlightModels[0].ArrivalTime)
-      this.arriveCode = item.FlightCombination.FlightModels[0].FlightLegs[0].DestinationCode
-      if (this.formResult.ticketClass == 'Y') this.ticketName = 'Economy'
-      if (this.formResult.ticketClass == 'W') this.ticketName = 'Premium Economy'
-      if (this.formResult.ticketClass == 'J') this.ticketName = 'Business'
-      if (this.formResult.ticketClass == 'F') this.ticketName = 'First Class'
-      this.duration = this.getDiff(item.FlightCombination.FlightModels[0].FlightLegs[0].StartTime, item.FlightCombination.FlightModels[0].FlightLegs[0].EndTime)
-      if (this.formResult.adultsCount != '0') this.adult = `Adults (x${this.formResult.adultsCount})`
-      if (this.formResult.childrenCount != '0') this.children = `Children (x${this.formResult.childrenCount})`
-      if (this.formResult.infantCount != '0') this.infant = `Infants (x${this.formResult.infantCount})`
-      this.price = this.getNPrice(item.FlightCombination.Price.Amount)
-      this.rules = item.FlightCombination.FareRules
-      this.from = item.FlightCombination.FlightModels[0].ArrivalName
-      this.to = item.FlightCombination.FlightModels[0].DepartureName
-      this.goingDate = moment(this.formResult.departureDate).format('llll')
+    getFlightData(item) {
+      //console.log(item);
+      this.flightLogo = item.FlightCombination.FlightModels[0].AirlineLogoUrl;
+      this.flightName = item.FlightCombination.FlightModels[0].AirlineName;
+      this.departName =
+        item.FlightCombination.FlightModels[0].FlightLegs[0].DepartureName;
+      this.departTime = this.getTime(
+        item.FlightCombination.FlightModels[0].DepartureTime
+      );
+      this.departCode =
+        item.FlightCombination.FlightModels[0].FlightLegs[0].DepartureCode;
+      this.arriveName =
+        item.FlightCombination.FlightModels[0].FlightLegs[0].DestinationName;
+      this.arriveTime = this.getTime(
+        item.FlightCombination.FlightModels[0].ArrivalTime
+      );
+      this.arriveCode =
+        item.FlightCombination.FlightModels[0].FlightLegs[0].DestinationCode;
+      if (this.formResult.ticketClass == "Y") this.ticketName = "Economy";
+      if (this.formResult.ticketClass == "W")
+        this.ticketName = "Premium Economy";
+      if (this.formResult.ticketClass == "J") this.ticketName = "Business";
+      if (this.formResult.ticketClass == "F") this.ticketName = "First Class";
+      this.duration = this.getDiff(
+        item.FlightCombination.FlightModels[0].FlightLegs[0].StartTime,
+        item.FlightCombination.FlightModels[0].FlightLegs[0].EndTime
+      );
+      if (this.formResult.adultsCount != "0")
+        this.adult = `Adults (x${this.formResult.adultsCount})`;
+      if (this.formResult.childrenCount != "0")
+        this.children = `Children (x${this.formResult.childrenCount})`;
+      if (this.formResult.infantCount != "0")
+        this.infant = `Infants (x${this.formResult.infantCount})`;
+      this.price = this.getNPrice(item.FlightCombination.Price.Amount);
+      this.rules = item.FlightCombination.FareRules;
+      this.from = item.FlightCombination.FlightModels[0].DepartureName;
+      this.to = item.FlightCombination.FlightModels[0].ArrivalName;
+      this.goingDate = moment(this.formResult.departureDate).format("llll");
+      if (this.formResult.adultsCount != "0")
+        this.adultPrice = this.getNPrice(
+          item.FlightCombination.PriceDetails[0].BaseFare.Amount
+        );
+      if (this.formResult.childrenCount != "0")
+        this.childrenPrice = this.getNPrice(
+          item.FlightCombination.PriceDetails[1].BaseFare.Amount
+        );
+      if (this.formResult.infantCount != "0")
+        this.infantPrice = this.getNPrice(
+          item.FlightCombination.PriceDetails[1].BaseFare.Amount
+        );
     },
-    getTime(value){
-        return moment(value).format('HH:mm')
+    getTime(value) {
+      return moment(value).format("HH:mm");
     },
-    getDiff(d1, d2){
-        momentDurationFormatSetup(moment)
-        let b = moment(d2).diff(d1, "minutes", true)
-        return moment.duration({
-            minutes: Math.ceil(b)
-        }).format("d[d] h[h] m[m]", { trim: "both" });
+    getDiff(d1, d2) {
+      momentDurationFormatSetup(moment);
+      let b = moment(d2).diff(d1, "minutes", true);
+      return moment
+        .duration({
+          minutes: Math.ceil(b),
+        })
+        .format("d[d] h[h] m[m]", { trim: "both" });
     },
-    getNPrice(value){
-        return (value).toLocaleString('en-NG', {
-            style: 'currency',
-            currency: 'NGN',
-        });
-    }
+    getNPrice(value) {
+      return value.toLocaleString("en-NG", {
+        style: "currency",
+        currency: "NGN",
+      });
+    },
   },
   mounted() {
     window.scrollTo(0, 0);
