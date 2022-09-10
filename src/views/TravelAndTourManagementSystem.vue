@@ -731,6 +731,7 @@ export default {
               "LL"
             ),
           });
+          console.log(sendData)
           this.$router.push({
             name: "TravelAndTourPage",
             params: {

@@ -701,8 +701,8 @@ export default {
   },
   data() {
     return {
-      flightResult: JSON.parse(this.$route.params.data),
-      formResult: JSON.parse(this.$route.params.form),
+      flightResult: [],
+      formResult: [],
       flightLogo: "",
       flightName: "",
       departName: "",
@@ -728,6 +728,8 @@ export default {
   },
   created() {
     console.log(this.flightResult);
+    this.flightResult = JSON.parse(this.$route.params.data)
+    this.formResult = JSON.parse(this.$route.params.form)
   },
   methods: {
     getFlightData(item) {
