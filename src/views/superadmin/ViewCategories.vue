@@ -1,16 +1,16 @@
 <template>
-    <title>View Contest | Elfrique</title>
+    <title>View Categories | Elfrique</title>
     <dash-header/>
 
     <!--------Main Content--------->
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1 class="create">View Contest</h1>
+            <h1 class="create">View Categories</h1>
             <nav>
                 <ol class="breadcrumb">
                 <li class="breadcrumb-item"><router-link to="/organiser/dashboard" class="routers"><a>Home</a></router-link></li>
                 <li class="breadcrumb-item active">Voting</li>
-                <li class="breadcrumb-item active">View Contest</li>
+                <li class="breadcrumb-item active">View Categories</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -51,8 +51,8 @@
                             <tr>
                                 <th scope="row">1</th>
                                 <td>122</td>
-                                <td>My Contest</td>
-                                <td><img src="@/assets/images/blog-img.jpg"></td>
+                                <td>My Categories</td>
+                                <td><img src="@/assets/images/travel1.jpg"></td>
                                 <td>2022-09-08 <br> 11:08:38</td>
                                 <td>Free</td>
                                 <td>Free</td>

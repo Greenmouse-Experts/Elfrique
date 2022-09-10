@@ -86,6 +86,7 @@ import EditVendorService from "../views/dashboard/EditVendorService.vue";
 import TravelBooking from "../views/dashboard/TravelBooking.vue";
 import IELTS from "../views/dashboard/IELTS.vue";
 import TourSales from "../views/dashboard/TourSales.vue";
+import ViewSales from "../views/dashboard/ViewSales.vue";
 //catchall 404
 import NotFound from '../views/NotFound.vue'
 /* import DashSearchEvent from "../views/dashboard/SearchEvent.vue"; */
@@ -244,6 +245,11 @@ import SuperAdminAnaVendorAnalytics from "../views/superadmin/VendorAnalytics.vu
 ///////////////////////////////////////
 import SuperAdminURLCreateURL from "../views/superadmin/CreateURL.vue";
 import SuperAdminURLViewURL from "../views/superadmin/ViewURL.vue";
+/////Hamzat superAdmin
+import ViewContest from "../views/superadmin/ViewContest.vue";
+import ViewCategories from "../views/superadmin/ViewCategories.vue";
+import Lelt from "../views/superadmin/Lelt.vue";
+import STravelsales from "../views/superadmin/STravelsales.vue";
 ///////////////////////////////////////
 import SuperAdminNotContactList from "../views/superadmin/ContactList.vue";
 import SuperAdminNotSMSLogs from "../views/superadmin/SMSLogs.vue";
@@ -544,6 +550,11 @@ const routes = [
     path: "/organiser/event-sales-analytics",
     name: "DashEventSalesAnalytics",
     component: DashEventSalesAnalytics,
+  },
+  {
+    path: "/organiser/view-sales",
+    name: "ViewSales",
+    component: ViewSales,
   },
   {
     path: "/organiser/personal-ticket",
@@ -1267,6 +1278,26 @@ const routes = [
     path: "/superadmin/sms-logs",
     name: "SuperAdminNotSMSLogs",
     component: SuperAdminNotSMSLogs,
+  },
+  {
+    path: "/superadmin/view-contest",
+    name: "ViewContest",
+    component: ViewContest,
+  },
+  {
+    path: "/superadmin/view-Categories",
+    name: "ViewCategories",
+    component: ViewCategories,
+  },
+  {
+    path: "/superadmin/ielts",
+    name: "Lelt",
+    component: Lelt,
+  },
+  {
+    path: "/superadmin/tour-sales",
+    name: "STravelsales",
+    component: STravelsales,
   },
 ];
 

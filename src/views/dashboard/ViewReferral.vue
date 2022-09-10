@@ -40,6 +40,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Referral Code</th>
                 <th scope="col">Edit Referral</th>
+                <th scope="col">View Sales</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -156,6 +157,7 @@
                     </div>
                   </div>
                 </td>
+                <td>View Sales Details</td>
                 <td>
                   <button
                     @click="deleteRef(item.id)"

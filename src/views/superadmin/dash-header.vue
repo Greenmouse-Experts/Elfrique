@@ -218,11 +218,6 @@
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/superadmin/view-contest" class="routers">
-                        <a><i class="bi bi-circle"></i><span>View Contest</span></a>
-                    </router-link>
-                </li>
-                <li>
                     <router-link to="#" class="routers">
                         <a><i class="bi bi-circle"></i><span>Cash Payment</span></a>
                     </router-link>
@@ -268,6 +263,16 @@
                     </router-link>
                 </li>
                 <li>
+                    <router-link to="/superadmin/view-contest" class="routers">
+                        <a><i class="bi bi-circle"></i><span>View Contest</span></a>
+                    </router-link>
+                </li>
+                <li>
+                    <router-link to="/superadmin/view-categories" class="routers">
+                        <a><i class="bi bi-circle"></i><span>View Categories</span></a>
+                    </router-link>
+                </li>
+                <li>
                     <router-link to="/superadmin/vote-sales-analytics" class="routers">
                         <a><i class="bi bi-circle"></i><span>Sales Analytics</span></a>
                     </router-link>
@@ -286,7 +291,7 @@
         </li>
         <!--Registration-->
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#reg-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-registration.png" /><span></span>Registration<i class="bi bi-chevron-down ms-auto"></i> </a>
+            <a class="nav-link collapsed" data-bs-target="#reg-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-registration.png" /><span></span>Event Registration<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="reg-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
                     <router-link to="/superadmin/overview-registration" class="routers">

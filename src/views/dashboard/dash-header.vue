@@ -298,6 +298,13 @@
             >
           </li>
           <li>
+            <router-link to="/organiser/view-sales" class="routers"
+              ><a
+                ><i class="bi bi-circle"></i><span>View Sales</span></a
+              ></router-link
+            >
+          </li>
+          <li>
             <router-link to="/organiser/sales-analytics" class="routers"
               ><a
                 ><i class="bi bi-circle"></i><span>Sales Analytics</span></a
@@ -485,7 +492,8 @@
           <li>
             <router-link to="/organiser/bidders-vendor" class="routers"
               ><a
-                ><i class="bi bi-circle"></i><span>View All Bidders Project </span></a
+                ><i class="bi bi-circle"></i><span>View Proposals
+              </span></a
               ></router-link
             >
           </li>
@@ -496,13 +504,13 @@
               ></router-link
             >
           </li>
-          <li>
+          <!-- <li>
             <router-link to="/organiser/search-vendor" class="routers"
               ><a
                 ><i class="bi bi-circle"></i><span>Search For Vendor</span></a
               ></router-link
             >
-          </li>
+          </li> -->
           <li>
             <router-link to="/organiser/place-advert" class="routers"
               ><a
@@ -517,13 +525,13 @@
               ></router-link
             >
           </li>
-          <li>
+          <!-- <li>
             <router-link to="/organiser/view-enquiries" class="routers"
               ><a
                 ><i class="bi bi-circle"></i><span>View Enquiries</span></a
               ></router-link
             >
-          </li>
+          </li> -->
           <li>
             <router-link to="/organiser/vendor-sales-analytics" class="routers"
               ><a
