@@ -739,7 +739,11 @@ export default {
               form: dataForm,
             },
           });
-        });
+        })
+        .catch(err => {
+          this.loading = false
+          console.log(err)
+        })
     },
   },
   mounted() {
