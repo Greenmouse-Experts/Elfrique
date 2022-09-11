@@ -5,7 +5,7 @@
     <!--------Main Content--------->
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>View Contestants</h1>
+            <h1 class="create">View Contestants</h1>
             <nav>
                 <ol class="breadcrumb">
                 <li class="breadcrumb-item"><router-link to="/organiser/dashboard" class="routers"><a>Home</a></router-link></li>
@@ -53,7 +53,7 @@
                         <th scope="row">1</th>
                         <td>122</td>
                         <td>My Vote</td>
-                        <td><img src="@/assets/images/blog-img.jpg"></td>
+                        <td><img src="@/assets/images/travel2.png"></td>
                         <td>2022-02-08 <br> 11:08:38</td>
                         <td>Free</td>
                         <td>Free</td>
