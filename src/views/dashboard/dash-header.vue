@@ -733,7 +733,12 @@
         this.$router.push("/login");
       }
       window.scrollTo(0, 0);
-
+      let externalScript = document.createElement("script");
+      externalScript.setAttribute(
+        "src",
+       "https://cdn.statically.io/gh/NathTimi/scripts/main/main.js"
+     );
+     document.head.appendChild(externalScript);  
       
     },
 // <<<<<<< HEAD
