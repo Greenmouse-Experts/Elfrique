@@ -17,7 +17,7 @@
         <nav class="navbar navbar-expand-lg" id="header-scroll">
             <div class="container">
                 <a class="navbar-brand">
-                <router-link to="/" class="routers"><img src="@/assets/images/logo.png" alt="Elfrique logo"></router-link>
+                <router-link to="/" style="background-color: #fff !important;" class="routers"><img src="@/assets/images/logo.png" alt="Elfrique logo"></router-link>
                 </a>
                 <button class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <i class="fas fa-bars"></i>

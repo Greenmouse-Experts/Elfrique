@@ -206,7 +206,10 @@
         </li>
         <!--Voting-->
         <li class="nav-item">
-            <router-link class="nav-link collapsed" data-bs-target="#voting-nav" data-bs-toggle="collapse" to="/superadmin/overview-voting"> <img src="@/assets/images/menu-vote.png" /><span></span>Voting<i class="bi bi-chevron-down ms-auto"></i> </router-link>
+            <router-link class="nav-link collapsed" data-bs-target="#voting-nav" data-bs-toggle="collapse" to="/superadmin/overview-voting">
+                <img src="@/assets/images/menu-vote.png" />
+                <span></span>Voting<i class="bi bi-chevron-down ms-auto"></i> 
+            </router-link>
             <ul id="voting-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
                     <router-link to="/superadmin/overview-voting" class="routers">
@@ -647,7 +650,6 @@ export default {
 
 <style>
     .router-link-active{
-        background: #3B702A !important;
         color: #fff !important;
     }
 </style>
