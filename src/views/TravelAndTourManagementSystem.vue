@@ -721,7 +721,7 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data.flightSearchResult)
+          //console.log(res.data.flightSearchResult)
           this.loading = false;
           let sendData = JSON.stringify(res.data.flightSearchResult);
           const dataForm = JSON.stringify({

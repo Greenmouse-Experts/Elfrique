@@ -582,9 +582,9 @@
     aria-hidden="true"
     style="z-index: 9999"
   >
-    <div class="modal-dialog death" style="max-width: 90%; margin-top: 10%">
+    <div class="modal-dialog death" style="max-width: 90%; margin-top: 10%;margin-left: auto;margin-right: auto;">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header" style="padding: 1rem 1rem;">
           <h5 class="modal-title" id="exampleModalLabel">
             Departure flight : {{ from }} - {{ to }}
           </h5>
@@ -596,7 +596,7 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" style="padding: 1rem 1rem;">
           <div class="row">
             <div class="col-lg-12">
               <div class="row">
