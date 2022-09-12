@@ -73,6 +73,7 @@ import Header from "./dash-header.vue";
 import Footer from "./dash-footer.vue";
 import VendorService from "../../service/vendor.service";
 import moment from "moment";
+import EventService from '../../service/event.service';
 export default {
   name: "Elfrique",
   components: {
@@ -95,7 +96,7 @@ export default {
       this.$router.push("/login");
     }
 
-    VendorService.getAllUrls().then(
+    EventService.getAllUserUrl().then(
       (response) => {
         this.content = response.data.data;
         setTimeout(function () {
@@ -113,9 +114,6 @@ export default {
             error.response.data.message) ||
           error.message ||
           error.toString();
-        thtis.successful = false;
-        this.$store.dispatch("auth/logout");
-        this.$router.push("/login");
       }
     );
   },
