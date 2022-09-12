@@ -63,14 +63,14 @@
             <form @submit.prevent="searchFlight">
               <div class="row mb-3">
                 <div class="col-lg-3">
-                  <select v-model="flight.FlightSearchType">
+                  <select v-model="flight.FlightSearchType" required>
                     <option value="Return">Round Trip</option>
                     <option value="Oneway">One-way</option>
                     <option value="Multidestination">Multi-city</option>
                   </select>
                 </div>
                 <div class="col-lg-3">
-                  <select v-model="flight.Ticketclass">
+                  <select v-model="flight.Ticketclass" required>
                     <option value="Y">Economy</option>
                     <option value="W">Premium Economy</option>
                     <option value="J">Business</option>
@@ -83,6 +83,7 @@
                     v-model="flight.Adults"
                     class="input-number"
                     type="number"
+                    required
                   />
                 </div>
                 <div class="col-lg-2">
@@ -91,6 +92,7 @@
                     v-model="flight.Children"
                     class="input-number"
                     type="number"
+                    required
                   />
                 </div>
                 <div class="col-lg-2">
@@ -99,6 +101,7 @@
                     v-model="flight.Infants"
                     class="input-number"
                     type="number"
+                    required
                   />
                 </div>
               </div>
@@ -116,6 +119,7 @@
                         type="text"
                         list="cityName"
                         placeholder="City or Airport"
+                        required
                       />
                       <datalist id="cityName">
                         <option
@@ -138,6 +142,7 @@
                         @keyup="formatDCity"
                         type="text"
                         list="destinationCity"
+                        required
                         placeholder="City or Airport"
                       />
                       <datalist id="destinationCity">
@@ -163,6 +168,7 @@
                       <input
                         v-model="flight.Itineraries.DepartureDate"
                         type="date"
+                        required
                       />
                     </div>
                     <div
@@ -715,7 +721,7 @@ export default {
           },
         })
         .then((res) => {
-          //console.log(res.data.flightSearchResult)
+          console.log(res.data.flightSearchResult)
           this.loading = false;
           let sendData = JSON.stringify(res.data.flightSearchResult);
           const dataForm = JSON.stringify({
@@ -731,13 +737,11 @@ export default {
               "LL"
             ),
           });
-          console.log(sendData)
+          //console.log(sendData)
+          localStorage.setItem('data', sendData)
+          localStorage.setItem('form', dataForm)
           this.$router.push({
             name: "TravelAndTourPage",
-            params: {
-              data: sendData,
-              form: dataForm,
-            },
           });
         })
         .catch(err => {

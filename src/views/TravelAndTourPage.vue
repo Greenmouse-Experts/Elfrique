@@ -701,8 +701,8 @@ export default {
   },
   data() {
     return {
-      flightResult:  [],
-      formResult:  [],
+      flightResult: JSON.parse(localStorage.getItem('data')) || [],
+      formResult: JSON.parse(localStorage.getItem('form')) || [],
       flightLogo: "",
       flightName: "",
       departName: "",
@@ -727,10 +727,10 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.params);
+    //console.log(this.$route.paramst);
   },
   methods: {
-    /* getFlightData(item) {
+    getFlightData(item) {
       //console.log(item);
       this.flightLogo = item.FlightCombination.FlightModels[0].AirlineLogoUrl;
       this.flightName = item.FlightCombination.FlightModels[0].AirlineName;
@@ -780,7 +780,7 @@ export default {
         this.infantPrice = this.getNPrice(
           item.FlightCombination.PriceDetails[1].BaseFare.Amount
         );
-    }, */
+    },
     getTime(value) {
       return moment(value).format("HH:mm");
     },
