@@ -12,7 +12,7 @@
             <img :src="trivia.image" />
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="text-title-area">
             <h1>{{ trivia.title }}</h1>
             <small
@@ -76,10 +76,68 @@
             </div>
           </div>
         </div>
+        <div class="col-lg-4 form-area" v-if="paymentForm">
+          <div class="contestantPaySection">
+              <h4>You are about to pay. There would be no refund or reversal if you choose a wrong form.</h4>
+              <hr>
+              <h5>Summary of your order</h5>
+              <div>
+                <h6>Name</h6>
+                <p>{{triviaPlayer.name}}</p>
+              </div>
+              <div>
+                <h6>Email</h6>
+                <p>{{triviaPlayer.email}}</p>
+              </div>
+              <div>
+                <h6>Reference</h6>
+                <p>{{reference}}</p>
+              </div>
+              <div>
+                <h6><strong>Amount</strong></h6>
+                <p>{{currency_symbol}} {{(amount/toRate).toFixed(2)}}</p>
+              </div>
+              <h5>Choose Payment Gateway</h5>
+          </div>
+          <div v-if="currency_symbol != 'NGN'">
+            <div class="col-lg-12 mb-3">
+                <button @click="flutterWave(trivia.id)">
+                  Pay Now – International
+                </button>
+              </div>
+          </div>
+          <div v-else>
+            <div class="col-lg-12 mb-3" v-if="method == 'paystack'">
+              <button @click="Paystack(trivia.id)">
+                Pay Now – Local
+              </button>
+            </div>
+            <div class="col-lg-12 mb-3" v-if="method == 'flutterwave'">
+              <button @click="flutterWave(trivia.id)">
+                Pay Now – Local & International
+              </button>
+            </div>
+            <div class="col-lg-12 mb-3" v-if="method == 'interswitch'">
+              <button @click="Interswitch(trivia.id)">
+                Pay Now – Local & International
+              </button>
+            </div>
+            <!-- <div class="col-lg-12 mb-3" v-if="method == 'aimstoget'">
+              <button :disabled="loading" @click="callAtgPay(form_id)">
+                Pay Now – Airtime – Nigeria Only 
+              </button>
+            </div> -->
+          </div>
+          <!-- <div class="col-lg-12 mb-3">
+            <button>
+              AimToGet – Pay Now – Airtime – Nigeria Only 
+            </button>
+          </div> -->
+        </div>
       </div>
     </div>
 
-    <div class="container event-form-content mt-4">
+    <div class="container event-form-content mt-4" v-if="!paymentForm">
       <div class="row">
         <div class="col-lg-12">
           <ul class="nav nav-pills mb-5 mt-2" id="pills-tab" role="tablist">
@@ -258,6 +316,9 @@
 <script>
 import Header from "./elfrique-header.vue";
 import Footer from "./elfrique-footer.vue";
+import uniqid from "uniqid";
+import moment from "moment";
+import axios from "axios";
 import TriviaService from "../service/trivia.service";
 export default {
   name: "Elfrique",
@@ -268,14 +329,21 @@ export default {
   data() {
     return {
       trivia: "",
+      triviaType: '',
       loading: false,
+      paymentForm: false,
+      currency_symbol: "",
+      toRate: "",
+      amount: 2000,
       triviaPlayer: {
         name: "",
         email: "",
         phonenumber: "",
         city: "",
       },
+      triviaType: '',
       errMessage: '',
+      reference: this.genRef(),
     };
   },
 
@@ -288,33 +356,55 @@ export default {
   created() {
     TriviaService.getSingleTrivia(this.$route.params.id).then((response) => {
       this.trivia = response.data.trivia;
-      console.log(this.trivia);
+      //console.log(this.trivia);
+      this.triviaType =  response.data.trivia.type
     });
+    this.convert_price();
   },
 
   methods: {
+    convert_price() {
+      axios.get("https://ipapi.co/currency").then((res) => {
+        let currency = res.data;
+        axios
+          .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+          .then((res) => {
+            this.currency_symbol = res.data.base;
+            this.toRate = res.data.rates["NGN"];
+          });
+      });
+    },
     submitPlayer() {
       this.loading = true;
-      TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
-      .then(
-        (response) => {
-          this.$store
-            .dispatch("vote/getTriviaPlayer", response.data.player)
-            .then(() => {
-              this.$router.push(
-                "/trivia-content-instruction/" + this.trivia.id
-              );
-            })
-        }
-      )
-      .catch(err => {
-          this.loading = false;
-            new Error(err)
-            this.errMessage = "You have already attemted this Trivia, please enter another email to cotinue"
-            setTimeout(() => {
-                this.errMessage = ""
-            }, 3000);
-        })
+      if(this.triviaType == 'paid'){
+        this.paymentForm = true
+        this.loading = false;
+      }
+      else{
+          TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
+        .then(
+          (response) => {
+            this.$store
+              .dispatch("vote/getTriviaPlayer", response.data.player)
+              .then(() => {
+                this.$router.push(
+                  "/trivia-content-instruction/" + this.trivia.id
+                );
+              })
+          }
+        )
+        .catch(err => {
+            this.loading = false;
+              new Error(err)
+              this.errMessage = "You have already attemted this Trivia, please enter another email to cotinue"
+              setTimeout(() => {
+                  this.errMessage = ""
+              }, 3000);
+          })
+      }
+    },
+    genRef() {
+      return uniqid();
     },
   },
 
