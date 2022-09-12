@@ -264,8 +264,13 @@
         >
           <li>
             <router-link to="/organiser/create-event" class="routers"
-              ><a
-                ><i class="bi bi-circle"></i><span>Create Event</span></a
+              >
+              <a
+                ><i class="bi bi-circle"></i>
+                <span>
+                  Create Event
+                </span>
+                </a
               ></router-link
             >
           </li>

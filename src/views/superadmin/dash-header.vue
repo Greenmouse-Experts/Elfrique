@@ -218,12 +218,12 @@
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="#" class="routers">
+                    <router-link to="/superadmin/cash-payment" class="routers">
                         <a><i class="bi bi-circle"></i><span>Cash Payment</span></a>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="#" class="routers">
+                    <router-link to="/superadmin/pending-online" class="routers">
                         <a><i class="bi bi-circle"></i><span>Pending Online</span></a>
                     </router-link>
                 </li>
