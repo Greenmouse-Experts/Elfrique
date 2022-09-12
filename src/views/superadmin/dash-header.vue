@@ -650,7 +650,6 @@ export default {
 
 <style>
     .router-link-active{
-        background: #3B702A !important;
         color: #fff !important;
     }
 </style>
