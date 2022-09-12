@@ -138,7 +138,7 @@ export default {
       this.method = data.method
       this.product_title = data.product_title
     },
-    payStack(id) {
+    PayStack(id) {
       //  options
       const paymentOptions = {
         // general options
