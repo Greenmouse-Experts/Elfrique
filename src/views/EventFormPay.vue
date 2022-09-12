@@ -104,7 +104,7 @@ export default {
     return {
       data: '',
       reference: '',
-      description: this.$route.params.description,
+      description: localStorage.getItem('EventformDescription'),
       admin_id: '',
       email: '',
       name: '',
@@ -126,7 +126,7 @@ export default {
   },
   methods: {
     getData(){
-      let data = this.transData
+      let data = JSON.parse(localStorage.getItem('EventformData'))
       this.reference = data.reference
       this.form_id = data.product_id
       this.admin_id = data.admin_id

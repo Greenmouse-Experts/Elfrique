@@ -590,7 +590,7 @@
           </h5>
           <button
             type="button"
-            id="close"
+            id="closeMOdal"
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
@@ -667,7 +667,7 @@
                       </div>
                       <div class="adult">
                         <p v-for="item in rules" :key="item">* {{ item }}</p>
-                        <button>Book</button>
+                        <button @click="PayFlutter(item)">Book</button>
                       </div>
                     </div>
                   </div>
@@ -692,6 +692,8 @@ import Newsletter from "./elfrique-newsletter.vue";
 import Footer from "./elfrique-footer.vue";
 import moment from "moment";
 import momentDurationFormatSetup from "moment-duration-format";
+import Swal from "sweetalert2";
+import uniqid from "uniqid";
 export default {
   name: "Elfrique",
   components: {
@@ -721,9 +723,13 @@ export default {
       from: "",
       to: "",
       goingDate: "",
+      Payprice: "",
       adultPrice: "",
       childrenPrice: "",
       infantPrice: "",
+      reference: this.genRef(),
+      publicKey: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f",
+      flw_public_key: "FLWPUBK_TEST-0f353662b04aee976128e62946a59682-X"
     };
   },
   created() {
@@ -764,6 +770,7 @@ export default {
       if (this.formResult.infantCount != "0")
         this.infant = `Infants (x${this.formResult.infantCount})`;
       this.price = this.getNPrice(item.FlightCombination.Price.Amount);
+      this.Payprice = item.FlightCombination.Price.Amount;
       this.rules = item.FlightCombination.FareRules;
       this.from = item.FlightCombination.FlightModels[0].DepartureName;
       this.to = item.FlightCombination.FlightModels[0].ArrivalName;
@@ -799,9 +806,85 @@ export default {
         currency: "NGN",
       });
     },
+    async PayFlutter(item){
+      this.closeModal()
+      const { value: email } = await Swal.fire({
+        title: 'Input your email address',
+        input: 'email',
+        inputLabel: 'Your email address',
+        inputPlaceholder: 'Enter your email address',
+        inputValidator: (value) => {
+          if (!value) {
+            return 'You need to write something!'
+          }
+        }
+      })
+      if (email) {
+        
+        const { value: name } = await Swal.fire({
+          title: 'Enter your name',
+          input: 'text',
+          inputLabel: 'Your name',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to write something!'
+            }
+          }
+        })
+        if (name) {
+          let paymentParams = FlutterwaveCheckout({
+            public_key: this.flw_public_key,
+            tx_ref: this.reference,
+            amount: this.Payprice,
+            currency: "NGN",
+            customer: {
+              email: email,
+              name: name,
+            },
+            callback: (response) => {
+              console.log(response);
+              this.loading = false;
+              this.method = "Flutterwave";
+              
+              paymentParams.close()
+              window.close()
+            },
+            onclose: () => paymentParams.close()
+          });
+        }
+      }
+
+      
+
+    },
+    genRef() {
+      return uniqid();
+    },
+    closeModal() {
+      document.getElementById("closeMOdal").click();
+    },
   },
   mounted() {
     window.scrollTo(0, 0);
+    const popup = document.createElement("script");
+    popup.setAttribute("src", "https://js.paystack.co/v2/inline.js");
+    popup.async = true;
+    document.head.appendChild(popup);
+    const inlineSdk = "https://checkout.flutterwave.com/v3.js";
+    const script = document.createElement("script");
+    script.src = inlineSdk;
+    if (!document.querySelector(`[src="${inlineSdk}"]`)) {
+      document.body.appendChild(script);
+    }
   },
 };
 </script>
+
+<style>
+  .swal2-container.swal2-center.swal2-backdrop-show{
+    z-index: 9999;
+  }
+  .swal2-styled.swal2-confirm{
+    background: #356425 !important;
+  }
+</style>

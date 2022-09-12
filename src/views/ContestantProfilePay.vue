@@ -74,7 +74,7 @@
             <h5>Choose Payment Gateway</h5>
           </div>
           <div v-if="payContent.amount != '0.00'">
-            <div v-if="currency_code != 'NGN'">
+            <div v-if="payContent.currency_symbol != 'NGN'">
               <div class="col-lg-12 mb-3">
                 <button @click="payWithFlutter">Pay Now – International</button>
               </div>

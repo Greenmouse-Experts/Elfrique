@@ -588,11 +588,14 @@ export default {
         type: "Event Form",
         message: `Someone just Successfully Applied for Event Form`,
       });
+      localStorage.setItem('EventformData', data)
       this.$router.push("/fill-form/" + id, {
         params: { data: { data } },
       });
     },
     proceedPay() {
+      localStorage.setItem('EventformData', JSON.stringify(this.transactForm))
+      localStorage.setItem('EventformDescription', this.description)
       this.$router.push({
         name: "EvtForEventFormPay",
         params: {

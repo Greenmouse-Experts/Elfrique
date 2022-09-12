@@ -475,9 +475,9 @@ export default {
     return {
       voteContent: "",
       awardContent: "",
-      voteContentToShow: 3,
+      voteContentToShow: 6,
       totalvoteContent: 0,
-      awardContentToShow: 3,
+      awardContentToShow: 6,
       totalAwardContent: 0,
     };
   },
