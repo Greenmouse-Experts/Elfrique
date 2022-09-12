@@ -638,7 +638,7 @@ export default {
   data() {
     return {
       flight: {
-        FlightSearchType: "Return",
+        FlightSearchType: "Oneway",
         Adults: 1,
         Children: "0",
         Infants: "0",
@@ -648,6 +648,7 @@ export default {
           Departure: "",
           Destination: "",
           DepartureDate: "",
+          ReturnDate: ""
         },
       },
       airportCityList: [],
@@ -699,21 +700,42 @@ export default {
       this.loading = true;
       let from = this.flight.Itineraries.Departure.slice(-3);
       let to = this.flight.Itineraries.Destination.slice(-3);
-      const dataForm = {
-        searchType: this.flight.FlightSearchType,
-        adultsCount: this.flight.Adults,
-        childrenCount: this.flight.Children,
-        infantCount: this.flight.Infants,
-        ticketClass: this.flight.Ticketclass,
-        currency: "NGN",
-        from: from,
-        to: to,
-        departureDate: moment(this.flight.Itineraries.DepartureDate).format(
-          "L"
-        ),
-      };
+      let dataForm = null
+      if (this.flight.Itineraries.ReturnDate != "") {
+        dataForm = {
+          searchType: this.flight.FlightSearchType,
+          adultsCount: this.flight.Adults,
+          childrenCount: this.flight.Children,
+          infantCount: this.flight.Infants,
+          ticketClass: this.flight.Ticketclass,
+          currency: "NGN",
+          from: from,
+          to: to,
+          departureDate: moment(this.flight.Itineraries.DepartureDate).format(
+            "L"
+          ),
+          returnDate: moment(this.flight.Itineraries.ReturnDate).format(
+            "L"
+          ),
+        };
+      } else {
+        dataForm = {
+          searchType: this.flight.FlightSearchType,
+          adultsCount: this.flight.Adults,
+          childrenCount: this.flight.Children,
+          infantCount: this.flight.Infants,
+          ticketClass: this.flight.Ticketclass,
+          currency: "NGN",
+          from: from,
+          to: to,
+          departureDate: moment(this.flight.Itineraries.DepartureDate).format(
+            "L"
+          ),
+        };
+      }
+      
       //console.log(dataForm)
-
+      
       axios
         .post(`${_API_URL}flight/search`, dataForm, {
           headers: {
