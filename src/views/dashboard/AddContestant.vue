@@ -10,7 +10,6 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><router-link to="/organiser/dashboard" class="routers"><a>Home</a></router-link></li>
                     <li class="breadcrumb-item active">Voting</li>
-                    <li class="breadcrumb-item active"><router-link to="/organiser/start-voting" class="routers"><a>Start Voting</a></router-link></li>
                     <li class="breadcrumb-item active">Add Contestant</li>
                 </ol>
             </nav>
