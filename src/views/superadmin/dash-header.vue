@@ -100,11 +100,9 @@
                     </li>
 
                     <li>
-                        <router-link to="/superadmin/profile" class="routers">
-                            <a class="dropdown-item d-flex align-items-center">
-                                <i class="bi bi-person"></i>
-                                <span>My Profile</span>
-                            </a>
+                        <router-link to="/superadmin/profile" class="routers dropdown-item d-flex align-items-center">
+                            <i class="bi bi-person"></i>
+                            <span>My Profile</span>
                         </router-link>
                     </li>
                     <li>
@@ -137,11 +135,9 @@
   <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item">
-            <router-link to="/superadmin/dashboard" class="routers">
-                <a class="nav-link collapsed">
-                    <img src="@/assets/images/menu-dashboard.png" />
-                    <span>Dashboard</span>
-                </a>
+            <router-link to="/superadmin/dashboard" class="routers nav-link collapsed">
+                <img src="@/assets/images/menu-dashboard.png" />
+                <span>Dashboard</span>
             </router-link>
         </li>
         <!-- Hamzat Update -->
@@ -163,7 +159,7 @@
             </li> -->
         <!--General-->
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#general-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-general.png" /><span></span>General<i class="bi bi-chevron-down ms-auto"></i> </a>
+            <router-link class="nav-link collapsed" data-bs-target="#general-nav" data-bs-toggle="collapse" to="/superadmin/overview-general"> <img src="@/assets/images/menu-general.png" /><span></span>General<i class="bi bi-chevron-down ms-auto"></i> </router-link>
             <ul id="general-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
                     <router-link to="/superadmin/overview-general" class="routers">
@@ -210,7 +206,7 @@
         </li>
         <!--Voting-->
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#voting-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-vote.png" /><span></span>Voting<i class="bi bi-chevron-down ms-auto"></i> </a>
+            <router-link class="nav-link collapsed" data-bs-target="#voting-nav" data-bs-toggle="collapse" to="/superadmin/overview-voting"> <img src="@/assets/images/menu-vote.png" /><span></span>Voting<i class="bi bi-chevron-down ms-auto"></i> </router-link>
             <ul id="voting-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
                     <router-link to="/superadmin/overview-voting" class="routers">
@@ -291,7 +287,7 @@
         </li>
         <!--Registration-->
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#reg-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-registration.png" /><span></span>Event Registration<i class="bi bi-chevron-down ms-auto"></i> </a>
+            <router-link class="nav-link collapsed" data-bs-target="#reg-nav" data-bs-toggle="collapse" to="/superadmin/overview-registration"> <img src="@/assets/images/menu-registration.png" /><span></span>Event Registration<i class="bi bi-chevron-down ms-auto"></i> </router-link>
             <ul id="reg-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
                     <router-link to="/superadmin/overview-registration" class="routers">
@@ -648,3 +644,10 @@ export default {
   },
 };
 </script>
+
+<style>
+    .router-link-active{
+        background: #3B702A !important;
+        color: #fff !important;
+    }
+</style>

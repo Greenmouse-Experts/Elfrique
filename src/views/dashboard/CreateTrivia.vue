@@ -60,6 +60,21 @@
                                     <input v-model="triviaContent.type"  class="radio" type="radio" name="trivia" value="paid" id="paid"> <span>Paid</span>
                                     <input v-model="triviaContent.type"  class="radio" type="radio" name="trivia" value="free" id="free"> <span>Free</span>
                                 </div>
+
+                                <div class="col-lg-12 mt-4" v-if="triviaContent.type == 'paid'">
+                                    <label for="trivia type">Price</label>
+                                    <input v-model="triviaContent.amount"  class="input" type="number" name="trivia" id="paid">
+                                </div>
+
+                                <div class="col-lg-12 mt-4" v-if="triviaContent.type == 'paid'">
+                                    <label for="trivia type">Payment Method</label>
+                                    <select v-model="triviaContent.method" id="" class="input">
+                                        <option value="paystack">Paystack</option>
+                                        <option value="flutterwave">Flutterwave</option>
+                                        <option value="aimstoget">AimsToGet</option>
+                                        <option value="interswitch">Interswitch</option>
+                                    </select>
+                                </div>
                                 <!--Trivia Details-->
                                 <div class="col-lg-12 mt-4">
                                     <label for="trivia details">Trivia Details</label>
@@ -115,9 +130,9 @@
                     instruction:'',
                     duration:'',
                     type:'',
-                    numberoftimes:'',
-
-                    
+                    numberoftimes: '',
+                    amount: 0,
+                    method: 'paystack'
                 },
                 file: '',
                 error: '',
@@ -152,6 +167,8 @@
             formData.append('instruction', this.triviaContent.instruction);
             formData.append('duration', this.triviaContent.duration);
             formData.append('type', this.triviaContent.type);
+            formData.append('amount', this.triviaContent.amount);
+            formData.append('paymentgateway', this.triviaContent.method);
             formData.append('numberoftimes', this.triviaContent.numberoftimes);
     
             TriviaService.createTrivia(formData).then(response => {
