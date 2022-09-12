@@ -23,7 +23,7 @@ class TransactionService {
   }
 
   getTransactionHistory() {
-    return axios.get(API_URL + "getAllTransactions", {
+    return axios.get(API_URL + "getAllUserTransactions", {
       headers: authHeader(),
     });
   }

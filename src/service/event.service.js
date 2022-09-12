@@ -53,6 +53,14 @@ class EventService {
     return axios.get(API_URL + "getallVote", { headers: authHeader() });
   }
 
+  getAllUserUrl() {
+    return axios.get(API_URL + "url/getAllUserUrl", { headers: authHeader2() });
+  }
+
+  getAllShortUrls() {
+    return axios.get(API_URL + "getAllShortUrl", { headers: authHeader2() });
+  }
+
   getSingleEvent(id) {
     return axios.get(API_URL + "getSingleEvent/" + id, {
       headers: authHeader(),
