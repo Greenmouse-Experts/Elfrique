@@ -27,7 +27,11 @@
                                 </select>
                             </div>
                             <div class="col-lg-12 mt-4">
-                                <button type="submit">View Analytics</button>
+                                <button  type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdrop">
+                                    View Analytics
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -35,6 +39,8 @@
             </div>
         </div>
     </main>
+
+    
 
     <dash-footer/>
 </template>

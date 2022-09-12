@@ -162,11 +162,6 @@
             <router-link class="nav-link collapsed" data-bs-target="#general-nav" data-bs-toggle="collapse" to="/superadmin/overview-general"> <img src="@/assets/images/menu-general.png" /><span></span>General<i class="bi bi-chevron-down ms-auto"></i> </router-link>
             <ul id="general-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
-                    <router-link to="/superadmin/overview-general" class="routers">
-                        <a><i class="bi bi-circle"></i><span>Overview</span></a>
-                    </router-link>
-                </li>
-                <li>
                     <router-link to="/superadmin/view-organisers" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Organisers</span></a>
                     </router-link>
@@ -176,17 +171,20 @@
                         <a><i class="bi bi-circle"></i><span>Short Links</span></a>
                     </router-link>
                 </li>
-                <!-- <li><router-link to="/superadmin/subscribers" class="routers"><a><i class="bi bi-circle"></i><span>Subscribers</span></a></router-link></li>
-                    <li><router-link to="/superadmin/add-subscribers" class="routers"><a><i class="bi bi-circle"></i><span>Add Subscribers</span></a></router-link></li>
-                    <li><router-link to="/superadmin/search-airtime" class="routers"><a><i class="bi bi-circle"></i><span>Search Airtime</span></a></router-link></li>
-                    <li><router-link to="/superadmin/view-airtime-logs" class="routers"><a><i class="bi bi-circle"></i><span>View Airtime Logs</span></a></router-link></li> -->
+                <li>
+                    <router-link to="/superadmin/subscribers" class="routers"><a><i class="bi bi-circle"></i><span>Subscribers</span></a>
+                    </router-link>
+                </li>
+                <li><router-link to="/superadmin/add-subscribers" class="routers"><a><i class="bi bi-circle"></i><span>Add Subscribers</span></a></router-link></li>
+                <li><router-link to="/superadmin/search-airtime" class="routers"><a><i class="bi bi-circle"></i><span>Search Airtime</span></a></router-link></li>
+                <li><router-link to="/superadmin/view-airtime-logs" class="routers"><a><i class="bi bi-circle"></i><span>View Airtime Logs</span></a></router-link></li>
                 <li>
                     <router-link to="/superadmin/view-payout" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Payout</span></a>
                     </router-link>
                 </li>
-                <!-- <li><router-link to="/superadmin/payu-log" class="routers"><a><i class="bi bi-circle"></i><span>Payu Log</span></a></router-link></li>
-                    <li><router-link to="/superadmin/search-payu-logs" class="routers"><a><i class="bi bi-circle"></i><span>Search Payu Logs</span></a></router-link></li> -->
+                <li><router-link to="/superadmin/payu-log" class="routers"><a><i class="bi bi-circle"></i><span>Payu Log</span></a></router-link></li>
+                    <li><router-link to="/superadmin/search-payu-logs" class="routers"><a><i class="bi bi-circle"></i><span>Search Payu Logs</span></a></router-link></li>
                 <li>
                     <router-link to="/superadmin/add-faq" class="routers">
                         <a><i class="bi bi-circle"></i><span>Add FAQ</span></a>
@@ -202,6 +200,11 @@
                         <a><i class="bi bi-circle"></i><span>Admin-User-Login</span></a>
                     </router-link>
                 </li>
+                <li>
+                    <router-link to="#" class="routers">
+                        <a><i class="bi bi-circle"></i><span>Search</span></a>
+                    </router-link>
+                </li>
             </ul>
         </li>
         <!--Voting-->
@@ -211,9 +214,14 @@
                 <span></span>Voting<i class="bi bi-chevron-down ms-auto"></i> 
             </router-link>
             <ul id="voting-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/overview-voting" class="routers">
                         <a><i class="bi bi-circle"></i><span>Overview</span></a>
+                    </router-link>
+                </li> -->
+                <li>
+                    <router-link to="/superadmin/view-contest" class="routers">
+                        <a><i class="bi bi-circle"></i><span>View Contest</span></a>
                     </router-link>
                 </li>
                 <li>
@@ -231,42 +239,7 @@
                         <a><i class="bi bi-circle"></i><span>Payout Setting</span></a>
                     </router-link>
                 </li>
-                <li>
-                    <router-link to="/superadmin/start-voting" class="routers">
-                        <a><i class="bi bi-circle"></i><span>Start Voting</span></a>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/superadmin/add-contestant" class="routers">
-                        <a><i class="bi bi-circle"></i><span>Add Contestants</span></a>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/superadmin/add-sponsor" class="routers">
-                        <a><i class="bi bi-circle"></i><span>Add Sponsors</span></a>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/superadmin/add-category" class="routers">
-                        <a><i class="bi bi-circle"></i><span>Add Category</span></a>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/superadmin/add-info" class="routers">
-                        <a><i class="bi bi-circle"></i><span>Add Info</span></a>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/superadmin/view-contestants" class="routers">
-                        <a><i class="bi bi-circle"></i><span>View Contestants</span></a>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/superadmin/view-contest" class="routers">
-                        <a><i class="bi bi-circle"></i><span>View Contest</span></a>
-                    </router-link>
-                </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/view-categories" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Categories</span></a>
                     </router-link>
@@ -280,7 +253,7 @@
                     <router-link to="/superadmin/result-setting" class="routers">
                         <a><i class="bi bi-circle"></i><span>Result Setting</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <li>
                     <router-link to="/superadmin/search-for-vote" class="routers">
                         <a><i class="bi bi-circle"></i><span>Search For Votes</span></a>
@@ -292,12 +265,12 @@
         <li class="nav-item">
             <router-link class="nav-link collapsed" data-bs-target="#reg-nav" data-bs-toggle="collapse" to="/superadmin/overview-registration"> <img src="@/assets/images/menu-registration.png" /><span></span>Event Registration<i class="bi bi-chevron-down ms-auto"></i> </router-link>
             <ul id="reg-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/overview-registration" class="routers">
                         <a><i class="bi bi-circle"></i><span>Overview</span></a>
                     </router-link>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <router-link to="/superadmin/create-event" class="routers">
                         <a><i class="bi bi-circle"></i><span>Create Event</span></a>
                     </router-link>
@@ -306,7 +279,7 @@
                     <router-link to="/superadmin/add-ticket" class="routers">
                         <a><i class="bi bi-circle"></i><span>Add Ticket</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <li>
                     <router-link to="/superadmin/view-event" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Event</span></a>
@@ -317,11 +290,11 @@
                         <a><i class="bi bi-circle"></i><span>Event Setting</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/personal-ticket" class="routers">
                         <a><i class="bi bi-circle"></i><span>Personal Ticket</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <li>
                     <router-link to="/superadmin/event-cash-payment" class="routers">
                         <a><i class="bi bi-circle"></i><span>Cash Payment</span></a>
@@ -338,8 +311,8 @@
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/superadmin/search-ticket" class="routers">
-                        <a><i class="bi bi-circle"></i><span>Search For Tickets</span></a>
+                    <router-link to="/superadmin/search-for-vote" class="routers">
+                        <a><i class="bi bi-circle"></i><span>Search For Votes</span></a>
                     </router-link>
                 </li>
             </ul>
@@ -348,12 +321,12 @@
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-form.png" /><span></span>Forms<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/overview-forms" class="routers">
                         <a><i class="bi bi-circle"></i><span>Overview</span></a>
                     </router-link>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <router-link to="/superadmin/create-form" class="routers">
                         <a><i class="bi bi-circle"></i><span>Create Form</span></a>
                     </router-link>
@@ -362,17 +335,17 @@
                     <router-link to="/superadmin/build-form" class="routers">
                         <a><i class="bi bi-circle"></i><span>Build Form</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <li>
                     <router-link to="/superadmin/view-forms" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Forms</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/personal-forms" class="routers">
                         <a><i class="bi bi-circle"></i><span>Personal Forms</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <li>
                     <router-link to="/superadmin/form-cash-payment" class="routers">
                         <a><i class="bi bi-circle"></i><span>Cash Payment</span></a>
@@ -383,11 +356,11 @@
                         <a><i class="bi bi-circle"></i><span>Payout Setting</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/form-sales-analytics" class="routers">
                         <a><i class="bi bi-circle"></i><span>Sales Analytics</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <li>
                     <router-link to="/superadmin/search-forms" class="routers">
                         <a><i class="bi bi-circle"></i><span>Search For Forms</span></a>
@@ -399,22 +372,32 @@
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#trivia-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-trivia.png" /><span></span>Trivia<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="trivia-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/overview-trivia" class="routers">
                         <a><i class="bi bi-circle"></i><span>Overview</span></a>
                     </router-link>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <router-link to="/superadmin/create-trivia" class="routers">
                         <a><i class="bi bi-circle"></i><span>Create Trivia</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <li>
                     <router-link to="/superadmin/view-trivia" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Trivia</span></a>
                     </router-link>
                 </li>
                 <li>
+                    <router-link to="/superadmin/view-trivia" class="routers">
+                        <a><i class="bi bi-circle"></i><span>Create Payment</span></a>
+                    </router-link>
+                </li>
+                <li>
+                    <router-link to="/superadmin/view-trivia" class="routers">
+                        <a><i class="bi bi-circle"></i><span>Search</span></a>
+                    </router-link>
+                </li>
+                <!-- <li>
                     <router-link to="/superadmin/update-trivia" class="routers">
                         <a><i class="bi bi-circle"></i><span>Update Trivia</span></a>
                     </router-link>
@@ -423,8 +406,8 @@
                     <router-link to="/superadmin/view-result" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Results</span></a>
                     </router-link>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <router-link to="/superadmin/trivia-cash-payment" class="routers">
                         <a><i class="bi bi-circle"></i><span>Cash Payment</span></a>
                     </router-link>
@@ -439,6 +422,7 @@
                         <a><i class="bi bi-circle"></i><span>Search For Trivia</span></a>
                     </router-link>
                 </li>
+            </ul> -->
             </ul>
         </li>
         <!--Vendor-->
@@ -554,11 +538,11 @@
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#analytics-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-analytics.png" /><span></span>Sales Analytics<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="analytics-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/overview-sales-analytics" class="routers">
                         <a><i class="bi bi-circle"></i><span>Overview</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <li>
                     <router-link to="/superadmin/voting-analytics" class="routers">
                         <a><i class="bi bi-circle"></i><span>Voting</span></a>
@@ -579,11 +563,11 @@
                         <a><i class="bi bi-circle"></i><span>Trivia</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/vendor-analytics" class="routers">
                         <a><i class="bi bi-circle"></i><span>Vendor</span></a>
                     </router-link>
-                </li>
+                </li> -->
             </ul>
         </li>
         <!--SMS Notification-->

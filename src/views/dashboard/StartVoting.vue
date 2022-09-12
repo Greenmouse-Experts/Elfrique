@@ -68,11 +68,11 @@
                                     <option value="interswitch">Interswitch</option>
                                 </select>
                             </div>
-                            <div class="col-lg-12 mt-4">
+                            <!-- <div class="col-lg-12 mt-4">
                                 <label for="accept crypto payments">Accept Crypto Payments (Bitcoin, Ethereum, Steem)</label>
                                 <input v-model="votecontent.acceptCryptoPayments" class="radio" type="radio" name="cryto" id="off" value="off"> <span>Off</span>
                                 <input v-model="votecontent.acceptCryptoPayments" class="radio" type="radio" name="cryto" id="on" value="on" checked> <span>On</span>
-                            </div>
+                            </div> -->
                             <div class="col-lg-12 mt-4">
                                 <button type="submit" value="proceed">Proceed</button>
                             </div>

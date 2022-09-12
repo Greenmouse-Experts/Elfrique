@@ -13,7 +13,8 @@
                 <li class="breadcrumb-item active">Overview</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
+        <!-- End Page Title -->
 
         <section class="section overview-box-section">
             <div class="container-fluid">
