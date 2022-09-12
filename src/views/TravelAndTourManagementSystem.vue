@@ -66,7 +66,7 @@
                   <select v-model="flight.FlightSearchType" required>
                     <option value="Return">Round Trip</option>
                     <option value="Oneway">One-way</option>
-                    <option value="Multidestination">Multi-city</option>
+                    <!-- <option value="Multidestination">Multi-city</option> -->
                   </select>
                 </div>
                 <div class="col-lg-3">
@@ -638,11 +638,11 @@ export default {
   data() {
     return {
       flight: {
-        FlightSearchType: "",
-        Adults: "0",
+        FlightSearchType: "Return",
+        Adults: 1,
         Children: "0",
         Infants: "0",
-        Ticketclass: "",
+        Ticketclass: "Y",
         TargetCurrency: "NGN",
         Itineraries: {
           Departure: "",
