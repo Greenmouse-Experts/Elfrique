@@ -6,7 +6,7 @@
   <main id="main" class="main">
     <!--Page Title-->
     <div class="pagetitle">
-      <h1>Organiser Dashboard</h1>
+      <h1 class="create">Organiser Dashboard</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
