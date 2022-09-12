@@ -250,6 +250,8 @@ import ViewContest from "../views/superadmin/ViewContest.vue";
 import ViewCategories from "../views/superadmin/ViewCategories.vue";
 import Lelt from "../views/superadmin/Lelt.vue";
 import STravelsales from "../views/superadmin/STravelsales.vue";
+import CashPayment from "../views/superadmin/CashPayment.vue";
+import PendingOnline from "../views/superadmin/PendingOnline.vue";
 ///////////////////////////////////////
 import SuperAdminNotContactList from "../views/superadmin/ContactList.vue";
 import SuperAdminNotSMSLogs from "../views/superadmin/SMSLogs.vue";
@@ -1298,6 +1300,16 @@ const routes = [
     path: "/superadmin/tour-sales",
     name: "STravelsales",
     component: STravelsales,
+  },
+  {
+    path: "/superadmin/cash-payment",
+    name: "CashPayment",
+    component: CashPayment,
+  },
+  {
+    path: "/superadmin/pending-online",
+    name: "PendingOnline",
+    component: PendingOnline,
   },
 ];
 

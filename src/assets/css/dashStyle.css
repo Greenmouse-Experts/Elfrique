@@ -655,6 +655,10 @@ header .logo img {
   color: #fff;
   background: #3B702A;
 }
+.sidebar-nav .nav-link:active{
+  color: #fff;
+  background: #3B702A;
+}
 .sidebar-nav .nav-link:hover i {
   color: #fff;
 }
@@ -687,10 +691,10 @@ header .logo img {
   border-radius: 4px;
   padding: 7px 0 7px 20px;
 }
-/* .sidebar-nav .nav-content a.active{
+.sidebar-nav .nav-content a.active{
   background-color: #3B702A;
   color: #fff;
-} */
+}
 .sidebar-nav .nav-content a i {
   font-size: 6px;
   margin-right: 8px;
