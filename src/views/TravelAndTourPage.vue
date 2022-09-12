@@ -844,8 +844,13 @@ export default {
             callback: (response) => {
               console.log(response);
               this.loading = false;
-              this.method = "Flutterwave";
-              
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Ticket Booked Successfully",
+                showConfirmButton: false,
+                timer: 1500,
+              });
               paymentParams.close()
               window.close()
             },
