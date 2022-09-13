@@ -1,11 +1,13 @@
 <template>
-    <title>Subscribers | Elfrique - Super Admin</title>
+    <title>
+        Subscribers | Elfrique - Super Admin
+    </title>
     <dash-header/>
 
     <!--------Main Content--------->
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>Subscribers</h1>
+            <h1 class="create">Subscribers</h1>
             <nav>
                 <ol class="breadcrumb">
                 <li class="breadcrumb-item"><router-link to="/superadmin/dashboard" class="routers"><a>Home</a></router-link></li>
@@ -34,13 +36,13 @@
                             </form>
                         </div>
                         <!--Table-->
-                        <p class="text-center p-text">Email Subscribers List</p>
+                        <p class="text-center p-text create">Email Subscribers List</p>
                         <table class="table datatable card-table-table">
                             <thead>
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Email</th>
-                                <th scope="col">Edit</th>
+                                <th scope="col">Edit </th>
                                 <th scope="col">Delete</th>
                             </tr>
                             </thead>
@@ -49,10 +51,17 @@
                                 <th scope="row">1</th>
                                 <td>Email Here</td>
                                 <td>
-                                    <button class="btn btn-primary btn-sm text-dark">Edit</button>
+                                    <button style="color:#000 !important" class="btn btn-primary btn-sm text-dark"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdrop">Edit Subscriber</button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger btn-sm text-dark">Delete</button>
+                                    <button style="color:red!important">
+                                        <div class="delete">
+                                           <button> Delete Subscriber</button>
+                                        </div>
+                                    </button>
                                 </td>
                             </tr>
                             </tbody>
@@ -78,9 +87,68 @@
     
     </main>
 
+    <!-- Modal -->
+    <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+        >
+        <div class="modal-dialog modal-xl container">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">
+                    <b>
+                        Edit subscriber
+                    </b>
+                </h5>
+                <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <section class="section">
+            <div class="row">
+            <div class="col-lg-12">
+                <div class="subscribe-email-section mt-5 mb-5">
+                    <form>
+                        <input class="email-input" type="email" placeholder="Enter Your Email Address">
+                        <input class="remove-input" type="text" value="Add Subscriber">
+                        <div class="mt-3">
+                            <button class="btn btn-success" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+            </section>
+            </div>
+            <div class="modal-footer">
+                <button
+                class="close"
+                id="close"
+                type="button"
+                data-bs-dismiss="modal"
+                >
+                Close
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+
     <dash-footer/>
 </template>
 <style scoped src="@/assets/css/dashStyle.css"></style>
+<style>
+                                    
+</style>
 <script>
     import Header from './dash-header.vue'
     import Footer from './dash-footer.vue'

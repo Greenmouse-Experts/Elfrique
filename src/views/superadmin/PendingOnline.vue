@@ -41,25 +41,29 @@
                             <tbody>
                             <tr>
                                 <th scope="row">1</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>hmztadeleke@gmail.com</td>
+                                <td>1212121212</td>
+                                <td>1214</td>
+                                <td>40,000</td>
+                                <td>9/3/2022</td>
+                                <td>400</td>
+                                <td>Pending</td>
+                                <td>Pending</td>
+                                <td>Paystack</td>
+                                <td>Flutterwave</td>
                                 <td>
                                     <div class="dropdown">
                                         <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="color: #000 !important;">
                                             Options
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                                            <li><a class="dropdown-item" href="#">Enable</a></li>
-                                            <li><a class="dropdown-item" href="#">Disable</a></li>
+                                            <li>
+                                                <button class="dropdown-item"  type="button"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#staticBackdrop">
+                                                    Activate Vote
+                                                </button>
+                                            </li>
                                             <li><a class="dropdown-item" href="#">Delete</a></li>
                                         </ul>
                                     </div>
@@ -86,6 +90,57 @@
             </div>
         </section>
     </main>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="staticBackdrop"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl container">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              <b>Please Comfirm Your Request</b>
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-12">
+                    <div class="text-center">
+                        <b>
+                            Comfirmation Successful!
+                        </b>
+                    </div> 
+                    <div class="text-center">
+                        Comfirmed!
+                    </div> 
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="close"
+              id="close"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <dash-footer/>
 </template>

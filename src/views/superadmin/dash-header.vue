@@ -171,7 +171,7 @@
                         <a><i class="bi bi-circle"></i><span>Short Links</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/subscribers" class="routers"><a><i class="bi bi-circle"></i><span>Subscribers</span></a>
                     </router-link>
                 </li>
@@ -184,8 +184,8 @@
                     </router-link>
                 </li>
                 <li><router-link to="/superadmin/payu-log" class="routers"><a><i class="bi bi-circle"></i><span>Payu Log</span></a></router-link></li>
-                    <li><router-link to="/superadmin/search-payu-logs" class="routers"><a><i class="bi bi-circle"></i><span>Search Payu Logs</span></a></router-link></li>
-                <li>
+                    <li><router-link to="/superadmin/search-payu-logs" class="routers"><a><i class="bi bi-circle"></i><span>Search Payu Logs</span></a></router-link></li> -->
+                <!-- <li>
                     <router-link to="/superadmin/add-faq" class="routers">
                         <a><i class="bi bi-circle"></i><span>Add FAQ</span></a>
                     </router-link>
@@ -204,7 +204,7 @@
                     <router-link to="#" class="routers">
                         <a><i class="bi bi-circle"></i><span>Search</span></a>
                     </router-link>
-                </li>
+                </li> -->
             </ul>
         </li>
         <!--Voting-->
@@ -224,7 +224,7 @@
                         <a><i class="bi bi-circle"></i><span>View Contest</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/cash-payment" class="routers">
                         <a><i class="bi bi-circle"></i><span>Cash Payment</span></a>
                     </router-link>
@@ -233,7 +233,7 @@
                     <router-link to="/superadmin/pending-online" class="routers">
                         <a><i class="bi bi-circle"></i><span>Pending Online</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <li>
                     <router-link to="/superadmin/vote-payout-setting" class="routers">
                         <a><i class="bi bi-circle"></i><span>Payout Setting</span></a>

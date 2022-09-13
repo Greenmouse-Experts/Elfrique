@@ -241,7 +241,10 @@
           </li>
           <li>
             <router-link to="/organiser/search-vote" class="routers"
-              ><i class="bi bi-circle"></i><span>Search For Vote</span></router-link
+              ><a>
+                <i class="bi bi-circle"></i><span>Search For Vote</span>
+              </a>
+              </router-link
             >
           </li>
         </ul>
