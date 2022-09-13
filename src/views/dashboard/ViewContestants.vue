@@ -1,115 +1,160 @@
 <template>
-    <title>View Contestants | Elfrique</title>
-    <dash-header/>
+  <title>View Contests | Elfrique</title>
+  <dash-header />
 
-    <!--------Main Content--------->
-    <main id="main" class="main">
-        <div class="pagetitle">
-            <h1>View Contestants</h1>
-            <nav>
-                <ol class="breadcrumb">
-                <li class="breadcrumb-item"><router-link to="/organiser/dashboard" class="routers"><a>Home</a></router-link></li>
-                <li class="breadcrumb-item active">Voting</li>
-                <li class="breadcrumb-item active">View Contestants</li>
-                </ol>
-            </nav>
-        </div><!-- End Page Title -->
+  <!--------Main Content--------->
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>View Contests</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <router-link to="/organiser/dashboard" class="routers"
+              ><a>Home</a></router-link
+            >
+          </li>
+          <li class="breadcrumb-item active">Voting</li>
+          <li class="breadcrumb-item active">View Contests</li>
+        </ol>
+      </nav>
+    </div>
+    <!-- End Page Title -->
 
-        <section class="section">
+    <section class="section">
       <div class="row">
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body card-table">
-                <div class="buttons-table">
-                    <button type="button">Copy</button>
-                    <button type="button">CSV</button>
-                    <button type="button">Excel</button>
-                    <button type="button">PDF</button>
-                    <button type="button">Print</button>
-                </div>
-                <div class="search-table">
-                    <form>
-                        <input type="text" placeholder="Search...">
-                    </form>
-                </div>
-                <!--Table-->
-                <table class="table datatable card-table-table">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">ID</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Date Added</th>
-                        <th scope="col">Type</th>
-                        <th scope="col">Fee</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Options</th>
-                        <th scope="col">Vote Link</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>122</td>
-                        <td>My Vote</td>
-                        <td><img src="@/assets/images/blog-img.jpg"></td>
-                        <td>2022-02-08 <br> 11:08:38</td>
-                        <td>Free</td>
-                        <td>Free</td>
-                        <td>Off</td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Options
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" href="#">Edit</a></li>
-                                    <li><a class="dropdown-item" href="#">Enable</a></li>
-                                    <li><a class="dropdown-item" href="#">Disable</a></li>
-                                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                                </ul>
-                            </div>
-                        </td>
-                        <td><a href="#">Vote Link</a></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <nav>
-                    <ul class="pagination pagination-md">
-                        <li class="page-item disabled">
-                            <a class="page-link"><span aria-hidden="true">&laquo;</span></a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link"><span aria-hidden="true">&raquo;</span></a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>  
+              <!--Table-->
+              <table class="table datatable card-table-table" id="getContest">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Fee</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Options</th>
+                    <th scope="col">Vote Link</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, i) in items" :key="item">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.title }}</td>
+                    <td><img :src="item.image" /></td>
+                    <td style="text-transform: capitalize">{{ item.type }}</td>
+                    <td v-if="item.type == 'free'">0</td>
+                    <td v-else>{{ item.fee }}</td>
+                    <td v-if="item.status == true">Active</td>
+                    <td v-else>Inactive</td>
+                    <td>
+                      <div class="dropdown">
+                        <button
+                          class="btn btn-info dropdown-toggle"
+                          type="button"
+                          id="dropdownMenuButton1"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          Options
+                        </button>
+                        <ul
+                          class="dropdown-menu"
+                          aria-labelledby="dropdownMenuButton1"
+                        >
+                          <li>
+                            <a
+                              type="button"
+                              class="dropdown-item"
+                              @click="edit(item.id)"
+                              >Edit</a
+                            >
+                          </li>
+                          <li>
+                            <a
+                              type="button"
+                              class="dropdown-item"
+                              @click="enable(item.id)"
+                              >Enable</a
+                            >
+                          </li>
+                          <li>
+                            <a
+                              type="button"
+                              class="dropdown-item"
+                              @click="disable(item.id)"
+                              >Disable</a
+                            >
+                          </li>
+                          <li>
+                            <a
+                              type="button"
+                              class="dropdown-item"
+                              @click="deleteItem(item.id)"
+                              >Delete</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+                    <td>
+                      <a :href="baseUrl + 'voting-content/' + item.id"
+                        >Vote Link</a
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </section>
+  </main>
 
-    </main>
-
-    <dash-footer/>
+  <dash-footer />
 </template>
 <style scoped src="@/assets/css/dashStyle.css"></style>
 <script>
-    import Header from './dash-header.vue'
-    import Footer from './dash-footer.vue'
-    export default {
-      name: "Elfrique",
-      components:{
-      'dash-header': Header,
-      'dash-footer': Footer,
-      },
-      mounted(){
-        window.scrollTo(0,0)
-      }
-    }
+import Header from "./dash-header.vue";
+import Footer from "./dash-footer.vue";
+import { _BASE_URL } from "../../configs";
+import voteService from "../../service/vote.service";
+export default {
+  name: "Elfrique",
+  components: {
+    "dash-header": Header,
+    "dash-footer": Footer,
+  },
+  data() {
+    return {
+      items: [],
+      baseUrl: _BASE_URL,
+    };
+  },
+  created() {
+    this.getContest();
+  },
+  methods: {
+    getContest() {
+      voteService.getallUserContest().then((res) => {
+        this.items = res.data.voteContests;
+        setTimeout(() => {
+          $("#getContest").DataTable({
+            dom: "Bfrtip",
+            pageLength: 10,
+            buttons: ["copy", "csv", "excel", "pdf", "print"],
+          });
+        }, 1000);
+      });
+    },
+  },
+  mounted() {
+    window.scrollTo(0, 0);
+  },
+};
 </script>

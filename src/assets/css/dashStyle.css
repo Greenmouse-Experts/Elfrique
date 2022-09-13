@@ -2146,12 +2146,10 @@ header .logo img {
 }
 .table td button{
   border: none;
-  background-color: #fff;
 }
 .table td button:hover{
   color: #26471b;
   border: none;
-  background-color: #fff;
   text-decoration: underline;
 }
 .modal-body .connet input::placeholder{

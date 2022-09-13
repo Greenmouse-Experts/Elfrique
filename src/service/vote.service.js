@@ -26,6 +26,10 @@ class VoteService {
     return axios.get(API_URL + "getallVote", { headers: authHeader() });
   }
 
+  getallUserContest() {
+    return axios.get(API_URL + "getallUserContests", { headers: authHeader2() });
+  }
+
   addContestant(contestantForm, contestId) {
     return axios.post(
       API_URL + "createContestant/" + contestId,
