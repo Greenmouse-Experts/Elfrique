@@ -5,7 +5,9 @@
     <!--------Main Content--------->
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>View Trivia</h1>
+            <h1 class="create">
+                View Trivia
+            </h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><router-link to="/superadmin/dashboard" class="routers"><a>Home</a></router-link></li>
@@ -80,7 +82,7 @@
                                 </ul>
                             </div>
                         </td>
-                        <td><a href="#">View Trivia</a></td>
+                        <td>hdhdhdhdhdhd</td>
                     </tr>
                     </tbody>
                 </table>

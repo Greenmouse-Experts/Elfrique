@@ -218,13 +218,13 @@
               ></router-link
             >
           </li>
-         <!--  <li>
+          <li>
             <router-link to="/organiser/view-vote-analytics" class="routers"
               ><a
                 ><i class="bi bi-circle"></i><span>Sales Analytics</span></a
               ></router-link
             >
-          </li> -->
+          </li>
           <li>
             <router-link to="/organiser/result-setting" class="routers"
               ><a

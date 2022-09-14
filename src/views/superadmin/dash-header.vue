@@ -295,11 +295,11 @@
                         <a><i class="bi bi-circle"></i><span>Personal Ticket</span></a>
                     </router-link>
                 </li> -->
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/event-cash-payment" class="routers">
                         <a><i class="bi bi-circle"></i><span>Cash Payment</span></a>
                     </router-link>
-                </li>
+                </li>-->
                 <li>
                     <router-link to="/superadmin/event-payout-setting" class="routers">
                         <a><i class="bi bi-circle"></i><span>Payout Setting</span></a>
@@ -310,11 +310,11 @@
                         <a><i class="bi bi-circle"></i><span>Sales Analytics</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/search-for-vote" class="routers">
                         <a><i class="bi bi-circle"></i><span>Search For Votes</span></a>
                     </router-link>
-                </li>
+                </li> -->
             </ul>
         </li>
         <!--Forms-->
@@ -346,7 +346,7 @@
                         <a><i class="bi bi-circle"></i><span>Personal Forms</span></a>
                     </router-link>
                 </li> -->
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/form-cash-payment" class="routers">
                         <a><i class="bi bi-circle"></i><span>Cash Payment</span></a>
                     </router-link>
@@ -355,17 +355,22 @@
                     <router-link to="/superadmin/form-payout-setting" class="routers">
                         <a><i class="bi bi-circle"></i><span>Payout Setting</span></a>
                     </router-link>
+                </li> -->
+                <li>
+                    <router-link to="/superadmin/form-payout-setting" class="routers">
+                        <a><i class="bi bi-circle"></i><span>Payout Setting</span></a>
+                    </router-link>
                 </li>
-                <!-- <li>
+                <li>
                     <router-link to="/superadmin/form-sales-analytics" class="routers">
                         <a><i class="bi bi-circle"></i><span>Sales Analytics</span></a>
                     </router-link>
-                </li> -->
-                <li>
+                </li>
+                <!-- <li>
                     <router-link to="/superadmin/search-forms" class="routers">
                         <a><i class="bi bi-circle"></i><span>Search For Forms</span></a>
                     </router-link>
-                </li>
+                </li> -->
             </ul>
         </li>
         <!--Trivia-->
@@ -387,16 +392,26 @@
                         <a><i class="bi bi-circle"></i><span>View Trivia</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/view-trivia" class="routers">
                         <a><i class="bi bi-circle"></i><span>Create Payment</span></a>
                     </router-link>
+                </li> -->
+                <li>
+                    <router-link to="/superadmin/trivia-sales-analytics" class="routers">
+                        <a><i class="bi bi-circle"></i><span>Sales Analytics</span></a>
+                    </router-link>
                 </li>
                 <li>
+                    <router-link to="/superadmin/view-result" class="routers">
+                        <a><i class="bi bi-circle"></i><span>View Results</span></a>
+                    </router-link>
+                </li> 
+                <!-- <li>
                     <router-link to="/superadmin/view-trivia" class="routers">
                         <a><i class="bi bi-circle"></i><span>Search</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <!-- <li>
                     <router-link to="/superadmin/update-trivia" class="routers">
                         <a><i class="bi bi-circle"></i><span>Update Trivia</span></a>
@@ -439,11 +454,11 @@
                         <a><i class="bi bi-circle"></i><span>View Vendor</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/search-vendor" class="routers">
                         <a><i class="bi bi-circle"></i><span>Search For Vendor</span></a>
                     </router-link>
-                </li>
+                </li> -->
             </ul>
         </li>
         <!--Travel-->
@@ -571,7 +586,7 @@
             </ul>
         </li>
         <!--SMS Notification-->
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#sms-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-sms.png" /><span></span>SMS Notification<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="sms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
@@ -585,7 +600,7 @@
                     </router-link>
                 </li>
             </ul>
-        </li>
+        </li> -->
         <!--Log Out-->
         <li class="nav-item">
             <a class="nav-link collapsed" type="button" @click="logOut">

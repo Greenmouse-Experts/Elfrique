@@ -53,11 +53,59 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="text-center">
-                           <b>
-                                Choose an Event From the List
-                           </b>
+                        <div class="card">
+                    <div class="card-body card-table">
+                        <div class="buttons-table">
+                            <button type="button">Copy</button>
+                            <button type="button">CSV</button>
+                            <button type="button">Excel</button>
+                            <button type="button">PDF</button>
+                            <button type="button">Print</button>
                         </div>
+                        <div class="search-table">
+                            <form>
+                                <input type="text" placeholder="Search...">
+                            </form>
+                        </div>
+                        <!--Table-->
+                        <table class="table datatable card-table-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Event id</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Home Address</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Quantity</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>  
+                    <div class="analyticsNote">
+                        <p>Total amount : ₦12300</p>
+                        <p>Tickets(s):14</p>
+                        <!-- <p>Current Online Payment Gateway: PAYSTACK</p> -->
+                    </div>
+                    <div class="analyticsLinkBelow">
+                        <a href="#">View narration so far</a>
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>

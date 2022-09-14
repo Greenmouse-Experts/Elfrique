@@ -53,16 +53,16 @@
                     <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td>Simbi</td>
-                        <td>Adeleke</td>
+                        <td>Hamzat</td>
+                        <td>Abdulazeez</td>
                         <td>myemail@email.com</td>
                         <td>07012345678</td>
-                        <td>2022-05-31</td>
+                        <td>2022-09-11</td>
                         <td>3</td>
                         <td>5</td>
-                        <td>Abia</td>
-                        <td>2022-06-28</td>
-                        <td>2022-06-30</td>
+                        <td>Abuja</td>
+                        <td>2022-09-12</td>
+                        <td>2022-09-13</td>
                         <td>
                             <button class="btn btn-success btn-sm mx-1 text-dark m-1">Approve</button>
                             <button class="btn btn-warning btn-sm mx-1 text-dark m-1">Suspend</button>
@@ -88,7 +88,7 @@
           </div>
         </div>
       </div>
-    </section>
+        </section>
     
     </main>
 
