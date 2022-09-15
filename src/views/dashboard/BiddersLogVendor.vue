@@ -17,31 +17,31 @@
         </div><!-- End Page Title -->
 
         <div class="container create-refer-div">
-      <div class="row justify-content-center">
-        <div class="col-lg-12 start-voting-inner-div">
-          <form>
-            <div class="row">
-              <div class="col-lg-12 mt-4">
-                <label for="vote option">Select a job service before viewing the bidders</label>
-                <select id="gateway" v-model="eventId" required>
-                <option v-for="con in content" :key="con.id" :value="con.id">
-                    {{ con.title }}
-                </option>
-                </select>
-              </div>
-              <div class="col-lg-12 mt-4">
-                <button
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#staticBackdrop"
-                >
-                  Submit
-                </button>
-              </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-12 start-voting-inner-div">
+                <form>
+                    <div class="row">
+                    <div class="col-lg-12 mt-4">
+                        <label for="vote option">Select a job service before viewing the bidders</label>
+                        <select id="gateway" v-model="eventId" required>
+                        <option v-for="con in content" :key="con.id" :value="con.id">
+                            {{ con.title }}
+                        </option>
+                        </select>
+                    </div>
+                    <div class="col-lg-12 mt-4">
+                        <button
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop"
+                        >
+                        Submit
+                        </button>
+                    </div>
+                    </div>
+                </form>
+                </div>
             </div>
-          </form>
-        </div>
-      </div>
         </div>
 
         <!-- Modal -->
