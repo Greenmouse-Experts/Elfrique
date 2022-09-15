@@ -6,14 +6,14 @@
     <main id="main" class="main">
         <div class="pagetitle">
             <h1 class="create">
-                Sales Analytics
+                Event Sales Analytics
             </h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><router-link to="/superadmin/dashboard" class="routers"><a>Home</a></router-link></li>
                     <li class="breadcrumb-item active">Registration</li>
                     <li class="breadcrumb-item"><router-link to="/superadmin/overview-registration" class="routers"><a>Overview</a></router-link></li>
-                    <li class="breadcrumb-item active">Sales Analytics</li>
+                    <li class="breadcrumb-item active">Event Sales Analytics</li>
                 </ol>
             </nav>
         </div>
@@ -26,7 +26,7 @@
                         <div class="row">
                             <div class="col-lg-12 mt-4">
                                 <select name="gateway" id="gateway">
-                                    <option value="select vote option">Select Your Event Option</option>
+                                    <option value="select vote option">Select Your Event Option-1</option>
                                     <option value="select vote option">Select Your Event Option-2</option>
                                 </select>
                             </div>
@@ -57,7 +57,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">
-                        <b>Sales Analytics</b>
+                        <b>View Event Sales Analytics</b>
                         </h5>
                         <button
                         type="button"

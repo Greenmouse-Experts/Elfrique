@@ -6,7 +6,9 @@
   <main id="main" class="main">
     <!--Page Title-->
     <div class="pagetitle">
-      <h1>SuperAdmin Dashboard</h1>
+      <h1 class="create">
+        SuperAdmin Dashboard
+      </h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">

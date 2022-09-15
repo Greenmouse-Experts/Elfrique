@@ -5,7 +5,7 @@
   <!--------Main Content--------->
   <main id="main" class="main">
     <div class="pagetitle">
-      <h1>View Forms</h1>
+      <h1 class="create">View Forms</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
@@ -43,7 +43,11 @@
                     </form>
                 </div> -->
               <!--Table-->
-              <p class="text-muted p-text">Forms Uploaded</p>
+              <p class="text-muted text-center p-text">
+                <b class="create">
+                  Forms Uploaded
+                </b>
+              </p>
               <table class="table datatable card-table-table">
                 <thead>
                   <tr>
