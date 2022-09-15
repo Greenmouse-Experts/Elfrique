@@ -228,7 +228,8 @@ export default {
         TriviaService.answerTrivia( this.trivia.id, this.answer).then(res => {
           this.loading = false
           let data = res.data.data
-          this.$router.push({ name: 'TriviaResult', params:{ data: JSON.stringify(data) } })
+          localStorage.setItem('TriviaResult', JSON.stringify(data))
+          this.$router.push({ name: 'TriviaResult' })
         })
       }
       

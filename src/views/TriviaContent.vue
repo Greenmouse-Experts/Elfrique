@@ -339,6 +339,7 @@ export default {
       toRate: "",
       method: "",
       amount: '',
+      usd_rate: '',
       triviaPlayer: {
         name: "",
         email: "",
@@ -367,8 +368,9 @@ export default {
       this.amount =  response.data.trivia.amount
       this.method = response.data.trivia.paymentgateway
       this.admin_id = response.data.trivia.adminuserId
+      this.convert_price();
     });
-    this.convert_price();
+    
     const script = document.createElement("script");
     script.src =
       "https://qa.interswitchng.com/collections/public/javascripts/inline-checkout.js";
@@ -385,7 +387,15 @@ export default {
             this.currency_symbol = res.data.base;
             this.toRate = res.data.rates["NGN"];
           });
+          axios
+          .get(`https://api.exchangerate-api.com/v4/latest/USD`)
+          .then((res) => {
+            this.use_currency_symbol = res.data.base;
+            this.usd_rate = res.data.rates["NGN"];
+            //console.log(this.usd_rate, this.amount)
+          });
       });
+      
     },
     submitPlayer() {
       this.loading = true;
@@ -441,7 +451,7 @@ export default {
             type: "Trivia Payment",
             message: `${this.triviaPlayer.name} just Successfully Paid for ${this.trivia.title} Trivia`,
           });
-          /* TransactionService.makeTransaction({
+          TransactionService.makeTransaction({
             admin_id: this.admin_id,
             reference: this.reference,
             category: "Trivia Payment",
@@ -459,7 +469,7 @@ export default {
               this.message = response.data.message;
               //this.resetForm();
             }
-          ); */
+          );
           TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
         .then(
           (response) => {
@@ -506,7 +516,7 @@ export default {
         let paymentParams = FlutterwaveCheckout({
           public_key: this.flw_public_key,
           tx_ref: this.reference,
-          amount: this.amount,
+          amount: this.amount/this.usd_rate,
           currency: 'USD',
           customer: {
             email: this.triviaPlayer.email,
@@ -521,24 +531,24 @@ export default {
               type: "Trivia Payment",
               message: `${this.triviaPlayer.name} just Successfully Paid for ${this.trivia.title} Trivia`
             })
-            /* TransactionService.makeTransaction({
-            admin_id: this.admin_id,
-            reference: this.reference,
-            category: "Trivia Payment",
-            email: this.triviaPlayer.email,
-            method: this.method,
-            product_title: this.trivia.title,
-            product_id: this.trivia.id,
-            currency: this.currency_symbol,
-            type: "paid",
-            amount: (this.amount / this.toRate).toFixed(2),
-            payer_name: this.triviaPlayer.name,
+            TransactionService.makeTransaction({
+              admin_id: this.admin_id,
+              reference: this.reference,
+              category: "Trivia Payment",
+              email: this.triviaPlayer.email,
+              method: this.method,
+              product_title: this.trivia.title,
+              product_id: this.trivia.id,
+              currency: this.currency_symbol,
+              type: "paid",
+              amount: (this.amount / this.toRate).toFixed(2),
+              payer_name: this.triviaPlayer.name,
           }).then(
               (response) => {
                 this.loading = false;
                 this.message = response.data.message;
               }
-            ); */
+            );
             TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
         .then(
           (response) => {
@@ -584,7 +594,7 @@ export default {
               type: "Trivia Payment",
               message: `${this.triviaPlayer.name} just Successfully Paid for ${this.trivia.title} Trivia`
             })
-            /* TransactionService.makeTransaction({
+            TransactionService.makeTransaction({
             admin_id: this.admin_id,
             reference: this.reference,
             category: "Trivia Payment",
@@ -592,7 +602,7 @@ export default {
             method: this.method,
             product_title: this.trivia.title,
             product_id: this.trivia.id,
-            currency: this.currency_symbol,
+            currency: this.usd_rate,
             type: "paid",
             amount: (this.amount / this.toRate).toFixed(2),
             payer_name: this.triviaPlayer.name,
@@ -601,7 +611,7 @@ export default {
                 this.loading = false;
                 //this.message = response.data.message;
               }
-            ); */
+            );
 
             TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
         .then(
@@ -670,7 +680,7 @@ export default {
                   this.errMessage = ""
               }, 3000);
           })
-         /*  TransactionService.makeTransaction({
+          TransactionService.makeTransaction({
             admin_id: this.admin_id,
             reference: this.reference,
             category: "Trivia Payment",
@@ -688,7 +698,7 @@ export default {
               this.message = response.data.message;
               //this.resetForm();
             }
-          ); */
+          );
         },
         mode: "TEST",
       };

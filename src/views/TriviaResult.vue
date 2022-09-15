@@ -27,7 +27,7 @@
         },
         methods: {
             getResults(){
-                let result = JSON.parse(this.$route.params.data)
+                let result = JSON.parse(localStorage.getItem('TriviaResult'))
                 this.result = result
             }
         },
