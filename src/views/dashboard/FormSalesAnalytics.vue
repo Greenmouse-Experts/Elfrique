@@ -124,7 +124,7 @@
                         <!-- <p>Current Online Payment Gateway: PAYSTACK</p> -->
                     </div>
                     <div class="analyticsLinkBelow">
-                        <a href="#">View narration so far</a>
+                        
                     </div>
                 </div>
                     </div>

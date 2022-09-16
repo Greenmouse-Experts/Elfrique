@@ -5,15 +5,26 @@
     <!--------Main Content--------->
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>Create Voting</h1>
+            <h1 class="create">Create Voting</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><router-link to="/organiser/dashboard" class="routers"><a>Home</a></router-link></li>
-                    <li class="breadcrumb-item active">Voting</li>
-                    <li class="breadcrumb-item active">Start Voting</li>
+                    <li class="breadcrumb-item">
+                        <router-link to="/organiser/dashboard" class="routers">
+                            <a>
+                                Home
+                            </a>
+                        </router-link>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Voting
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Start Voting
+                    </li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
+        <!-- End Page Title -->
 
         <div class="container start-voting-div create-event-div">
             <div class="row justify-content-center">
@@ -40,12 +51,12 @@
 
                                 <div class="col-lg-6 mt-4">
                                     <label for="start date">Start Date</label>
-                                    <input v-model="votecontent.startdate" class="input" type="date"  required>
+                                    <input v-model="votecontent.startdate" class="input" type="datetime-local"  required>
                                 </div>
                                 <!--End Date-->
                                 <div class="col-lg-6 mt-4">
                                     <label for="end date">End Date</label>
-                                    <input v-model="votecontent.enddate" class="input" type="date" required>
+                                    <input v-model="votecontent.enddate" class="input" type="datetime-local" required>
                                 </div>
 
                                 <div v-if="voteContent.type == 'paid' " class="col-lg-12 mt-4">
@@ -491,7 +502,7 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-12 mt-4">
-                                     <button type="submit" class="btn btn-success" :disabled="loading" >Create Award<span v-show="loading" class="spinner-border spinner-border-sm"></span></button>
+                                    <button type="submit" class="btn btn-success" :disabled="loading" >Create Award<span v-show="loading" class="spinner-border spinner-border-sm"></span></button>
                                 </div>
                          </div>
                         

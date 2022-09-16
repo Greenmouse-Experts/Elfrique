@@ -340,13 +340,13 @@
           data-bs-parent="#sidebar-nav"
         >
           <li>
-            <a href="/organiser/create-form" class="routers"
-              ><a><i class="bi bi-circle"></i><span>Create Form</span></a></a
+            <router-link to="/organiser/create-form" class="routers"
+              ><a><i class="bi bi-circle"></i><span>Create Form</span></a></router-link
             >
           </li>
           <li>
-            <a href="/organiser/build-form" class="routers"
-              ><a><i class="bi bi-circle"></i><span>Build Form</span></a></a
+            <router-link to="/organiser/build-form" class="routers"
+              ><a><i class="bi bi-circle"></i><span>Build Form</span></a></router-link
             >
           </li>
           <li>

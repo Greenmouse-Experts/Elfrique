@@ -53,11 +53,58 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="text-center">
-                           <b>
-                                Kindly Create a Vendor Service From the List
-                           </b>
+                        <div class="card">
+                    <div class="card-body card-table">
+                        <div class="buttons-table">
+                            <button type="button">Copy</button>
+                            <button type="button">CSV</button>
+                            <button type="button">Excel</button>
+                            <button type="button">PDF</button>
+                            <button type="button">Print</button>
                         </div>
+                        <div class="search-table">
+                            <form>
+                                <input type="text" placeholder="Search...">
+                            </form>
+                        </div>
+                        <!--Table-->
+                        <table class="table datatable card-table-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">VENDOR ID</th>
+                                <th scope="col">EVENT NAME</th>
+                                <th scope="col">VENDOR TITLE</th>
+                                <th scope="col">SERVICE PRICE (NGN)</th>
+                                <th scope="col">VENDOR SERVICE IMAGE</th>
+                                <th scope="col">VENDOR DESCRIPTION</th>
+                                <th scope="col">DATE ADDED</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <input type="file" accept="image/*">
+                                </td>
+                                <td>You are HER0</td>
+                                <td>9/15/2022</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>  
+                    <div class="analyticsNote">
+                        <h4 class="text-center">
+                            NARRATION
+                        </h4>
+                        <p>Valid Number of Vendor : 71</p>
+                        <p>Monetary Value on Vendor received : ₦5590</p>
+                        <p>Payments due to Payment Gateway on successful online payments : 69.15</p>
+                        <!-- <p>Current Online Payment Gateway: PAYSTACK</p> -->
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>
