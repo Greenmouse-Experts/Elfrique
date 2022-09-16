@@ -234,11 +234,11 @@
                         <a><i class="bi bi-circle"></i><span>Pending Online</span></a>
                     </router-link>
                 </li> -->
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/vote-payout-setting" class="routers">
                         <a><i class="bi bi-circle"></i><span>Payout Setting</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <!-- <li>
                     <router-link to="/superadmin/view-categories" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Categories</span></a>
@@ -375,7 +375,7 @@
         </li>
         <!--Trivia-->
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#trivia-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-trivia.png" /><span></span>Trivia<i class="bi bi-chevron-down ms-auto"></i> </a>
+            <a class="nav-link collapsed" data-bs-target="#trivia-nav" data-bs-toggle="collapse" href="#"><img src="@/assets/images/menu-trivia.png" /><span></span>Trivia<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="trivia-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <!-- <li>
                     <router-link to="/superadmin/overview-trivia" class="routers">
@@ -402,11 +402,11 @@
                         <a><i class="bi bi-circle"></i><span>Sales Analytics</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/view-result" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Results</span></a>
                     </router-link>
-                </li> 
+                </li>  -->
                 <!-- <li>
                     <router-link to="/superadmin/view-trivia" class="routers">
                         <a><i class="bi bi-circle"></i><span>Search</span></a>
@@ -444,11 +444,11 @@
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#vendor-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-vendor.png" /><span></span>Vendor<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="vendor-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <li>
+                <!-- <li>
                     <router-link to="/superadmin/create-vendor-service" class="routers">
                         <a><i class="bi bi-circle"></i><span>Create Vendor Service</span></a>
                     </router-link>
-                </li>
+                </li> -->
                 <li>
                     <router-link to="/superadmin/view-vendor" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Vendor</span></a>

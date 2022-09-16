@@ -60,7 +60,8 @@
                         <td>Feb 2nd, 2022</td>
                         <td><a href="#">View Vendor Service</a></td>
                         <td>
-                            <button class="btn btn-primary btn-sm mx-1 text-dark m-1">Edit</button>
+                            <button class="btn btn-primary btn-sm mx-1 text-dark m-1"
+                            type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Edit</button>
                             <button class="btn btn-warning btn-sm mx-1 text-dark m-1">Suspend</button>
                             <button class="btn btn-danger btn-sm mx-1 text-dark m-1">Delete</button>
                         </td>
@@ -85,7 +86,67 @@
         </div>
       </div>
     </section>
-    
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl container">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel"><b>Edit Vendor</b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3 class="create text-center mt-4">
+                                        Edit Vendor
+                                    </h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="connet">
+                                        <label>User name<span>*</span></label>
+                                        <input type="text" placeholder="" required class="input" name="first" id="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="connet">
+                                        <label>User Email<span>*</span></label>
+                                        <input type="email" placeholder="Enter Your Last Name" required class="input" name="middle" id="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-4">
+                                    <div class="connet">
+                                        <label>User Telephone<span>*</span></label>
+                                        <input type="tel" required class="input">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-4">
+                                    <div class="connet">
+                                        <label>Date Added<span>*</span></label>
+                                        <input type="datetime-local" required class="input">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mt-4">
+                                    <div class="connet">
+                                        <button>
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>
     </main>
 
     <dash-footer/>
