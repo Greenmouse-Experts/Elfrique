@@ -189,9 +189,10 @@
                             <select disabled class="form-control" v-if="parseInt(con.quantity) == 0">
                               <option>0</option>
                             </select>
-                            <select @change="selectTicketQty(con, $event)" class="form-control" v-else>
-                              <option v-for="item in parseInt(con.quantity)" :value="item" :key="item">
-                                {{ item }}
+                            <select v-model="qutty" @change="selectTicketQty(con, $event)" class="form-control" v-else>
+                              <option value="">0</option>
+                              <option v-for="(item, i) in parseInt(con.quantity)" :value="item" :key="item">
+                                {{ i + 1 }}
                               </option>
                             </select>
                             <!-- <input type="number" :max="con.quantity"  @keyup="checkQuantity"
@@ -538,6 +539,7 @@ import IPGeolocationAPI from "ip-geolocation-api-javascript-sdk";
 import axios from "axios";
 import { Modal } from "bootstrap";
 import { Store } from "vuex";
+import Swal from "sweetalert2";
 export default {
   name: "Elfrique",
   components: {
@@ -554,6 +556,7 @@ export default {
       toRate: "",
       salesEnd: false,
       formDatas: "",
+      qutty: '',
       email: "",
       admin_id: "",
       firstname: "",
@@ -573,7 +576,10 @@ export default {
         seconds: 0,
       },
       message: "",
-      event: "",
+      event: {
+        adminuser: {}
+      },
+      toUsdRate: '',
       newTicket: [],
       eventId: this.$route.params.id,
       modal: false,
@@ -584,7 +590,6 @@ export default {
     script.src =
       "https://qa.interswitchng.com/collections/public/javascripts/inline-checkout.js";
     document.getElementsByTagName("head")[0].appendChild(script);
-    this.convert_price();
     this.getEvent();
   },
   computed: {
@@ -636,15 +641,17 @@ export default {
     },
     selectTicketQty(item, qty) {
       const elementIndex = this.newTicket.findIndex((obj) => obj.id == item.id);
-      //console.log(elementIndex);
+      console.log(qty);
       if (elementIndex == -1) {
         if (item.price != "free") {
           let newPrice = (item.price / this.toRate).toFixed(2);
           let sub_total = (newPrice * qty.target.value).toFixed(2)
+          let orifinal_price = item.price
           this.newTicket.push({
             id: item.id,
             name: item.name,
             price: newPrice,
+            orifinal_price: orifinal_price,
             quantity: qty.target.value,
             sub_total: sub_total,
           });
@@ -671,6 +678,12 @@ export default {
             this.currency_symbol = res.data.base;
             this.toRate = res.data.rates["NGN"];
           });
+          axios
+          .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+          .then((res) => {
+            this.currency_symbol = res.data.base;
+            this.toUsdRate = res.data.rates["USD"];
+          });
       });
     },
     sales_time(value) {
@@ -681,6 +694,7 @@ export default {
         this.event = res.data.events;
         this.admin_id = res.data.events.adminuserId
         this.endDate = res.data.events.enddate;
+        this.convert_price();
         this.getCountdown();
       });
     },
@@ -759,8 +773,8 @@ export default {
         let paymentParams = FlutterwaveCheckout({
             public_key: this.flw_public_key,
             tx_ref: this.reference,
-            amount: this.totalPrice.toString(),
-            currency: this.currency_symbol,
+            amount: this.totalPrice * this.toUsdRate,
+            currency: 'USD',
             customer: {
               email: this.email,
               phone_number: this.phone,
@@ -779,6 +793,10 @@ export default {
                   //this.resetForm();
                   this.getEvent();
                   this.genRef()
+                  Swal.fire({
+                    icon: 'success',
+                    text: `You have successfully booked ${productTitle} ticket`,
+                  })
                   this.proceedPayment = false;
                   paymentParams.close();
                   window.close();
@@ -814,6 +832,10 @@ export default {
                   this.getEvent();
                   this.ticketSelected = false;
                   this.message = "Ticket has been sccessfully booked!!";
+                  Swal.fire({
+                    icon: 'success',
+                    text: `You have successfully booked ${productTitle} ticket`,
+                  })
                   //this.resetForm();
                 }
               );
@@ -851,7 +873,10 @@ export default {
                   this.getEvent();
                   this.ticketSelected = false;
                   this.message = "Ticket has been sccessfully booked!!";
-                  //this.resetForm();
+                  Swal.fire({
+                    icon: 'success',
+                    text: `You have successfully booked ${productTitle} ticket`,
+                  })
                 }
               );
               //this.$router.push("/fill-form/" + id);
@@ -899,6 +924,10 @@ export default {
                   //this.resetForm();
                   this.getEvent();
                   this.ticketSelected = false;
+                  Swal.fire({
+                    icon: 'success',
+                    text: `You have successfully booked ${productTitle} ticket`,
+                  })
                   paymentParams.close();
                   window.close();
                 }

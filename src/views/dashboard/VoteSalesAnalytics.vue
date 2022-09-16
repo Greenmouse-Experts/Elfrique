@@ -53,14 +53,12 @@
 
       data(){
             return{
-            content: '',
-            content2: '',
-            contestId: '',
-            message: '',
-            error: '',
-            loading: false,
-            
-    
+                content: '',
+                content2: '',
+                contestId: '',
+                message: '',
+                error: '',
+                loading: false,
             }  
         },
 

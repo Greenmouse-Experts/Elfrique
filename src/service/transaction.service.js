@@ -19,7 +19,7 @@ class TransactionService {
   }
 
   submitVote(contestantId, voteForm) {
-    return axios.post(API_URL + "vote/" + contestantId, voteForm, {});
+    return axios.post(API_URL + "userAddContestVote/" + contestantId, voteForm, {});
   }
 
   getTransactionHistory() {

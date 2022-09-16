@@ -262,6 +262,8 @@ export default {
         reference: this.reference,
         numberOfVote: this.numberOfVotes,
         method: this.method,
+        voters_email: this.email,
+        voters_phone: this.phone,
         type: "paid",
         amount: this.amount,
         fullname: this.firstname + " " + this.lastname,

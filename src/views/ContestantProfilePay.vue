@@ -165,6 +165,7 @@ import VoteService from "../service/vote.service";
 import TransactionService from "../service/transaction.service";
 import Notification from "../service/notitfication-service";
 import { throwStatement } from "@babel/types";
+import Swal from "sweetalert2";
 
 export default {
   name: "Elfrique",
@@ -216,10 +217,13 @@ export default {
       return {
         reference: this.payContent.reference,
         numberOfVote: this.payContent.numberOfVotes,
+        voters_email: this.payContent.email,
+        voters_phone: this.payContent.phone,
         method: this.payContent.method,
         type: "paid",
         amount: this.payContent.amount,
         fullname: this.payContent.firstname + " " + this.payContent.lastname,
+        currency: this.payContent.currency_symbol,
       };
     },
   },
@@ -275,10 +279,14 @@ export default {
         reference: this.payContent.reference,
         numberOfVote: this.payContent.numberOfVotes,
         method: "",
+        voters_email: this.payContent.email,
+        voters_phone: this.payContent.phone,
+        currency: this.payContent.currency_symbol,
         type: "free",
         amount: 0,
         fullname: this.payContent.firstname + " " + this.payContent.lastname,
       };
+      console.log(dataForm);
       Notification.addNotification({
         receiverId: this.adminId,
         type: "voting",
@@ -288,8 +296,18 @@ export default {
         (response) => {
           this.loading = false;
           this.message = response.data.message;
-          this.resetForm();
-          this.$router.push("/contestant-profile/" + this.contestant.id);
+          //this.resetForm();
+          Swal.fire({
+            icon: 'success',
+            text: `You have successfully voted for ${this.contestant.fullname}`,
+            confirmButtonText: 'Ok'
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push("/contestant-profile/" + this.contestant.id);
+            }
+          })
+          
         }
       );
     },
@@ -308,8 +326,17 @@ export default {
         (response) => {
           this.loading = false;
           this.message = response.data.message;
-          this.resetForm();
-          this.$router.push("/contestant-profile/" + this.contestant.id);
+          Swal.fire({
+            icon: 'success',
+            text: `You have successfully voted for ${this.contestant.fullname}`,
+            confirmButtonText: 'Ok'
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              this.$router.push("/contestant-profile/" + this.contestant.id);
+            }
+          })
+          
         }
       );
     },
@@ -374,8 +401,16 @@ export default {
             (response) => {
               this.loading = false;
               this.message = response.data.message;
-              this.resetForm();
-              this.$router.push("/contestant-profile/" + this.contestant.id);
+              Swal.fire({
+                icon: 'success',
+                text: `You have successfully voted for ${this.contestant.fullname}`,
+                confirmButtonText: 'Ok'
+              })
+              .then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push("/contestant-profile/" + this.contestant.id);
+                }
+              })
             }
           );
         },
@@ -412,9 +447,18 @@ export default {
             ).then((response) => {
               this.loading = false;
               this.message = response.data.message;
+              Swal.fire({
+                icon: 'success',
+                text: `You have successfully voted for ${this.contestant.fullname}`,
+                confirmButtonText: 'Ok'
+              })
+              .then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push("/contestant-profile/" + this.contestant.id);
+                }
+              })
             });
             paymentParams.close();
-            this.$router.push("/contestant-profile/" + this.contestant.id);
             window.close();
           },
           onclose: () => paymentParams.close(),
@@ -444,10 +488,18 @@ export default {
             ).then((response) => {
               this.loading = false;
               this.message = response.data.message;
-              this.resetForm();
+              Swal.fire({
+                icon: 'success',
+                text: `You have successfully voted for ${this.contestant.fullname}`,
+                confirmButtonText: 'Ok'
+              })
+              .then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push("/contestant-profile/" + this.contestant.id);
+                }
+              })
             });
             paymentParams.close();
-            this.$router.push("/contestant-profile/" + this.contestant.id);
             window.close();
           },
           onclose: () => paymentParams.close(),
@@ -499,8 +551,16 @@ export default {
             (response) => {
               this.loading = false;
               this.message = response.data.message;
-              this.resetForm();
-              this.$router.push("/contestant-profile/" + this.contestant.id);
+              Swal.fire({
+                icon: 'success',
+                text: `You have successfully voted for ${this.contestant.fullname}`,
+                confirmButtonText: 'Ok'
+              })
+              .then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push("/contestant-profile/" + this.contestant.id);
+                }
+              })
             }
           );
           //get reference and verify payment before awarding value

@@ -91,9 +91,6 @@
             error: '',
             loading: false,
             totalvote: '',
-
-            
-    
             }  
         },
 
@@ -101,8 +98,6 @@
         loggedIn() {
             return this.$store.state.auth.status.loggedIn;
             },
-
-        
          },
 
     created() {
