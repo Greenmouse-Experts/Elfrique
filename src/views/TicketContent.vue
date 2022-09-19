@@ -16,7 +16,9 @@
         <div class="col-md-6">
           <div class="text-title-area">
             <h1>{{ event.title }}</h1>
-            <small>Organised by : <span>{{ event.organisation }}</span></small>
+            <small
+              >Organised by : <span>{{ event.organisation }}</span></small
+            >
             <div class="details-header">
               <h5>Location</h5>
               <p><i class="bi bi-geo-alt-fill"></i> : {{ event.venue }}</p>
@@ -114,9 +116,16 @@
         <div class="col-lg-12">
           <ul class="nav nav-pills mb-5 mt-2" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
-              <button class="nav-link active tabs-button" id="pills-ticket-tab" data-bs-toggle="pill"
-                data-bs-target="#pills-ticket" type="button" role="tab" aria-controls="pills-ticket"
-                aria-selected="true">
+              <button
+                class="nav-link active tabs-button"
+                id="pills-ticket-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-ticket"
+                type="button"
+                role="tab"
+                aria-controls="pills-ticket"
+                aria-selected="true"
+              >
                 <i class="bi bi-people-fill"></i> Ticket
               </button>
             </li>
@@ -130,7 +139,12 @@
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <!--Ticket-->
-            <div class="tab-pane fade show active" id="pills-ticket" role="tabpanel" aria-labelledby="pills-ticket-tab">
+            <div
+              class="tab-pane fade show active"
+              id="pills-ticket"
+              role="tabpanel"
+              aria-labelledby="pills-ticket-tab"
+            >
               <div class="event-details" v-if="ended == false">
                 <div class="row">
                   <div class="col-lg-6">
@@ -172,26 +186,47 @@
                     <div class="card" v-if="!proceedPayment">
                       <div class="card-body">
                         <h5 class="card-title mb-3 muted">Ticket</h5>
-                        <div class="row mt-4" v-for="con in event.eventsTickets" :key="con.id">
+                        <div
+                          class="row mt-4"
+                          v-for="con in event.eventsTickets"
+                          :key="con.id"
+                        >
                           <div class="col d-flex align-items-center">
                             <span>{{ con.name.toUpperCase() }}</span>
                           </div>
-                          <div class="col text-center d-flex align-items-center">
+                          <div
+                            class="col text-center d-flex align-items-center"
+                          >
                             <div v-if="con.price == 'free'">
                               <span>Free</span>
                             </div>
                             <div v-if="con.price != 'free'">
-                              <span>{{ currency_symbol }}
-                                {{ (con.price / toRate).toFixed(2) }}</span>
+                              <span
+                                >{{ currency_symbol }}
+                                {{ (con.price / toRate).toFixed(2) }}</span
+                              >
                             </div>
                           </div>
                           <div class="col">
-                            <select disabled class="form-control" v-if="parseInt(con.quantity) == 0">
+                            <select
+                              disabled
+                              class="form-control"
+                              v-if="parseInt(con.quantity) == 0"
+                            >
                               <option>0</option>
                             </select>
-                            <select v-model="qutty" @change="selectTicketQty(con, $event)" class="form-control" v-else>
+                            <select
+                              v-model="qutty"
+                              @change="selectTicketQty(con, $event)"
+                              class="form-control"
+                              v-else
+                            >
                               <option value="">0</option>
-                              <option v-for="(item, i) in parseInt(con.quantity)" :value="item" :key="item">
+                              <option
+                                v-for="(item, i) in parseInt(con.quantity)"
+                                :value="item"
+                                :key="item"
+                              >
                                 {{ i + 1 }}
                               </option>
                             </select>
@@ -200,50 +235,76 @@
                           </div>
                         </div>
                         <div class="col-lg-12 text-center d-grid gap-2">
-                          <button class="btn btn-buy-ticket btn-block" type="submit" @click="showModal">
+                          <button
+                            v-if="qutty != ''"
+                            class="btn btn-buy-ticket btn-block"
+                            type="submit"
+                            @click="showModal"
+                          >
                             Buy Ticket
                           </button>
                         </div>
                       </div>
                     </div>
                     <div class="card" v-else>
-                      <form @submit.prevent="buyTicket(event.paymentgateway, totalPrice)">
+                      <form
+                        @submit.prevent="
+                          buyTicket(event.paymentgateway, totalPrice)
+                        "
+                      >
                         <div class="card-body">
                           <h5 class="card-title mb-3 muted">Order Summary</h5>
                           <div v-for="item in newTicket" :key="item.id">
-                            <hr>
+                            <hr />
                             <div class="row mt-4">
                               <div class="col d-flex align-items-center">
-                                <span>{{item.quantity}} x {{ item.name.toUpperCase() }}</span>
+                                <span
+                                  >{{ item.quantity }} x
+                                  {{ item.name.toUpperCase() }}</span
+                                >
                               </div>
-                              <div class="col justify-content-end d-flex align-items-center">
+                              <div
+                                class="col justify-content-end d-flex align-items-center"
+                              >
                                 <div v-if="item.price == 'free'">
                                   <span>Free</span>
                                 </div>
                                 <div v-if="item.price != 'free'">
-                                  <span>{{ currency_symbol }}
-                                    {{ item.price }}</span>
+                                  <span
+                                    >{{ currency_symbol }}
+                                    {{ item.price }}</span
+                                  >
                                 </div>
                               </div>
                             </div>
                             <div class="row mt-2">
-                                <div class="col">
-                                  <span>Sub-Total:</span>
-                                </div>
-                                <div class="col justify-content-end d-flex align-items-center">
-                                  <span>
-                                    <strong>{{ currency_symbol }} {{ item.sub_total }}</strong>
-                                  </span>
-                                </div>
+                              <div class="col">
+                                <span>Sub-Total:</span>
                               </div>
+                              <div
+                                class="col justify-content-end d-flex align-items-center"
+                              >
+                                <span>
+                                  <strong
+                                    >{{ currency_symbol }}
+                                    {{ item.sub_total }}</strong
+                                  >
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                          <hr>
+                          <hr />
                           <div class="row mt-4">
                             <div class="col">
                               <span><strong>Total</strong></span>
                             </div>
                             <div class="col d-flex justify-content-end">
-                              <span><strong>{{totalPrice}}</strong></span>
+                              <span
+                                ><strong
+                                  >{{ currency_symbol }}
+                                  {{ totalPrice }}</strong
+                                ></span
+                              >
                             </div>
                           </div>
                           <div class="row mt-4">
@@ -251,14 +312,19 @@
                               <span>Reference NUmber</span>
                             </div>
                             <div class="col d-flex justify-content-end">
-                              <span>{{reference}}</span>
+                              <span>{{ reference }}</span>
                             </div>
                           </div>
                           <div class="row mt-4">
                             <div class="col">
                               <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" v-model="email" class="form-control mt-2" id="">
+                                <input
+                                  type="email"
+                                  v-model="email"
+                                  class="form-control mt-2"
+                                  id=""
+                                />
                               </div>
                             </div>
                           </div>
@@ -266,7 +332,12 @@
                             <div class="col">
                               <div class="form-group">
                                 <label for="email">Firstname</label>
-                                <input type="text" v-model="firstname" class="form-control mt-2" id="">
+                                <input
+                                  type="text"
+                                  v-model="firstname"
+                                  class="form-control mt-2"
+                                  id=""
+                                />
                               </div>
                             </div>
                           </div>
@@ -274,7 +345,12 @@
                             <div class="col">
                               <div class="form-group">
                                 <label for="email">Lastname</label>
-                                <input type="text" v-model="lastname" class="form-control mt-2" id="">
+                                <input
+                                  type="text"
+                                  v-model="lastname"
+                                  class="form-control mt-2"
+                                  id=""
+                                />
                               </div>
                             </div>
                           </div>
@@ -282,22 +358,26 @@
                             <div class="col">
                               <div class="form-group">
                                 <label for="email">Phone Number</label>
-                                <input type="tel" v-model="phone" class="form-control mt-2" id="">
+                                <input
+                                  type="tel"
+                                  v-model="phone"
+                                  class="form-control mt-2"
+                                  id=""
+                                />
                               </div>
                             </div>
                           </div>
                           <div class="col-lg-12 mt-5 d-grid gap-2">
                             <button
-                              style="width: auto;"
-                              v-if="currency_code == 'NGN'"
+                              style="width: auto"
+                              v-if="currency_symbol == 'NGN'"
                               type="submit"
-
                             >
                               Pay Now - Local Only
                             </button>
                             <button
                               v-else
-                              style="width: auto;"
+                              style="width: auto"
                               class="btn btn-block"
                               type="submit"
                             >
@@ -383,17 +463,31 @@
                 </h6>
               </div>
             </div>
-            <div style="z-index: 9999" class="modal fade" ref="exampleModal" data-backdrop="static"
-              data-keyboard="false" tabindex="-1" aria-labelledby="exampleModal" aria-hidden="true">
+            <div
+              style="z-index: 9999"
+              class="modal fade"
+              ref="exampleModal"
+              data-backdrop="static"
+              data-keyboard="false"
+              tabindex="-1"
+              aria-labelledby="exampleModal"
+              aria-hidden="true"
+            >
               <div class="modal-dialog" style="top: 180px; max-width: 60%">
                 <div class="modal-content">
                   <div class="modal-header" style="display: block">
-                  <button type="button" class="btn-close" style="float:right" @click="modal.hide()" aria-label="Close"></button>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      style="float: right"
+                      @click="modal.hide()"
+                      aria-label="Close"
+                    ></button>
                     <h5 class="modal-title" id="exampleModalLabel">
-                      {{event.title}}
+                      {{ event.title }}
                     </h5>
                     <h6>
-                      {{event.venue}}
+                      {{ event.venue }}
                     </h6>
                     <h6>
                       {{ format_date(event.startdate) }}
@@ -406,27 +500,57 @@
                           <div class="px-2">
                             <div class="form-groug">
                               <label>Email</label>
-                              <input type="email" v-model="email" class="form-control" placeholder="Email Required"
-                                required />
+                              <input
+                                type="email"
+                                v-model="email"
+                                class="form-control"
+                                placeholder="Email Required"
+                                required
+                              />
                             </div>
                             <div class="form-groug">
                               <label>FirstName</label>
-                              <input type="text" v-model="firstname" class="form-control" placeholder="Firstname Required"
-                                required />
+                              <input
+                                type="text"
+                                v-model="firstname"
+                                class="form-control"
+                                placeholder="Firstname Required"
+                                required
+                              />
                             </div>
                             <div class="form-groug">
                               <label>Lastname</label>
-                              <input type="text" v-model="lastname" class="form-control" placeholder="Lastname Required"
-                                required />
+                              <input
+                                type="text"
+                                v-model="lastname"
+                                class="form-control"
+                                placeholder="Lastname Required"
+                                required
+                              />
                             </div>
                             <div class="form-groug">
                               <label>Phone Number</label>
-                              <input type="tel" v-model="phone" class="form-control" placeholder="Phone Required"
-                                required />
+                              <input
+                                type="tel"
+                                v-model="phone"
+                                class="form-control"
+                                placeholder="Phone Required"
+                                required
+                              />
                             </div>
                             <div class="form-group mt-3">
-                              <input type="checkbox" ref="checkbox" required id=""> <span>
-                                I accept the <router-link to="#">terms and conditions</router-link> for using this service.
+                              <input
+                                type="checkbox"
+                                ref="checkbox"
+                                required
+                                id=""
+                              />
+                              <span>
+                                I accept the
+                                <router-link to="#"
+                                  >terms and conditions</router-link
+                                >
+                                for using this service.
                               </span>
                             </div>
                           </div>
@@ -437,12 +561,17 @@
                             <hr />
                             <div class="row">
                               <div class="col">
-                                <span>{{ item.quantity }}</span> <span> x </span>
-                                <span>{{ item.name }}</span>:
+                                <span>{{ item.quantity }}</span>
+                                <span> x </span> <span>{{ item.name }}</span
+                                >:
                               </div>
                               <div class="col">
-                                <span v-if="item.price == 'free'"><strong>{{ item.price }}</strong></span>
-                                <span v-else><strong>{{ item.price }}</strong></span>
+                                <span v-if="item.price == 'free'"
+                                  ><strong>{{ item.price }}</strong></span
+                                >
+                                <span v-else
+                                  ><strong>{{ item.price }}</strong></span
+                                >
                               </div>
                             </div>
                             <div class="row mt-2">
@@ -479,7 +608,6 @@
                             background: #bfddb4;
                             margin-top: 12px;
                           "
-                          
                         >
                           Proceed to Payment
                         </button>
@@ -501,7 +629,12 @@
               </div>
             </div>
             <!--Organiser-->
-            <div class="tab-pane fade" id="pills-organ" role="tabpanel" aria-labelledby="pills-organ-tab">
+            <div
+              class="tab-pane fade"
+              id="pills-organ"
+              role="tabpanel"
+              aria-labelledby="pills-organ-tab"
+            >
               <div class="container organiser-area">
                 <div class="row justify-content-center px-2">
                   <div class="col-lg-12">
@@ -556,7 +689,7 @@ export default {
       toRate: "",
       salesEnd: false,
       formDatas: "",
-      qutty: '',
+      qutty: "",
       email: "",
       admin_id: "",
       firstname: "",
@@ -577,9 +710,9 @@ export default {
       },
       message: "",
       event: {
-        adminuser: {}
+        adminuser: {},
       },
-      toUsdRate: '',
+      toUsdRate: "",
       newTicket: [],
       eventId: this.$route.params.id,
       modal: false,
@@ -635,9 +768,9 @@ export default {
     },
   },
   methods: {
-    proceedPay(){
-      this.proceedPayment = true
-      this.modal.hide()
+    proceedPay() {
+      this.proceedPayment = true;
+      this.modal.hide();
     },
     selectTicketQty(item, qty) {
       const elementIndex = this.newTicket.findIndex((obj) => obj.id == item.id);
@@ -645,8 +778,8 @@ export default {
       if (elementIndex == -1) {
         if (item.price != "free") {
           let newPrice = (item.price / this.toRate).toFixed(2);
-          let sub_total = (newPrice * qty.target.value).toFixed(2)
-          let orifinal_price = item.price
+          let sub_total = (newPrice * qty.target.value).toFixed(2);
+          let orifinal_price = item.price;
           this.newTicket.push({
             id: item.id,
             name: item.name,
@@ -678,7 +811,7 @@ export default {
             this.currency_symbol = res.data.base;
             this.toRate = res.data.rates["NGN"];
           });
-          axios
+        axios
           .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
           .then((res) => {
             this.currency_symbol = res.data.base;
@@ -692,7 +825,7 @@ export default {
     getEvent() {
       EventService.getSingleEvent(this.$route.params.id).then((res) => {
         this.event = res.data.events;
-        this.admin_id = res.data.events.adminuserId
+        this.admin_id = res.data.events.adminuserId;
         this.endDate = res.data.events.enddate;
         this.convert_price();
         this.getCountdown();
@@ -768,44 +901,51 @@ export default {
     buyTicket(paymentGateway, price) {
       let amount = price * this.ticketQuantity;
       let adminId = this.$store.state.vote.event.adminuserId;
-      let productTitle = this.$store.state.vote.event.title;
-      if (this.currency_symbol != 'NGN' || this.currency_symbol == 'USD') {
+      let productTitle = this.event.title;
+      if (this.currency_symbol != "NGN" || this.currency_symbol == "USD") {
         let paymentParams = FlutterwaveCheckout({
-            public_key: this.flw_public_key,
-            tx_ref: this.reference,
-            amount: this.totalPrice * this.toUsdRate,
-            currency: 'USD',
-            customer: {
-              email: this.email,
-              phone_number: this.phone,
-            },
-            callback: (response) => {
-              console.log(response);
-              this.method = "Flutterwave";
-              Notification.addNotification({
-                receiverId: adminId,
-                type: "Event Ticket Purchased",
-                message: `Someone just Successfully Purchased ${productTitle} ticket`,
-              });
-              TransactionService.makeTransaction(this.transactForm).then(
-                (response) => {
-                  this.message = "Ticket has been sccessfully booked!!";
-                  //this.resetForm();
-                  this.getEvent();
-                  this.genRef()
-                  Swal.fire({
-                    icon: 'success',
-                    text: `You have successfully booked ${productTitle} ticket`,
-                  })
-                  this.proceedPayment = false;
-                  paymentParams.close();
-                  window.close();
-                }
-              );
-              //this.$router.push("/fill-form/" + id);
-            },
-            onclose: () => paymentParams.close(),
-          });
+          public_key: this.flw_public_key,
+          tx_ref: this.reference,
+          amount: this.totalPrice * this.toUsdRate,
+          currency: "USD",
+          customer: {
+            email: this.email,
+            phone_number: this.phone,
+          },
+          callback: (response) => {
+            console.log(response);
+            this.method = "Flutterwave";
+            Notification.addNotification({
+              receiverId: adminId,
+              type: "Event Ticket Purchased",
+              message: `Someone just Successfully Purchased ${productTitle} ticket`,
+            });
+            TransactionService.makeTransaction(this.transactForm).then(
+              (response) => {
+                this.message = "Ticket has been sccessfully booked!!";
+                //this.resetForm();
+                this.getEvent();
+                this.genRef();
+                this.proceedPayment = false;
+                this.qutty = "";
+                Swal.fire({
+                  icon: "success",
+                  text: `You have successfully booked ${productTitle} ticket`,
+                  confirmButtonText: "Ok",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.proceedPayment = false;
+                    this.qutty = "";
+                  }
+                });
+                paymentParams.close();
+                window.close();
+              }
+            );
+            //this.$router.push("/fill-form/" + id);
+          },
+          onclose: () => paymentParams.close(),
+        });
       } else {
         if (paymentGateway == "interswitch") {
           let samplePaymentRequest = {
@@ -830,12 +970,19 @@ export default {
                 (response) => {
                   //this.modal.hide();
                   this.getEvent();
-                  this.ticketSelected = false;
+                  this.proceedPayment = false;
+                  this.qutty = "";
                   this.message = "Ticket has been sccessfully booked!!";
                   Swal.fire({
-                    icon: 'success',
+                    icon: "success",
                     text: `You have successfully booked ${productTitle} ticket`,
-                  })
+                    confirmButtonText: "Ok",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.proceedPayment = false;
+                      this.qutty = "";
+                    }
+                  });
                   //this.resetForm();
                 }
               );
@@ -851,7 +998,7 @@ export default {
             // general options
             key: this.publicKey, //required
             email: this.email, //required
-            amount: (amount * 100).toFixed(0), //required
+            amount: (this.totalPrice * 100).toFixed(0), //required
             reference: this.reference, //required
             firstname: this.firstname,
             lastname: this.lastname,
@@ -871,12 +1018,19 @@ export default {
                 (response) => {
                   //this.modal.hide();
                   this.getEvent();
-                  this.ticketSelected = false;
+                  this.proceedPayment = false;
+                  this.qutty = "";
                   this.message = "Ticket has been sccessfully booked!!";
                   Swal.fire({
-                    icon: 'success',
+                    icon: "success",
                     text: `You have successfully booked ${productTitle} ticket`,
-                  })
+                    confirmButtonText: "Ok",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.proceedPayment = false;
+                      this.qutty = "";
+                    }
+                  });
                 }
               );
               //this.$router.push("/fill-form/" + id);
@@ -923,11 +1077,18 @@ export default {
                   this.message = "Ticket has been sccessfully booked!!";
                   //this.resetForm();
                   this.getEvent();
-                  this.ticketSelected = false;
+                  this.proceedPayment = false;
+                  this.qutty = "";
                   Swal.fire({
-                    icon: 'success',
+                    icon: "success",
                     text: `You have successfully booked ${productTitle} ticket`,
-                  })
+                    confirmButtonText: "Ok",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.proceedPayment = false;
+                      this.qutty = "";
+                    }
+                  });
                   paymentParams.close();
                   window.close();
                 }
@@ -941,7 +1102,6 @@ export default {
         } else {
         }
       }
-      
     },
   },
   mounted() {

@@ -225,6 +225,7 @@ export default {
       lastname: "",
       message: "",
       adminId: "",
+      toUsdRate: '',
     };
   },
   computed: {
@@ -247,6 +248,7 @@ export default {
         reference: this.reference,
         numberOfVotes: this.numberOfVotes,
         currency_symbol: this.currency_symbol,
+        toUsdRate: this.toUsdRate
       };
     },
 
@@ -301,6 +303,12 @@ export default {
           .then((res) => {
             this.currency_symbol = res.data.base;
             this.toRate = res.data.rates["NGN"];
+          });
+          axios
+          .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+          .then((res) => {
+            this.currency_symbol = res.data.base;
+            this.toUsdRate = res.data.rates["NGN"];
           });
       });
     },

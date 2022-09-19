@@ -426,7 +426,7 @@ export default {
         let paymentParams = FlutterwaveCheckout({
           public_key: this.flw_public_key,
           tx_ref: this.payContent.reference,
-          amount: this.payContent.amount,
+          amount: this.payContent.amount * this.payContent.toUsdRate,
           currency: "USD",
           customer: {
             email: this.payContent.email,
