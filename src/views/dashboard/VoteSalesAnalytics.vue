@@ -74,10 +74,10 @@
       this.$router.push('/login');
     }
 
-    VoteService.getContests().then
+    VoteService.getallUserContest().then
     (
         response => {
-            this.content = response.data.voteContest;
+            this.content = response.data.voteContests;
         }
     )
     },

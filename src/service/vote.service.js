@@ -88,6 +88,12 @@ class VoteService {
     });
   }
 
+  getAllVoters(contestId) {
+    return axios.get(API_URL + "allUserContestVotes/" + contestId, {
+      headers: authHeader(),
+    });
+  }
+
   getSingleAward(contestId) {
     return axios.get(API_URL + "getAward/" + contestId, {
       headers: authHeader(),

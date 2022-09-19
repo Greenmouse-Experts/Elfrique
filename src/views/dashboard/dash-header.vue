@@ -214,7 +214,7 @@
           <li>
             <router-link to="/organiser/view-contestants" class="routers"
               ><a
-                ><i class="bi bi-circle"></i><span>View Contestants</span></a
+                ><i class="bi bi-circle"></i><span>View Contests</span></a
               ></router-link
             >
           </li>
