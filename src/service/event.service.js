@@ -79,6 +79,18 @@ class EventService {
     });
   }
 
+  getAllUserBookedTickets(contestId) {
+    return axios.get(API_URL + "allUserBookedTickets", {
+      headers: authHeader(),
+    });
+  }
+
+  getAllUserSingleBookedTicket(eventId) {
+    return axios.get(API_URL + "allUserBookedTickets/" + eventId, {
+      headers: authHeader(),
+    });
+  }
+
   addsponsor(sponsorForm, contestId) {
     return axios.post(API_URL + "addSponsor/" + contestId, sponsorForm, {
       headers: authHeader(),

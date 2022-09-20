@@ -22,20 +22,8 @@
                 <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body card-table">
-                        <div class="buttons-table">
-                            <button type="button">Copy</button>
-                            <button type="button">CSV</button>
-                            <button type="button">Excel</button>
-                            <button type="button">PDF</button>
-                            <button type="button">Print</button>
-                        </div>
-                        <div class="search-table">
-                            <form>
-                                <input type="text" placeholder="Search...">
-                            </form>
-                        </div>
                         <!--Table-->
-                        <table class="table datatable card-table-table">
+                        <table class="table datatable card-table-table" id="allAdvert">
                             <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -60,19 +48,6 @@
                             </tr>
                             </tbody>
                         </table>
-                        <nav>
-                            <ul class="pagination pagination-md">
-                                <li class="page-item disabled">
-                                    <a class="page-link"><span aria-hidden="true">&laquo;</span></a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link"><span aria-hidden="true">&raquo;</span></a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>  
                 </div>
                 </div>
@@ -112,7 +87,14 @@
 
             VendorService.getUserAds().then(response => {
                 this.content = response.data.data;
-                console.log(this.content);
+                //console.log(this.content);
+                setTimeout(function () {
+                    $("#allAdvert").DataTable({
+                    dom: "Bfrtip",
+                    pageLength: 10,
+                    buttons: ["copy", "csv", "excel", "pdf", "print"],
+                    });
+                }, 1000);
             },
             error => {
             this.message =

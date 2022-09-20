@@ -258,7 +258,7 @@
           href="#"
         >
           <img src="@/assets/images/menu-registration.png" /><span></span
-          >Event Registration<i class="bi bi-chevron-down ms-auto"></i>
+          >Event<i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul
           id="reg-nav"
@@ -505,13 +505,13 @@
               ></router-link
             >
           </li>
-          <li>
+          <!-- <li>
             <router-link to="/organiser/reviews" class="routers"
               ><a
                 ><i class="bi bi-circle"></i><span>Reviews</span></a
               ></router-link
             >
-          </li>
+          </li> -->
           <!-- <li>
             <router-link to="/organiser/search-vendor" class="routers"
               ><a
@@ -540,13 +540,13 @@
               ></router-link
             >
           </li> -->
-          <li>
+          <!-- <li>
             <router-link to="/organiser/vendor-sales-analytics" class="routers"
               ><a
                 ><i class="bi bi-circle"></i><span>Sales Analytics</span></a
               ></router-link
             >
-          </li>
+          </li> -->
         </ul>
       </li>
       <!--Travel-->

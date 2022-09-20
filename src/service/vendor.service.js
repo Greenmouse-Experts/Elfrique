@@ -13,6 +13,10 @@ class VendorService {
     return axios.get(API_URL + "getAllJob", { headers: authHeader() });
   }
 
+  getAllSellerJob() {
+    return axios.get(API_URL + "getAllSellerJob", { headers: authHeader() });
+  }
+
   getSingleJob(jobId) {
     return axios.get(API_URL + "getJob/" + jobId);
   }
@@ -67,6 +71,18 @@ class VendorService {
     return axios.get(API_URL + "getallCategories/" + contestId, {
       headers: authHeader(),
     });
+  }
+
+  getAllProposal(jobId){
+    return axios.get(API_URL + "getAllProposal/" + jobId, {
+      headers: authHeader2()
+    })
+  }
+
+  deleteProposal(id){
+    return axios.delete(API_URL + "deleteProposal/" + id, {
+      headers: authHeader2()
+    })
   }
 
   addsponsor(sponsorForm, contestId) {

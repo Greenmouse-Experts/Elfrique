@@ -255,7 +255,7 @@ export default {
               Swal.fire({
                 position: "top-end",
                 icon: "success",
-                title: "Referrer updated Successfully",
+                title: "Referrer Deleted Successfully",
                 showConfirmButton: false,
                 timer: 1500,
               });

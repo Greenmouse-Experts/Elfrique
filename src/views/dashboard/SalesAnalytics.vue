@@ -1,5 +1,5 @@
 <template>
-    <title>Sales-Analytics | Elfrique</title>
+    <title>Event Sales Analytics | Elfrique</title>
     <dash-header/>
 
     <!--------Main Content--------->
@@ -11,7 +11,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><router-link to="/organiser/dashboard" class="routers"><a>Home</a></router-link></li>
                     <li class="breadcrumb-item active">
-                        Registration
+                        Event
                     </li>
                     <li class="breadcrumb-item active">
                         Sales Analytics
@@ -25,17 +25,16 @@
         <div class="container create-refer-div">
             <div class="row justify-content-center">
                 <div class="col-lg-12 start-voting-inner-div">
-                    <form>
+                    <form @submit.prevent="getBookedTicket">
                         <div class="row">
                             <div class="col-lg-12 mt-4">
-                                <label for="vote option" class="create">Sales-Analytics</label>
-                                <select id="gateway" required>
-                                    <option value="select vote option" >Select Your Event Option 1</option>
-                                    <option value="select vote option" >Select Your Event Option 2</option>
+                                <label for="vote option" class="create">Select Event</label>
+                                <select v-model="eventId" id="gateway" required>
+                                    <option v-for="item in events" :key="item" :value="item.id" >{{item.title}}</option>
                                 </select>
                             </div>
                             <div class="col-lg-12 mt-4">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">View Analytics</button>
+                                <button type="submit" data-bs-toggle="modal" data-bs-target="#staticBackdrop">View Analytics</button>
                             </div>
                         </div>
                     </form>
@@ -55,56 +54,44 @@
                     <div class="col-lg-12">
                         <div class="card">
                     <div class="card-body card-table">
-                        <div class="buttons-table">
-                            <button type="button">Copy</button>
-                            <button type="button">CSV</button>
-                            <button type="button">Excel</button>
-                            <button type="button">PDF</button>
-                            <button type="button">Print</button>
-                        </div>
-                        <div class="search-table">
-                            <form>
-                                <input type="text" placeholder="Search...">
-                            </form>
-                        </div>
                         <!--Table-->
-                        <table class="table datatable card-table-table">
+                        <table class="table datatable card-table-table" id="TicketBooked">
                             <thead>
-                            <tr>
-                                <th scope="col">Event id</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">First Name</th>
-                                <th scope="col">Last Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Home Address</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Quantity</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            </tbody>
+                                <tr>
+                                  <th scope="col">S/N</th>
+                                  <th scope="col">EventId</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Email</th>
+                                  <th scope="col">Phone</th>
+                                  <th scope="col">QTY</th>
+                                  <th scope="col">Amount</th>
+                                  <th scope="col">Method</th>
+                                  <th scope="col">Reference</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr v-for="(item, i) in ticketBooked" :key="item.id">
+                                  <th scope="row">{{i + 1}}</th>
+                                  <th>{{item.eventsTicketId}}</th>
+                                  <td>{{item.name}}</td>
+                                  <td>{{item.email}}</td>
+                                  <td>{{item.phone_no}}</td>
+                                  <td>{{item.quantity}}</td>
+                                  <td>{{item.currency}} {{item.amount}}</td>
+                                  <td>{{item.payment_method}}</td>
+                                  <td>{{item.reference}}</td>
+                                </tr>
+                              </tbody>
                         </table>
                     </div>  
                     <div class="analyticsNote">
-                        <p>Total amount : ₦12300</p>
-                        <p>Tickets(s):14</p>
+                        <!-- <p>Total amount : ₦12300</p> -->
+                        <p>Tickets(s):{{ticketBooked.length}}</p>
                         <!-- <p>Current Online Payment Gateway: PAYSTACK</p> -->
                     </div>
-                    <div class="analyticsLinkBelow">
+                    <!-- <div class="analyticsLinkBelow">
                         <a href="#">View narration so far</a>
-                    </div>
+                    </div> -->
                 </div>
                     </div>
                 </div>
@@ -124,6 +111,7 @@
     import Header from './dash-header.vue'
     import Footer from './dash-footer.vue'
     import VoteService from '../../service/vote.service'
+import eventService from '../../service/event.service'
 
     export default {
       name: "Elfrique",
@@ -134,32 +122,18 @@
       },
       data(){
             return{
-            content: '',
-            contestId: '',
-            NumberOfCategories: '',
+            events: [],
+            eventId: '',
+            ticketBooked: [],
             message: '',
             error: '',
             loading: false,
-            
-    
             }  
         },
         computed: {
         loggedIn() {
             return this.$store.state.auth.status.loggedIn;
             },
-        categoryForm: function () {
-            let categoryForm = []
-            for(let i = 0; i < this.NumberOfCategories; i++){
-               categoryForm.push({
-                   name: '',
-                   description: '',
-                
-                })
-            }
-            return categoryForm
-        
-        },
   },
 
   created() {
@@ -169,48 +143,29 @@
     }
 
 
-    VoteService.getAwards().then
+    eventService.getUserEvents().then
     (
         response => {
-            this.content = response.data.awards;
+            this.events = response.data.events;
+            console.log(this.events)
         }
     )
     },
 
     methods: {
-        addCategory(){
-
-            this.loading = true;
-
-            if (this.categoryForm){
-                for (let i = 0; i < this.NumberOfCategories; i++) {
-                let formData = new FormData();
-                formData.append('name', this.categoryForm[i].name);
-                formData.append('description', this.categoryForm[i].description);
-            
-               
-                
-                VoteService.addCategory(this.categoryForm[i], this.contestId).then
-                (
-                    response => {
-                        console.log(response);
-                        this.$store.dispatch('vote/getMessage', 'Contest created successfully');
-                        this.message = "categories created successfully";
-                        this.loading = false;
-                         
-                    },
-
-                    error => {
-                        this.error = error.response.data.message;
-                        this.loading = false;
-                        console.log(error);
-                    }   
-                )
-            }
-            }
-            
-        },
-        
+        getBookedTicket(){
+            eventService.getAllUserSingleBookedTicket(this.eventId).then(res => {
+                this.ticketBooked = res.data.booked_tickets
+                setTimeout(function () {
+                    $("#TicketBooked").DataTable({
+                    dom: "Bfrtip",
+                    pageLength: 10,
+                    buttons: ["copy", "csv", "excel", "pdf", "print"],
+                    });
+                }, 1000);
+                //console.log(res.data)
+            })
+        }
     },
       mounted(){
         window.scrollTo(0,0)

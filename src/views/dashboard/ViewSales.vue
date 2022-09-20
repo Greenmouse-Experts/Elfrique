@@ -38,18 +38,24 @@
                   <th scope="col">EventId</th>
                   <th scope="col">Name</th>
                   <th scope="col">Email</th>
-                  <th scope="col">Phone Number</th>
-                  <th scope="col">View Details</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">QTY</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Method</th>
+                  <th scope="col">Reference</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <th>11212</th>
-                  <td>HamzatAbdulazeez</td>
-                  <td>hmztadeleke@gmail.com</td>
-                  <td>09055555555555</td>
-                  <td>This page talk about the sale details</td>
+                <tr v-for="(item, i) in tickets" :key="item.id">
+                  <th scope="row">{{i + 1}}</th>
+                  <th>{{item.eventsTicketId}}</th>
+                  <td>{{item.name}}</td>
+                  <td>{{item.email}}</td>
+                  <td>{{item.phone_no}}</td>
+                  <td>{{item.quantity}}</td>
+                  <td>{{item.currency}} {{item.amount}}</td>
+                  <td>{{item.payment_method}}</td>
+                  <td>{{item.reference}}</td>
                 </tr>
               </tbody>
             </table>
@@ -76,7 +82,7 @@
     },
     data() {
       return {
-        content: "",
+        tickets: [],
         contestId: "",
         NumberOfCategories: "",
         message: "",
@@ -103,9 +109,9 @@
   
     methods: {
       getUserEventRef() {
-        EventService.getUserEventReferral().then((response) => {
-          //console.log(response.data)
-          this.content = response.data;
+        EventService.getAllUserBookedTickets().then((response) => {
+          //console.log(response.data.booked_tickets)
+          this.tickets = response.data.booked_tickets;
           setTimeout(function () {
             $("#dataTableRef").DataTable({
               dom: "Bfrtip",
