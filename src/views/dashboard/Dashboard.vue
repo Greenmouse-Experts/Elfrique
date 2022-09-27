@@ -316,7 +316,11 @@
                     ></button>
                   </div>
                   <div class="card-body card-table">
-                    <table ref="event" class="table datatable card-table-table" id="eventTable">
+                    <table
+                      ref="event"
+                      class="table datatable card-table-table"
+                      id="eventTable"
+                    >
                       <thead>
                         <tr>
                           <th scope="col">#</th>
@@ -370,7 +374,11 @@
                   </div>
                   <div class="card-body card-table">
                     <!--Table-->
-                    <table ref="form" class="table datatable card-table-table" id="formTable">
+                    <table
+                      ref="form"
+                      class="table datatable card-table-table"
+                      id="formTable"
+                    >
                       <thead>
                         <tr>
                           <th scope="col">#</th>
@@ -515,7 +523,10 @@
                   <div class="card-body card-table">
                     <!--Table-->
                     <p class="text-center p-text">Your referral earnings</p>
-                    <table class="table datatable card-table-table" id="ref_earnings">
+                    <table
+                      class="table datatable card-table-table"
+                      id="ref_earnings"
+                    >
                       <thead>
                         <tr>
                           <th scope="col">#</th>
@@ -949,14 +960,14 @@ export default {
 
         GetDashboard.getDashboard(this.adminId).then((res) => {
           let data = res.data;
-          this.form = res.data.eventforms.length;
-          this.eventForm = res.data.eventforms;
-          this.event = res.data.events.length;
-          this.events = res.data.events;
-          this.trivia = res.data.trivia.length;
-          this.trivias = res.data.trivia;
-          this.votes = res.data.votingContests.length;
-          this.voteContest = res.data.votingContests;
+          this.form = res?.data?.eventforms?.length;
+          this.eventForm = res?.data?.eventforms;
+          this.event = res?.data?.events?.length;
+          this.events = res?.data?.events;
+          this.trivia = res?.data?.trivia?.length;
+          this.trivias = res?.data?.trivia;
+          this.votes = res?.data?.votingContests?.length;
+          this.voteContest = res?.data?.votingContests;
           this.events.filter((el) => {
             this.ticket = el.eventsTickets.length;
           });
@@ -1007,7 +1018,6 @@ export default {
     ReferralService.getReferral().then(
       (response) => {
         this.content = response.data.referrals;
-        
       },
       (error) => {
         this.message =
@@ -1045,7 +1055,6 @@ export default {
         }
       );
     },
-
   },
   mounted() {
     if (!this.currentUser) {
