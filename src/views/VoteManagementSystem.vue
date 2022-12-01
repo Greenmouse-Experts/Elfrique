@@ -140,9 +140,7 @@
                         <div class="card-text">
                           <p class="card-text card-text-after">
                             <i class="bi bi-person-plus-fill"></i>:
-                            {{
-                              voteContent[index].contestants.length
-                            }}
+                            {{ voteContent[index].contestants.length }}
                             Contestant(s)
                           </p>
                           <p></p>
@@ -185,11 +183,7 @@
                         </div>
                         <div class="mt-3 link-container">
                           <div
-                            class="
-                              d-flex
-                              justify-content-between
-                              align-items-center
-                            "
+                            class="d-flex justify-content-between align-items-center"
                           >
                             <router-link
                               :to="'/voting-content/' + voteContent[index].id"
@@ -205,16 +199,20 @@
                     </div>
                   </div>
 
+                <div class="p-5" v-if="isLoadingPageantry">
+                  <LoaderVue />
+                </div>
+
                   <div
                     v-if="
-                      voteContentToShow < voteContent.length ||
-                      voteContent.length > voteContentToShow
+                      ((voteContentToShow < voteContent.length ||
+                      voteContent.length > voteContentToShow) && (!isLoadingPageantry))
                     "
                     class="col-lg-12 text-center"
                   >
                     <button
                       class="btnLoadMore"
-                      @click="voteContentToShow += 1"
+                      @click="loadPageantry"
                       type="button"
                     >
                       Load More
@@ -253,9 +251,7 @@
                         <div class="card-text">
                           <p class="card-text card-text-after">
                             <i class="bi bi-person-plus-fill"></i>:
-                            {{
-                              awardContent[index].awardCategories.length
-                            }}
+                            {{ awardContent[index].awardCategories.length }}
                             Categories(s)
                           </p>
                           <p></p>
@@ -298,11 +294,7 @@
                         </div>
                         <div class="mt-3 link-container">
                           <div
-                            class="
-                              d-flex
-                              justify-content-between
-                              align-items-center
-                            "
+                            class="d-flex justify-content-between align-items-center"
                           >
                             <router-link
                               :to="'/award-content/' + awardContent[index].id"
@@ -318,16 +310,20 @@
                     </div>
                   </div>
 
+                <div class="p-5" v-if="isLoadingAward">
+                  <LoaderVue />
+                </div>
+
                   <div
                     v-if="
-                      awardContentToShow < awardContent.length ||
-                      awardContent.length > awardContentToShow
+                      ((awardContentToShow < awardContent.length ||
+                      awardContent.length > awardContentToShow) && (!isLoadingAward))
                     "
                     class="col-lg-12 text-center"
                   >
                     <button
                       class="btnLoadMore"
-                      @click="awardContentToShow += 1"
+                      @click="loadAward"
                       type="button"
                     >
                       Load More
@@ -461,65 +457,88 @@
 </template>
 
 <script>
-import Header from "./elfrique-header.vue";
-import Footer from "./elfrique-footer.vue";
-import VoteService from "../service/vote.service";
-import AOS from "aos";
-export default {
-  name: "Elfrique",
-  components: {
-    "elfrique-header": Header,
-    "elfrique-footer": Footer,
-  },
-  data() {
-    return {
-      voteContent: "",
-      awardContent: "",
-      voteContentToShow: 6,
-      totalvoteContent: 0,
-      awardContentToShow: 6,
-      totalAwardContent: 0,
-    };
-  },
+  import Header from "./elfrique-header.vue";
+  import Footer from "./elfrique-footer.vue";
+  import VoteService from "../service/vote.service";
+  import LoaderVue from "./components/Loader.vue";
 
-  created() {
-    VoteService.getAllContests().then((response) => {
-      this.voteContent = response.data.voteContests;
-      this.totalvoteContent = this.voteContent.length;
-    });
-    VoteService.getAllAwards().then((response) => {
-      this.awardContent = response.data.awards;
-      this.totalAwardContent = this.awardContent.length;
-    });
-  },
-
-  methods: {
-    getContest(contest) {
-      this.$store.dispatch("vote/getSingleContest", contest).then(() => {
-        //console.log(this.$store.state.vote.voteContent)
-        /* this.$router.push('/voting-content'); */
-      });
+  import AOS from "aos";
+  export default {
+    name: "Elfrique",
+    components: {
+      "elfrique-header": Header,
+      "elfrique-footer": Footer,
+      LoaderVue,
     },
-    getAllContests() {
-      console.log("Adding 10 more data results");
-      this.busy = true;
+    data() {
+      return {
+        voteContent: "",
+        awardContent: "",
+        voteContentToShow: 6,
+        totalvoteContent: 0,
+        awardContentToShow: 6,
+        totalAwardContent: 0,
+        isLoadingPageantry: true,
+        isLoadingAward: true,
+      };
+    },
 
+    created() {
       VoteService.getAllContests().then((response) => {
-        const append = response.data.voteContests.slice(
-          this.voteContent.length,
-          this.voteContent.length + this.limit
-        );
-        this.voteContent = this.voteContent.concat(append);
-        this.busy = false;
-        //this.voteContent = response.data.voteContests;
-        //console.log(this.voteContent);
+        this.voteContent = response.data.voteContests;
+        this.totalvoteContent = this.voteContent.length;
+        this.isLoadingPageantry = false;
+      });
+      VoteService.getAllAwards().then((response) => {
+        this.awardContent = response.data.awards;
+        this.totalAwardContent = this.awardContent.length;
+        this.isLoadingAward = false;
       });
     },
-  },
 
-  mounted() {
-    window.scrollTo(0, 0);
-    AOS.init();
-  },
-};
-</script> 
+    methods: {
+      loadPageantry() {
+        this.isLoadingPageantry = true;
+        setTimeout(() => {
+          this.isLoadingPageantry = false;
+          this.voteContentToShow += 3;
+        }, 4000);
+      },
+
+      loadAward() {
+        this.isLoadingAward = true;
+        setTimeout(() => {
+          this.isLoadingAward = false;
+          this.awardContentToShow += 3;
+        }, 4000);
+      },
+
+      getContest(contest) {
+        this.$store.dispatch("vote/getSingleContest", contest).then(() => {
+          //console.log(this.$store.state.vote.voteContent)
+          /* this.$router.push('/voting-content'); */
+        });
+      },
+      getAllContests() {
+        console.log("Adding 10 more data results");
+        this.busy = true;
+
+        VoteService.getAllContests().then((response) => {
+          const append = response.data.voteContests.slice(
+            this.voteContent.length,
+            this.voteContent.length + this.limit
+          );
+          this.voteContent = this.voteContent.concat(append);
+          this.busy = false;
+          //this.voteContent = response.data.voteContests;
+          //console.log(this.voteContent);
+        });
+      },
+    },
+
+    mounted() {
+      window.scrollTo(0, 0);
+      AOS.init();
+    },
+  };
+</script>
