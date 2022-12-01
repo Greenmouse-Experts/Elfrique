@@ -40,7 +40,7 @@
             </div>
           </div>
 
-          <form @submit.prevent="proceedtopay">
+          <form @submit.prevent="proceedToOtp">
             <div
               v-if="message"
               class="alert-success alert alert-dismissible fade show"
@@ -108,11 +108,17 @@
                   >
                 </p>
               </div>
-              <div v-if="contest.type == 'free'" class="col-lg-12 mb-3">
-                <button type="submit">Vote</button>
+              <div class="col-lg-12 mb-3" v-if="loadOtp">
+                <label>Enter OTP sent to {{ email }}</label>
+                <OtpInput @validateOtp="handleValidate($event)" />
               </div>
-              <div v-else class="col-lg-12 mb-3">
-                <button type="submit">Proceed</button>
+              <div class="col-lg-12" v-else>
+                <div v-if="contest.type == 'free'" class="col-lg-12 mb-3">
+                  <button type="submit">Vote</button>
+                </div>
+                <div v-else class="col-lg-12 mb-3">
+                  <button type="submit">Proceed</button>
+                </div>
               </div>
             </div>
           </form>
@@ -179,273 +185,299 @@
   <elfrique-footer />
 </template>
 <style scoped>
-.contestant-profile .header-contestant .col-lg-12 {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  background-image: linear-gradient(90deg, #000000bb, #000000bb),
-    url("../assets/images/voting-img.jpg");
-  padding: 100px 10px;
-  color: #fff;
-  border-radius: 20px;
-}
+  .contestant-profile .header-contestant .col-lg-12 {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-image: linear-gradient(90deg, #000000bb, #000000bb),
+      url("../assets/images/voting-img.jpg");
+    padding: 100px 10px;
+    color: #fff;
+    border-radius: 20px;
+  }
 </style>
 <script>
-import paystack from "vue-paystack";
-import uniqid from "uniqid";
-import Header from "./elfrique-header.vue";
-import Footer from "./elfrique-footer.vue";
-import VoteService from "../service/vote.service";
-import TransactionService from "../service/transaction.service";
-import Notification from "../service/notitfication-service";
-import axios from "axios";
+  import paystack from "vue-paystack";
+  import uniqid from "uniqid";
+  import Header from "./elfrique-header.vue";
+  import Footer from "./elfrique-footer.vue";
+  import VoteService from "../service/vote.service";
+  import TransactionService from "../service/transaction.service";
+  import Notification from "../service/notitfication-service";
+  import OtpInput from "./components/OtpInput.vue";
+  import Swal from "sweetalert2";
+  import axios from "axios";
 
-export default {
-  name: "Elfrique",
-  components: {
-    "elfrique-header": Header,
-    "elfrique-footer": Footer,
-    paystack: paystack,
-  },
-  data() {
-    return {
-      contest: "",
-      contestant: "",
-      currency_symbol: "",
-      toRate: "",
-      method: "",
-      email: "",
-      loading: false,
-      reference: this.genRef(),
-      phone: "",
-      email: "",
-      numberOfVotes: "",
-      publicKey: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f",
-      flw_public_key: "FLWPUBK_TEST-0f353662b04aee976128e62946a59682-X",
-      firstname: "",
-      lastname: "",
-      message: "",
-      adminId: "",
-    };
-  },
-  computed: {
-    /* otherContestants() {
+  export default {
+    name: "Elfrique",
+    components: {
+      "elfrique-header": Header,
+      "elfrique-footer": Footer,
+      paystack: paystack,
+      OtpInput,
+      Swal,
+    },
+    data() {
+      return {
+        contest: "",
+        contestant: "",
+        currency_symbol: "",
+        toRate: "",
+        method: "",
+        email: "",
+        loading: false,
+        reference: this.genRef(),
+        phone: "",
+        email: "",
+        numberOfVotes: "",
+        publicKey: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f",
+        flw_public_key: "FLWPUBK_TEST-0f353662b04aee976128e62946a59682-X",
+        firstname: "",
+        lastname: "",
+        message: "",
+        adminId: "",
+        loadOtp: false,
+      };
+    },
+    computed: {
+      /* otherContestants() {
       console.log(this.contest);
       const OC = this.contest.contestants.filter(
         (contestant) => contestant.id !== this.contestant.id
       );
       return OC;
     }, */
-    amount() {
-      return (
-        (Number(this.numberOfVotes) * Number(this.contest.fee)) /
-        this.toRate
-      ).toFixed(2);
+      amount() {
+        return (
+          (Number(this.numberOfVotes) * Number(this.contest.fee)) /
+          this.toRate
+        ).toFixed(2);
+      },
+
+      paymentForm() {
+        return {
+          email: this.email,
+          amount: this.amount,
+          method: this.method,
+          fullname: this.firstname + " " + this.lastname,
+          phone: this.phone,
+          type: "paid",
+          reference: this.reference,
+          numberOfVotes: this.numberOfVotes,
+          currency_symbol: this.currency_symbol,
+        };
+      },
+
+      voteForm() {
+        return {
+          reference: this.reference,
+          numberOfVote: this.numberOfVotes,
+          method: this.method,
+          type: "paid",
+          amount: this.amount,
+          fullname: this.firstname + " " + this.lastname,
+        };
+      },
     },
 
-    paymentForm() {
-      return {
-        email: this.email,
-        amount: this.amount,
-        method: this.method,
-        fullname: this.firstname + " " + this.lastname,
-        phone: this.phone,
-        type: "paid",
-        reference: this.reference,
-        numberOfVotes: this.numberOfVotes,
-        currency_symbol: this.currency_symbol,
-      };
+    created() {
+      VoteService.getSingleNominee(this.$route.params.id).then((response) => {
+        this.contestant = response.data.Nominees;
+        VoteService.getSingleAward(response.data.Nominees.awardContestId).then(
+          (response) => {
+            this.adminId = response.data.awards.adminuserId;
+            this.contest = response.data.awards;
+          }
+        );
+      });
+
+      this.convert_price();
+
+      const script = document.createElement("script");
+      script.src =
+        "https://qa.interswitchng.com/collections/public/javascripts/inline-checkout.js";
+      document.getElementsByTagName("head")[0].appendChild(script);
     },
 
-    voteForm() {
-      return {
-        reference: this.reference,
-        numberOfVote: this.numberOfVotes,
-        method: this.method,
-        type: "paid",
-        amount: this.amount,
-        fullname: this.firstname + " " + this.lastname,
-      };
-    },
-  },
-
-  created() {
-    VoteService.getSingleNominee(this.$route.params.id).then((response) => {
-      this.contestant = response.data.Nominees;
-      VoteService.getSingleAward(response.data.Nominees.awardContestId).then(
-        (response) => {
-          this.adminId = response.data.awards.adminuserId;
-          this.contest = response.data.awards;
+    methods: {
+      proceedToOtp() {
+        if (this.email !== "" && this.numberOfVotes !== "" && this.firstname !== "" && this.lastname !== "" && this.phone !== "") {
+          this.loadOtp = true;
         }
-      );
-    });
+        else {
+          Swal.fire({
+            icon: 'error',
+            text: `You need to fill in all details to proceed`,
+            confirmButtonText: 'Ok'
+          })
+        }
+      },
 
-    this.convert_price();
+      handleValidate(value) {
+        if (value === "12345") {
+          this.proceedtopay();
+        }
+      },
 
-    const script = document.createElement("script");
-    script.src =
-      "https://qa.interswitchng.com/collections/public/javascripts/inline-checkout.js";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  },
+      convert_price() {
+        axios.get("https://ipapi.co/currency").then((res) => {
+          let currency = res.data;
+          axios
+            .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+            .then((res) => {
+              this.currency_symbol = res.data.base;
+              this.toRate = res.data.rates["NGN"];
+            });
+        });
+      },
+      format_date(value) {
+        if (value) {
+          return moment(String(value)).format("MM/DD/YYYY hh:mm");
+        }
+      },
+      getContestant(con) {
+        this.$store.dispatch("vote/getContestant", con);
+        window.scrollTo(0, 0);
+      },
 
-  methods: {
-    convert_price() {
-      axios.get("https://ipapi.co/currency").then((res) => {
-        let currency = res.data;
-        axios
-          .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
-          .then((res) => {
-            this.currency_symbol = res.data.base;
-            this.toRate = res.data.rates["NGN"];
+      nairaToKobo(amount) {
+        return (amount * 100).toFixed(0);
+      },
+
+      close() {
+        console.log("close");
+      },
+      genRef() {
+        return uniqid();
+      },
+
+      proceedtopay() {
+        this.$store
+          .dispatch("vote/getPaymentForm", this.paymentForm)
+          .then(() => {
+            //console.log(this.$store.state.vote.voteContent)
+            this.$router.push("/nominee-profile-pay/" + this.contestant.id);
           });
-      });
-    },
-    format_date(value) {
-      if (value) {
-        return moment(String(value)).format("MM/DD/YYYY hh:mm");
-      }
-    },
-    getContestant(con) {
-      this.$store.dispatch("vote/getContestant", con);
-      window.scrollTo(0, 0);
-    },
+      },
+      resetForm() {
+        this.email = "";
+        this.address = "";
+        this.firstname = "";
+        (this.lastname = ""), (this.numberOfVotes = "");
+        this.phone = "";
+      },
 
-    nairaToKobo(amount) {
-      return (amount * 100).toFixed(0);
-    },
-
-    close() {
-      console.log("close");
-    },
-    genRef() {
-      return uniqid();
-    },
-
-    proceedtopay() {
-      this.$store.dispatch("vote/getPaymentForm", this.paymentForm).then(() => {
-        //console.log(this.$store.state.vote.voteContent)
-        this.$router.push("/nominee-profile-pay/" + this.contestant.id);
-      });
-    },
-    resetForm() {
-      this.email = "";
-      this.address = "";
-      this.firstname = "";
-      (this.lastname = ""), (this.numberOfVotes = "");
-      this.phone = "";
-    },
-
-    successPaymentPaystack() {
-      this.loading = true;
-      this.method = "Paystack";
-      console.log(this.voteForm);
-      window.scrollTo(0, 0);
-      Notification.addNotification({
-        receiverId: this.adminId,
-        type: "voting",
-        message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
-      });
-      TransactionService.submitVote(this.contestant.id, this.voteForm).then(
-        (response) => {
-          this.loading = false;
-          this.message = response.data.message;
-          this.resetForm();
-          this.$router.push("/contestant-profile/" + this.contestant.id);
-        }
-      );
-    },
-    payWithPaystack() {
-      //  options
-      const paymentOptions = {
-        // general options
-        key: this.publicKey, //required
-        email: this.email, //required
-        amount: this.nairaToKobo(this.amount), //required
-        reference: this.reference, //required
-        firstname: this.firstname,
-        lastname: this.lastname,
-        /* currency: this.currency,
+      successPaymentPaystack() {
+        this.loading = true;
+        this.method = "Paystack";
+        console.log(this.voteForm);
+        window.scrollTo(0, 0);
+        Notification.addNotification({
+          receiverId: this.adminId,
+          type: "voting",
+          message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
+        });
+        TransactionService.submitVote(this.contestant.id, this.voteForm).then(
+          (response) => {
+            this.loading = false;
+            this.message = response.data.message;
+            this.resetForm();
+            this.$router.push("/contestant-profile/" + this.contestant.id);
+          }
+        );
+      },
+      payWithPaystack() {
+        //  options
+        const paymentOptions = {
+          // general options
+          key: this.publicKey, //required
+          email: this.email, //required
+          amount: this.nairaToKobo(this.amount), //required
+          reference: this.reference, //required
+          firstname: this.firstname,
+          lastname: this.lastname,
+          /* currency: this.currency,
         channels: this.channels,
         metadata: this.metadata,
         label: this.label,  */
-        onSuccess: (response) => {
-          this.successPaymentPaystack();
-        },
+          onSuccess: (response) => {
+            this.successPaymentPaystack();
+          },
 
-        /*  onCancel: () => {
+          /*  onCancel: () => {
           this.onCancel();
         }, */
-        // onBankTransferConfirmationPending: function(response) {
-        //   this.onBankTransferConfirmationPending(response);
-        // },
-        // single split payments
-        //subaccount:this.subaccount,  //required for single split
-        //transaction_charge:this.transaction_charge,
-        //bearer:this.bearer,
-        // multi-split payments
-        //split_code:this.split_code, //required for multi-split
-        // subscriptionss
-        // plan: this.plan, //required for subscriptions
-        // quantity: this.quantity,
-      };
-      const paystack = new window.PaystackPop();
-      paystack.newTransaction(paymentOptions);
-    },
-    showPaymentInterswitch() {
-      let samplePaymentRequest = {
-        merchant_code: "MX60729",
-        pay_item_id: "Default_Payable_MX60729",
-        site_redirect_url: window.location.origin,
-        cust_id: this.email,
-        data_ref: "wiJeY3fhpkxpisBwKtsgXxKwwdnECfCvbJHfYDVuLH0=",
-        txn_ref: this.reference,
-        amount: this.nairaToKobo(this.amount),
-        currency: 566, // ISO 4217 numeric code of the currency used
-        onComplete: (response) => {
-          console.log(response);
-          this.loading = true;
-          this.method = "InterSwitch";
-          console.log(this.voteForm);
-          Notification.addNotification({
-            receiverId: this.adminId,
-            type: "voting",
-            message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
-          });
-          /* TransactionService.submitVote(this.contestant.id, this.voteForm).then(response => {
+          // onBankTransferConfirmationPending: function(response) {
+          //   this.onBankTransferConfirmationPending(response);
+          // },
+          // single split payments
+          //subaccount:this.subaccount,  //required for single split
+          //transaction_charge:this.transaction_charge,
+          //bearer:this.bearer,
+          // multi-split payments
+          //split_code:this.split_code, //required for multi-split
+          // subscriptionss
+          // plan: this.plan, //required for subscriptions
+          // quantity: this.quantity,
+        };
+        const paystack = new window.PaystackPop();
+        paystack.newTransaction(paymentOptions);
+      },
+      showPaymentInterswitch() {
+        let samplePaymentRequest = {
+          merchant_code: "MX60729",
+          pay_item_id: "Default_Payable_MX60729",
+          site_redirect_url: window.location.origin,
+          cust_id: this.email,
+          data_ref: "wiJeY3fhpkxpisBwKtsgXxKwwdnECfCvbJHfYDVuLH0=",
+          txn_ref: this.reference,
+          amount: this.nairaToKobo(this.amount),
+          currency: 566, // ISO 4217 numeric code of the currency used
+          onComplete: (response) => {
+            console.log(response);
+            this.loading = true;
+            this.method = "InterSwitch";
+            console.log(this.voteForm);
+            Notification.addNotification({
+              receiverId: this.adminId,
+              type: "voting",
+              message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
+            });
+            /* TransactionService.submitVote(this.contestant.id, this.voteForm).then(response => {
             this.loading = false;
             this.message = response.data.message;
             this.resetForm();
             this.$router.push('/contestant-profile/' + this.contestant.id)
           }) */
-        },
-        mode: "TEST",
-      };
-      console.log(samplePaymentRequest);
+          },
+          mode: "TEST",
+        };
+        console.log(samplePaymentRequest);
 
-      //window.webpayCheckout(samplePaymentRequest);
-    },
+        //window.webpayCheckout(samplePaymentRequest);
+      },
 
-    showPaymentModal() {
-      let paymentParams = {
-        public_key: this.flw_public_key,
-        tx_ref: this.reference,
-        amount: this.nairaToKobo(this.amount),
-        currency: "NGN",
-        customer: {
-          email: this.email,
-          phone_number: this.phone,
-        },
-        callback: (response) => {
-          console.log(response);
-          this.loading = true;
-          this.method = "Flutterwave";
-          Notification.addNotification({
-            receiverId: this.adminId,
-            type: "voting",
-            message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
-          });
+      showPaymentModal() {
+        let paymentParams = {
+          public_key: this.flw_public_key,
+          tx_ref: this.reference,
+          amount: this.nairaToKobo(this.amount),
+          currency: "NGN",
+          customer: {
+            email: this.email,
+            phone_number: this.phone,
+          },
+          callback: (response) => {
+            console.log(response);
+            this.loading = true;
+            this.method = "Flutterwave";
+            Notification.addNotification({
+              receiverId: this.adminId,
+              type: "voting",
+              message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
+            });
 
-          /* TransactionService.submitVote(this.contestant.id, this.voteForm).then(
+            /* TransactionService.submitVote(this.contestant.id, this.voteForm).then(
             (response) => {
               this.loading = false;
               this.message = response.data.message;
@@ -453,68 +485,68 @@ export default {
               this.$router.push("/contestant-profile/" + this.contestant.id);
             }
           ); */
-        },
-        onclose: () => this.onclose(),
-      };
+          },
+          onclose: () => this.onclose(),
+        };
 
-      window.FlutterwaveCheckout(paymentParams);
-    },
+        window.FlutterwaveCheckout(paymentParams);
+      },
 
-    callAtgPay(e) {
-      e.preventDefault();
-      AtgPayment.pay({
-        // Merchant's aimotget PUBLIC KEY
-        key: process.env.VUE_APP_AIM_TO_GET_KEY,
-        //customer's email address
-        email: this.email,
-        //Customer's phone number (Optional)
-        phone: this.phone,
-        description: `Vote for ${this.contestant.fullname}`,
-        amount: (this.amount * 10).toString(),
-        reference: this.reference,
-        logo_url: "https://example.com/logo.png",
-        onclose: function () {
-          //do something when modal is closed
-          console.log("close");
-        },
-        onerror: function (data) {
-          let reference = data.reference;
-          console.log("error");
-          //payment failed, do something with reference
-        },
-        onsuccess: function (data) {
-          let reference = data.reference;
-          this.loading = true;
-          this.method = "AimToGet";
-          this.amount = data.amount;
-          Notification.addNotification({
-            receiverId: this.adminId,
-            type: "voting",
-            message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
-          });
-          /* TransactionService.submitVote(this.contestant.id, this.voteForm).then(response => {
+      callAtgPay(e) {
+        e.preventDefault();
+        AtgPayment.pay({
+          // Merchant's aimotget PUBLIC KEY
+          key: process.env.VUE_APP_AIM_TO_GET_KEY,
+          //customer's email address
+          email: this.email,
+          //Customer's phone number (Optional)
+          phone: this.phone,
+          description: `Vote for ${this.contestant.fullname}`,
+          amount: (this.amount * 10).toString(),
+          reference: this.reference,
+          logo_url: "https://example.com/logo.png",
+          onclose: function () {
+            //do something when modal is closed
+            console.log("close");
+          },
+          onerror: function (data) {
+            let reference = data.reference;
+            console.log("error");
+            //payment failed, do something with reference
+          },
+          onsuccess: function (data) {
+            let reference = data.reference;
+            this.loading = true;
+            this.method = "AimToGet";
+            this.amount = data.amount;
+            Notification.addNotification({
+              receiverId: this.adminId,
+              type: "voting",
+              message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
+            });
+            /* TransactionService.submitVote(this.contestant.id, this.voteForm).then(response => {
                 this.loading = false;
                 this.message = response.data.message;
                 this.resetForm();
                 this.$router.push('/contestant-profile/' + this.contestant.id)
             }) */
-          //get reference and verify payment before awarding value
-        },
-      });
+            //get reference and verify payment before awarding value
+          },
+        });
+      },
     },
-  },
-  mounted() {
-    window.scrollTo(0, 0);
-    const popup = document.createElement("script");
-    popup.setAttribute("src", "https://js.paystack.co/v2/inline.js");
-    popup.async = true;
-    document.head.appendChild(popup);
-    const inlineSdk = "https://checkout.flutterwave.com/v3.js";
-    const script = document.createElement("script");
-    script.src = inlineSdk;
-    if (!document.querySelector(`[src="${inlineSdk}"]`)) {
-      document.body.appendChild(script);
-    }
-  },
-};
+    mounted() {
+      window.scrollTo(0, 0);
+      const popup = document.createElement("script");
+      popup.setAttribute("src", "https://js.paystack.co/v2/inline.js");
+      popup.async = true;
+      document.head.appendChild(popup);
+      const inlineSdk = "https://checkout.flutterwave.com/v3.js";
+      const script = document.createElement("script");
+      script.src = inlineSdk;
+      if (!document.querySelector(`[src="${inlineSdk}"]`)) {
+        document.body.appendChild(script);
+      }
+    },
+  };
 </script>
