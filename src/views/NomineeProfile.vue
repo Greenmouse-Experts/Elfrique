@@ -216,6 +216,8 @@
       paystack: paystack,
       OtpInput,
       Swal,
+      TransactionService,
+      Notification
     },
     data() {
       return {
@@ -301,22 +303,55 @@
 
     methods: {
       proceedToOtp() {
-        if (this.email !== "" && this.numberOfVotes !== "" && this.firstname !== "" && this.lastname !== "" && this.phone !== "") {
-          this.loadOtp = true;
-        }
-        else {
+        if (
+          this.email !== "" &&
+          this.numberOfVotes !== "" &&
+          this.firstname !== "" &&
+          this.lastname !== "" &&
+          this.phone !== ""
+        ) {
+          if (this.contest.type === "free") {
+            this.loadOtp = true;
+          } else {
+            this.proceedtopay();
+          }
+        } else {
           Swal.fire({
-            icon: 'error',
+            icon: "error",
             text: `You need to fill in all details to proceed`,
-            confirmButtonText: 'Ok'
-          })
+            confirmButtonText: "Ok",
+          });
         }
       },
 
       handleValidate(value) {
         if (value === "12345") {
-          this.proceedtopay();
+          this.processVote();
         }
+      },
+
+      processVote() {
+        const dataForm = {
+          reference: this.reference,
+          numberOfVote: this.numberOfVotes,
+          method: "",
+          type: "free",
+          amount: 0,
+          fullname: this.firstname + " " + this.lastname,
+        };
+        Notification.addNotification({
+          receiverId: this.adminId,
+          type: "award voting",
+          message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
+        });
+        TransactionService.submitVote(this.contestant.id, dataForm).then(
+          (response) => {
+            this.loading = false;
+            this.message = response.data.message;
+            this.resetForm();
+            this.$router.push("/contestant-profile/" + this.contestant.id);
+          }
+        );
       },
 
       convert_price() {
