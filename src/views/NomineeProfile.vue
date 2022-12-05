@@ -56,6 +56,7 @@
                   v-model="numberOfVotes"
                   type="number"
                   placeholder="Enter number of votes you want"
+                  :disabled="disabled"
                 />
               </div>
               <div class="col-lg-12 mb-3">
@@ -64,6 +65,7 @@
                   v-model="firstname"
                   type="text"
                   placeholder="Enter your name"
+                  :disabled="disabled"
                 />
               </div>
               <div class="col-lg-12 mb-3">
@@ -72,6 +74,7 @@
                   v-model="lastname"
                   type="text"
                   placeholder="Enter your name"
+                  :disabled="disabled"
                 />
               </div>
               <div class="col-lg-12 mb-3">
@@ -80,6 +83,7 @@
                   v-model="email"
                   type="email"
                   placeholder="Enter your email address"
+                  :disabled="disabled"
                 />
               </div>
               <div class="col-lg-12 mb-3">
@@ -88,6 +92,7 @@
                   v-model="phone"
                   type="tel"
                   placeholder="Enter your phone number"
+                  :disabled="disabled"
                 />
               </div>
               <div class="col-lg-12 mb-3">
@@ -96,6 +101,15 @@
                   v-model="reference"
                   placeholder="Enter your phone number"
                   disabled
+                />
+              </div>
+              <div class="col-lg-12 mb-3" v-if="loadOtp">
+                <label>Enter OTP sent to {{ email }}</label>
+                <OtpInput
+                  @validateOtp="handleValidate($event)"
+                  :disabled="disabled"
+                  :error="errorOtp"
+                  :clearInput="removeInput"
                 />
               </div>
               <div>
@@ -108,17 +122,17 @@
                   >
                 </p>
               </div>
-              <div class="col-lg-12 mb-3" v-if="loadOtp">
-                <label>Enter OTP sent to {{ email }}</label>
-                <OtpInput @validateOtp="handleValidate($event)" />
+              <div class="col-lg-12 mb-3" v-if="!loadOtp">
+                <button type="submit">Proceed</button>
               </div>
-              <div class="col-lg-12" v-else>
-                <div v-if="contest.type == 'free'" class="col-lg-12 mb-3">
-                  <button type="submit">Vote</button>
-                </div>
-                <div v-else class="col-lg-12 mb-3">
-                  <button type="submit">Proceed</button>
-                </div>
+              <div class="col-lg-12 mb-3" v-else>
+                <button
+                  type="button"
+                  v-on:click="processVote()"
+                  :disabled="voteBtn"
+                >
+                  Vote
+                </button>
               </div>
             </div>
           </form>
@@ -184,6 +198,18 @@
 
   <elfrique-footer />
 </template>
+<style>
+  .details-contestant form input:disabled {
+    background-color: #e1e1e1;
+    cursor: not-allowed;
+  }
+
+  .contestant-profile .details-contestant .form-area button:disabled {
+    background-color: #25491947;
+    cursor: not-allowed;
+  }
+</style>
+
 <style scoped>
   .contestant-profile .header-contestant .col-lg-12 {
     background-repeat: no-repeat;
@@ -217,7 +243,7 @@
       OtpInput,
       Swal,
       TransactionService,
-      Notification
+      Notification,
     },
     data() {
       return {
@@ -239,6 +265,10 @@
         message: "",
         adminId: "",
         loadOtp: false,
+        disabled: false,
+        voteBtn: true,
+        errorOtp: false,
+        removeInput: false,
       };
     },
     computed: {
@@ -326,7 +356,11 @@
 
       handleValidate(value) {
         if (value === "12345") {
-          this.processVote();
+          this.disabled = true;
+          this.voteBtn = false;
+          this.errorOtp = false;
+        } else {
+          this.errorOtp = true;
         }
       },
 
