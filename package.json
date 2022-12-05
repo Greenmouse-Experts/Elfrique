@@ -38,6 +38,7 @@
     "vue-social-sharing": "^4.0.0-alpha4",
     "vue2-editor": "^2.10.3",
     "vue3-apexcharts": "^1.4.1",
+    "vue3-otp-input": "^0.3.6",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
