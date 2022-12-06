@@ -109,7 +109,7 @@
                   @validateOtp="handleValidate($event)"
                   :disabled="disabled"
                   :error="errorOtp"
-                  :clearInput="removeInput"
+                  :clear="removeInput"
                 />
               </div>
               <div>
@@ -230,9 +230,9 @@
   import VoteService from "../service/vote.service";
   import TransactionService from "../service/transaction.service";
   import Notification from "../service/notitfication-service";
-  import OtpInput from "./components/OtpInput.vue";
-  import Swal from "sweetalert2";
   import axios from "axios";
+  import Swal from "sweetalert2";
+  import OtpInput from "./components/OtpInput.vue";
 
   export default {
     name: "Elfrique",
@@ -242,8 +242,6 @@
       paystack: paystack,
       OtpInput,
       Swal,
-      TransactionService,
-      Notification,
     },
     data() {
       return {
@@ -342,6 +340,7 @@
         ) {
           if (this.contest.type === "free") {
             this.loadOtp = true;
+            this.generateOTP();
           } else {
             this.proceedtopay();
           }
@@ -355,7 +354,7 @@
       },
 
       handleValidate(value) {
-        if (value === "12345") {
+        if (value === this.generatedOTP) {
           this.disabled = true;
           this.voteBtn = false;
           this.errorOtp = false;
@@ -364,11 +363,26 @@
         }
       },
 
+      generateOTP() {
+        const payload = {
+          email: this.email,
+          service: "Voting",
+        };
+
+        TransactionService.generateOTP(payload).then((response) => {
+          this.generatedOTP = response.data.otp;
+        });
+      },
+
       processVote() {
+        this.voteBtn = true;
         const dataForm = {
           reference: this.reference,
           numberOfVote: this.numberOfVotes,
           method: "",
+          voters_email: this.email,
+          voters_phone: this.phone,
+          currency: null,
           type: "free",
           amount: 0,
           fullname: this.firstname + " " + this.lastname,
@@ -378,12 +392,21 @@
           type: "award voting",
           message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
         });
-        TransactionService.submitVote(this.contestant.id, dataForm).then(
+        TransactionService.submitVoteAwards(this.contestant.id, dataForm).then(
           (response) => {
             this.loading = false;
             this.message = response.data.message;
             this.resetForm();
-            this.$router.push("/contestant-profile/" + this.contestant.id);
+            this.voteBtn = false;
+            this.removeInput = true;
+            this.loadOtp = false;
+            this.contestant.voteCount += 1;
+            // this.$router.push("/contestant-profile/" + this.contestant.id);
+            Swal.fire({
+              icon: "success",
+              text: `You have successfully voted for ${this.contestant.fullname}`,
+              confirmButtonText: "Ok",
+            });
           }
         );
       },
