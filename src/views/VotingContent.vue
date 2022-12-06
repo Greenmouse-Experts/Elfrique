@@ -221,9 +221,14 @@
                           <i class="bi bi-circle-square"></i> :
                           {{ con.contestantnumber }} (contestant number)
                         </p>
-                        <p class="card-text card-text-after">
-                          <i class="bi bi-activity"></i>:
-                          {{ con.voteCount }} (votes)
+                        <p class="card-text card-text-after d-flex flex-column">
+                          <span class="flex-row">
+                            <i class="bi bi-activity"></i>:
+                            {{ con.voteCount }} (votes)
+                          </span>
+                          <span class="ml-5">
+                            <ProgressBarVue :value="con.voteCount" :total="totalVotes" :percentage="true" />
+                          </span>
                         </p>
                         <router-link
                           :to="'/contestant-profile/' + con.id"
@@ -341,113 +346,126 @@
 </template>
 
 <script>
-import Header from "./elfrique-header.vue";
-import Footer from "./elfrique-footer.vue";
-import BarChart from "../Chart/BarChart.vue";
-import PieChart from "../Chart/PieChart.vue";
-import PolarChart from "../Chart/PolarChart.vue";
-import moment from "moment";
+  import Header from "./elfrique-header.vue";
+  import Footer from "./elfrique-footer.vue";
+  import BarChart from "../Chart/BarChart.vue";
+  import PieChart from "../Chart/PieChart.vue";
+  import PolarChart from "../Chart/PolarChart.vue";
+  import moment from "moment";
 import VoteService from "../service/vote.service";
-export default {
-  name: "Elfrique",
-  components: {
-    "elfrique-header": Header,
-    "elfrique-footer": Footer,
-    BarChart,
-    PieChart,
-    PolarChart,
-  },
-  data() {
-    return {
-      contest: "",
-      ended: false,
-      endDate: "",
-      countdown: {
-        months: 0,
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
+  import ProgressBarVue from "./components/ProgressBar.vue";
+  export default {
+    name: "Elfrique",
+    components: {
+      "elfrique-header": Header,
+      "elfrique-footer": Footer,
+      BarChart,
+      PieChart,
+      PolarChart,
+      ProgressBarVue
+    },
+    data() {
+      return {
+        contest: "",
+        ended: false,
+        endDate: "",
+        countdown: {
+          months: 0,
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        },
+        chartType: "",
+        label: 0,
+        totalVotes: 0,
+      };
+    },
+    computed: {
+      loggedIn() {
+        return this.$store.state.auth.status.loggedIn;
       },
-      chartType: "",
-      label: 0,
-    };
-  },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
+      currentUrl() {
+        return window.location.href;
+      },
     },
-    currentUrl() {
-      return window.location.href;
+    created() {
+      VoteService.getSingleContest(this.$route.params.id).then((response) => {
+        this.contest = response.data.voteContest;
+        this.endDate = response.data.voteContest.closedate;
+        this.getTotalVotes(response.data.voteContest);
+        this.getCountdown();
+      });
     },
-  },
-  created() {
-    VoteService.getSingleContest(this.$route.params.id).then((response) => {
-      this.contest = response.data.voteContest;
-      this.endDate = response.data.voteContest.closedate;
-      this.getCountdown();
-    });
-  },
   methods: {
-    getCountdown() {
-      var endCount = moment(this.endDate).format("YYYY-MM-DDT11:00:00Z");
+    getTotalVotes(contest) {
+      let sum = 0;
+      contest.contestants.forEach((contenstant) => {
+        sum += contenstant.voteCount;
+      });
 
-      // make it a moment object End
-      var event = moment(endCount);
+      this.totalVotes = sum;
+    },
 
-      // get current time/date
-      var current = moment().format();
-      /* console.log(current);
+      getCountdown() {
+        var endCount = moment(this.endDate).format("YYYY-MM-DDT11:00:00Z");
+
+        // make it a moment object End
+        var event = moment(endCount);
+
+        // get current time/date
+        var current = moment().format();
+        /* console.log(current);
       console.log(endCount); */
-      if (current >= endCount) {
-        this.ended = true;
-        this.countdown.days = 0;
-        this.countdown.hours = 0;
-        this.countdown.minutes = 0;
-        this.countdown.seconds = 0;
-      } else {
-        this.ended = false;
-        // get difference between event and current
-        var diffTime = event.diff(current);
+        if (current >= endCount) {
+          this.ended = true;
+          this.countdown.days = 0;
+          this.countdown.hours = 0;
+          this.countdown.minutes = 0;
+          this.countdown.seconds = 0;
+        } else {
+          this.ended = false;
+          // get difference between event and current
+          var diffTime = event.diff(current);
 
-        // let moment.js make the duration out of the timestamp
-        var duration = moment.duration(diffTime, "milliseconds", true);
+          // let moment.js make the duration out of the timestamp
+          var duration = moment.duration(diffTime, "milliseconds", true);
 
-        // Interval
-        var interval = 1000;
-        setInterval(() => {
-          duration = moment.duration(duration - interval, "milliseconds");
-          this.countdown.days = parseInt(duration.asDays());
-          this.countdown.hours = duration.hours();
-          this.countdown.minutes = duration.minutes();
-          this.countdown.seconds = duration.seconds();
-        }, interval);
-      }
+          // Interval
+          var interval = 1000;
+          setInterval(() => {
+            duration = moment.duration(duration - interval, "milliseconds");
+            this.countdown.days = parseInt(duration.asDays());
+            this.countdown.hours = duration.hours();
+            this.countdown.minutes = duration.minutes();
+            this.countdown.seconds = duration.seconds();
+          }, interval);
+        }
+      },
+      format_date(value) {
+        if (value) {
+          return moment(String(value)).format("MM/DD/YYYY hh:mm");
+        }
+      },
+      getContestant(con) {
+        this.$store.dispatch("vote/getContestant", con);
+      },
     },
-    format_date(value) {
-      if (value) {
-        return moment(String(value)).format("MM/DD/YYYY hh:mm");
-      }
+    mounted() {
+      window.scrollTo(0, 0);
     },
-    getContestant(con) {
-      this.$store.dispatch("vote/getContestant", con);
-    },
-  },
-  mounted() {
-    window.scrollTo(0, 0);
-  },
-};
+  };
 </script>
 
 <style>
-.form-control {
-  height: 50px;
-}
-.form-control:focus {
-  color: #212529;
-  background-color: #fff;
-  border-color: #68f874 !important;
-  outline: 0;
-  box-shadow: none !important;
-}
+  .form-control {
+    height: 50px;
+  }
+  .form-control:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #68f874 !important;
+    outline: 0;
+    box-shadow: none !important;
+  }
 </style>

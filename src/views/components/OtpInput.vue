@@ -1,19 +1,21 @@
 <template>
   <div class="d-flex flex-column">
-  <div class="d-flex flex-row">
-    <v-otp-input
-      ref="otpInput"
-      :input-classes="`otp-input mr-5 ${error ? 'hasError' : ''}`"
-      :is-disabled="disabled"
-      separator=""
-      :num-inputs="5"
-      :should-auto-focus="true"
-      :is-input-num="true"
-      @on-complete="handleOnComplete"
-    />
+    <div class="d-flex flex-row">
+      <v-otp-input
+        ref="otpInput"
+        :input-classes="`otp-input mr-5 ${error ? 'hasError' : ''}`"
+        :is-disabled="disabled"
+        separator=""
+        :num-inputs="5"
+        :should-auto-focus="true"
+        :is-input-num="true"
+        @on-complete="handleOnComplete"
+      />
     </div>
     <span class="mt-2" v-if="error">
-      <small class="text-red-700 text-xs semibold">Otp code entered is not valid</small>
+      <small class="text-red-700 text-xs semibold"
+        >Otp code entered is not valid</small
+      >
     </span>
   </div>
 </template>
@@ -33,18 +35,18 @@
       },
       error: {
         type: Boolean,
-        default: false
+        default: false,
       },
-      clearInput: {
+      clear: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
 
     data() {
       return {
         disabledVal: false,
-        errorVal: false
+        errorVal: false,
       };
     },
 
@@ -55,10 +57,9 @@
       error() {
         this.errorVal = this.error;
       },
-      clearInput() {
-        const otpInput = ref(null);
-        otpInput.value.clearInput();
-      }
+      clear() {
+        this.$refs.otpInput.clearInput();
+      },
     },
 
     methods: {

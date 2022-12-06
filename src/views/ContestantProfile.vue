@@ -53,10 +53,20 @@
               <div class="col-lg-12 mb-3">
                 <label>Total number of votes you want</label>
                 <input
+                  v-model="freeVote"
+                  type="number"
+                  placeholder="Enter number of votes you want"
+                  :disabled="(disabled || contest.type === 'free')"
+                  min="1"
+                  max="1"
+                  v-if="contest.type === 'free'"
+                />
+                <input
                   v-model="numberOfVotes"
                   type="number"
                   placeholder="Enter number of votes you want"
                   :disabled="disabled"
+                  v-else
                 />
               </div>
               <div class="col-lg-12 mb-3">
@@ -109,7 +119,7 @@
                   @validateOtp="handleValidate($event)"
                   :disabled="disabled"
                   :error="errorOtp"
-                  :clearInput="removeInput"
+                  :clear="removeInput"
                 />
               </div>
               <div>
@@ -248,6 +258,7 @@
         phone: "",
         email: "",
         numberOfVotes: "",
+        freeVote: '1',
         publicKey: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f",
         flw_public_key: "FLWPUBK_TEST-0f353662b04aee976128e62946a59682-X",
         firstname: "",
@@ -255,6 +266,7 @@
         message: "",
         adminId: "",
         toUsdRate: "",
+        generatedOTP: "",
         loadOtp: false,
         disabled: false,
         voteBtn: true,
@@ -353,6 +365,7 @@
       },
 
       proceedToOtp() {
+        this.contest.type === 'free' ? this.numberOfVotes = this.freeVote : '';
         if (
           this.email !== "" &&
           this.numberOfVotes !== "" &&
@@ -362,6 +375,7 @@
         ) {
           if (this.contest.type === "free") {
             this.loadOtp = true;
+            this.generateOTP();
           } else {
             this.proceedtopay();
           }
@@ -375,7 +389,7 @@
       },
 
       handleValidate(value) {
-        if (value === "12345") {
+        if (value === this.generatedOTP) {
           this.disabled = true;
           this.voteBtn = false;
           this.errorOtp = false;
@@ -394,8 +408,20 @@
           });
       },
 
+      generateOTP() {
+        const payload = {
+          email: this.email,
+          service: 'Voting'
+        };
+
+        TransactionService.generateOTP(payload).then((response) => {
+          this.generatedOTP = response.data.otp;
+        })
+      },
+
       processVote() {
-       const dataForm = {
+        this.voteBtn = true;
+        const dataForm = {
           reference: this.reference,
           numberOfVote: this.numberOfVotes,
           method: "",
@@ -416,9 +442,11 @@
             this.loading = false;
             this.message = response.data.message;
             this.disabled = false;
+            this.voteBtn = false;
             this.resetForm();
+            this.loadOtp = false;
             this.removeInput = true;
-            this.contestant.voteCount = this.numberOfVotes;
+            this.contestant.voteCount += 1;
             Swal.fire({
               icon: "success",
               text: `You have successfully voted for ${this.contestant.fullname}`,

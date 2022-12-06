@@ -22,6 +22,14 @@ class TransactionService {
     return axios.post(API_URL + "userAddContestVote/" + contestantId, voteForm, {});
   }
 
+  submitVoteAwards(contestantId, voteForm) {
+    return axios.post(API_URL + "userAddAwardVote/" + contestantId, voteForm, {});
+  }
+
+  generateOTP(payload) {
+    return axios.post(API_URL + "generateOtp", payload);
+  }
+
   getTransactionHistory() {
     return axios.get(API_URL + "getAllUserTransactions", {
       headers: authHeader(),
