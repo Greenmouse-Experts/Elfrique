@@ -56,7 +56,7 @@
                   v-model="freeVote"
                   type="number"
                   placeholder="Enter number of votes you want"
-                  :disabled="(disabled || contest.type === 'free')"
+                  :disabled="disabled || contest.type === 'free'"
                   min="1"
                   max="1"
                   v-if="contest.type === 'free'"
@@ -66,6 +66,8 @@
                   type="number"
                   placeholder="Enter number of votes you want"
                   :disabled="disabled"
+                  min="1"
+                  max="10000000000000"
                   v-else
                 />
               </div>
@@ -136,7 +138,13 @@
                 <button type="submit">Proceed</button>
               </div>
               <div class="col-lg-12 mb-3" v-else>
-                <button type="button" v-on:click="processVote()" :disabled="voteBtn">Vote</button>
+                <button
+                  type="button"
+                  v-on:click="processVote()"
+                  :disabled="voteBtn"
+                >
+                  Vote
+                </button>
               </div>
             </div>
           </form>
@@ -258,7 +266,7 @@
         phone: "",
         email: "",
         numberOfVotes: "",
-        freeVote: '1',
+        freeVote: "1",
         publicKey: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f",
         flw_public_key: "FLWPUBK_TEST-0f353662b04aee976128e62946a59682-X",
         firstname: "",
@@ -271,7 +279,7 @@
         disabled: false,
         voteBtn: true,
         errorOtp: false,
-        removeInput: false
+        removeInput: false,
       };
     },
     computed: {
@@ -365,7 +373,9 @@
       },
 
       proceedToOtp() {
-        this.contest.type === 'free' ? this.numberOfVotes = this.freeVote : '';
+        this.contest.type === "free"
+          ? (this.numberOfVotes = this.freeVote)
+          : "";
         if (
           this.email !== "" &&
           this.numberOfVotes !== "" &&
@@ -393,30 +403,31 @@
           this.disabled = true;
           this.voteBtn = false;
           this.errorOtp = false;
-        }
-        else {
+        } else {
           this.errorOtp = true;
         }
       },
 
       proceedtopay() {
-        this.$store
-          .dispatch("vote/getPaymentForm", this.paymentForm)
-          .then(() => {
-            //console.log(this.$store.state.vote.voteContent)
-            this.$router.push("/contestant-profile-pay/" + this.contestant.id);
-          });
+        const paymentForm = this.paymentForm;
+
+        window.localStorage.setItem(
+          "paymentForm",
+          JSON.stringify(paymentForm)
+        );
+
+        this.$router.push("/contestant-profile-pay/" + this.contestant.id);
       },
 
       generateOTP() {
         const payload = {
           email: this.email,
-          service: 'Voting'
+          service: "Voting",
         };
 
         TransactionService.generateOTP(payload).then((response) => {
           this.generatedOTP = response.data.otp;
-        })
+        });
       },
 
       processVote() {
