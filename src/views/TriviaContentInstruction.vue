@@ -139,7 +139,7 @@ export default {
       })
       .then(() => {
         if (this.player.id == null) {
-          this.$router.push("/trivia-content/" + this.trivia.id);
+          // this.$router.push("/trivia-content/" + this.trivia.id);
         }
       });
   },
