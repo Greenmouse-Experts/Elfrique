@@ -1729,6 +1729,24 @@ header nav .offcanvas-header button i {
   padding: 10px 5px;
   width: 100%;
 }
+
+.voting-content .form-area button {
+  background-color: #254919;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 5px;
+  text-align: center;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+}
+
+.voting-content .form-area button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @media (max-width: 1199px) {
   .voting-content .counter-div {
     left: -100px;
