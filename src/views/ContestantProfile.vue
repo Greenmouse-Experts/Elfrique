@@ -171,7 +171,7 @@
         </div>
       </div>
     </div>
-    <!--Other Contestants-->
+    <!--Other Contestants--
     <div class="container service-content-vote mt-5">
       <div class="row tab-content">
         <div class="col-lg-12">
@@ -204,7 +204,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>--->
   </section>
 
   <elfrique-footer />
@@ -411,10 +411,7 @@
       proceedtopay() {
         const paymentForm = this.paymentForm;
 
-        window.localStorage.setItem(
-          "paymentForm",
-          JSON.stringify(paymentForm)
-        );
+        window.localStorage.setItem("paymentForm", JSON.stringify(paymentForm));
 
         this.$router.push("/contestant-profile-pay/" + this.contestant.id);
       },

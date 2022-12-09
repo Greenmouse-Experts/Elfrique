@@ -309,7 +309,7 @@
           type: "voting",
           message: `Someone just voted ${this.payContent.fullname} with ${this.payContent.numberOfVotes} vote`,
         });
-        TransactionService.submitVote(this.contestant.id, this.voteForm).then(
+        TransactionService.submitVote(this.contestant.id, this.voteForm()).then(
           (response) => {
             this.loading = false;
             this.message = response.data.message;
@@ -384,7 +384,7 @@
             });
             TransactionService.submitVote(
               this.contestant.id,
-              this.voteForm
+              this.voteForm()
             ).then((response) => {
               this.loading = false;
               this.message = response.data.message;
@@ -432,7 +432,7 @@
               });
               TransactionService.submitVote(
                 this.contestant.id,
-                this.voteForm
+                this.voteForm()
               ).then((response) => {
                 this.loading = false;
                 this.message = response.data.message;
@@ -445,11 +445,7 @@
                   text: `You have successfully voted for ${this.contestant.fullname}`,
                   confirmButtonText: "Ok",
                 }).then((result) => {
-                  if (result.isConfirmed) {
-                    this.$router.push(
-                      "/contestant-profile/" + this.contestant.id
-                    );
-                  }
+                  if (result.isConfirmed) {}
                 });
               });
               paymentParams.close();
@@ -478,7 +474,7 @@
               });
               TransactionService.submitVote(
                 this.contestant.id,
-                this.voteForm
+                this.voteForm()
               ).then((response) => {
                 this.loading = false;
                 this.message = response.data.message;
@@ -491,11 +487,7 @@
                   text: `You have successfully voted for ${this.contestant.fullname}`,
                   confirmButtonText: "Ok",
                 }).then((result) => {
-                  if (result.isConfirmed) {
-                    this.$router.push(
-                      "/contestant-profile/" + this.contestant.id
-                    );
-                  }
+                  if (result.isConfirmed) {}
                 });
               });
               paymentParams.close();
@@ -548,7 +540,7 @@
             });
             TransactionService.submitVote(
               this.contestant.id,
-              this.voteForm
+              this.voteForm()
             ).then((response) => {
               this.loading = false;
               this.message = response.data.message;

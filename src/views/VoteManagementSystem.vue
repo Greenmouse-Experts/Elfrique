@@ -502,7 +502,7 @@
         setTimeout(() => {
           this.isLoadingPageantry = false;
           this.voteContentToShow += 3;
-        }, 4000);
+        }, 3000);
       },
 
       loadAward() {
@@ -510,7 +510,7 @@
         setTimeout(() => {
           this.isLoadingAward = false;
           this.awardContentToShow += 3;
-        }, 4000);
+        }, 3000);
       },
 
       getContest(contest) {

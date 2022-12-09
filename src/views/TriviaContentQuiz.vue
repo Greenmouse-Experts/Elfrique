@@ -78,10 +78,10 @@
         </div>
         <div class="col-md-2 justify-content-center text-center">
           <div class="counter-div">
-              <div class="icon">
-                  <i class="bi bi-alarm-fill"></i>
-              </div>
-              <!-- <div class="boxes days">
+            <div class="icon">
+              <i class="bi bi-alarm-fill"></i>
+            </div>
+            <!-- <div class="boxes days">
                   <span class="title">Days</span> <br>
                   <span id="days"></span>
               </div>
@@ -89,16 +89,16 @@
                   <span class="title">Hours</span> <br>
                   <span id="hours"></span>
               </div> -->
-              <div class="boxes minutes">
-                  <span class="title">Min</span> <br>
-                  <span id="minutes"></span>
-              </div>
-              <div class="boxes seconds">
-                  <span class="title">Sec</span> <br>
-                  <span id="seconds"></span>
-              </div>
-              <div class="clear"></div>
-              <p id="timeUpText"></p>
+            <div class="boxes minutes">
+              <span class="title">Min</span> <br />
+              <span>{{ countdown.minutes }}</span>
+            </div>
+            <div class="boxes seconds">
+              <span class="title">Sec</span> <br />
+              <span>{{ countdown.seconds }}</span>
+            </div>
+            <div class="clear"></div>
+            <p id="timeUpText"></p>
           </div>
         </div>
       </div>
@@ -106,32 +106,46 @@
 
     <div class="container">
       <div class="row">
-        <div  class="col-lg-12 mt-3 quiz-box">
-          <span style="color: red;text-align:center">{{errMessage}}</span>
+        <div class="col-lg-12 mt-3 quiz-box">
+          <span style="color: red; text-align: center">{{ errMessage }}</span>
           <form>
-            <div  class="question mb-4">
+            <div class="question mb-4">
               <div v-for="(question, index) in questions" :key="question.id">
-              <div v-show="index === questionIndex">
-                <h1>{{ question.question }}</h1>
-                <div v-for="opt in question.questionOptions" :key="opt.id">
-                  <input v-model="check" @change="selectOption(opt)" type="radio" v-bind:name="index" :value="opt"/>
-                  <span>{{ opt.option }}</span>
+                <div v-show="index === questionIndex">
+                  <h1>{{ question.question }}</h1>
+                  <div v-for="opt in question.questionOptions" :key="opt.id" class="p-2">
+                    <input
+                      v-model="check"
+                      @change="selectOption(opt)"
+                      type="radio"
+                      v-bind:name="index"
+                      :value="opt"
+                    />
+                    <span>{{ opt.option }}</span>
+                  </div>
                 </div>
-              </div>
               </div>
             </div>
           </form>
-            <div>
-              <button v-if="questionIndex > 0" @click="prev">
-                  Previous
-                </button>
-                
-                <button style="margin-left: 20px" v-if="questionIndex < (questions.length - 1)" @click="next">
-                  Next
-                </button>
-              <button v-if="questionIndex == (questions.length - 1)" style="margin-left: 30px" @click="submitQuiz" type="submit">Submit Quiz</button>
-            </div>
-          
+          <div>
+            <button v-if="questionIndex > 0" @click="prev">Previous</button>
+
+            <button
+              style="margin-left: 20px"
+              v-if="questionIndex < questions.length - 1"
+              @click="next"
+            >
+              Next
+            </button>
+            <button
+              v-if="questionIndex == questions.length - 1"
+              style="margin-left: 30px"
+              @click="submitQuiz"
+              type="submit"
+            >
+              Submit Quiz
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -141,102 +155,138 @@
 </template>
 
 <script>
-import Header from "./elfrique-header.vue";
-import Footer from "./elfrique-footer.vue";
-import TriviaService from "../service/trivia.service";
-export default {
-  name: "Elfrique",
-  components: {
-    "elfrique-header": Header,
-    "elfrique-footer": Footer,
-  },
-  data() {
-    return {
-      trivia: "",
-      loading: false,
-      questions: "",
-      answer: {
-        "playerEmail": this.$store.state.vote.player.email,
-        "trivia_answer": []
-      },
-      questionIndex: 0,
-      check: '',
-      errMessage: '',
-      ended:false,
-      endDate: "",
-      countdown: {
-        months: 0,
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-      },
-    };
-  },
-  computed: {
-    player() {
-      return this.$store.state.vote.player;
+  import Header from "./elfrique-header.vue";
+  import Footer from "./elfrique-footer.vue";
+  import moment from "moment";
+  import TriviaService from "../service/trivia.service";
+  export default {
+    name: "Elfrique",
+    components: {
+      "elfrique-header": Header,
+      "elfrique-footer": Footer,
     },
-    currentUrl() {
-      return window.location.href;
+    data() {
+      return {
+        trivia: "",
+        loading: false,
+        questions: "",
+        answer: {
+          playerEmail: this.$store.state.vote.player.email,
+          trivia_answer: [],
+        },
+        questionIndex: 0,
+        check: "",
+        errMessage: "",
+        ended: false,
+        endDate: "",
+        countdown: {
+          minutes: 0,
+          seconds: 0,
+        },
+      };
     },
-  },
-  created() {
-    TriviaService.getSingleTrivia(this.$route.params.id)
-      .then((response) => {
-        this.trivia = response.data.trivia;
-        this.questions = response.data.trivia.questions;
-      })
-      .then(() => {
-        if (this.player.id == null) {
-          this.$router.push("/trivia-content/" + this.trivia.id);
+    computed: {
+      player() {
+        return this.$store.state.vote.player;
+      },
+      currentUrl() {
+        return window.location.href;
+      },
+    },
+    created() {
+      TriviaService.getSingleTrivia(this.$route.params.id)
+        .then((response) => {
+          this.trivia = response.data.trivia;
+          this.questions = response.data.trivia.questions;
+        })
+        .then(() => {
+          if (this.player.id == null) {
+            // this.$router.push("/trivia-content/" + this.trivia.id);
+          }
+        });
+      this.getCountDown();
+    },
+    methods: {
+      startQuiz() {
+        this.$router.push("/trivia-content-quiz/" + this.trivia.id);
+      },
+      next() {
+        this.questionIndex++;
+      },
+      // Go to previous question
+      prev() {
+        this.questionIndex--;
+      },
+      selectOption(index) {
+        const elementIndex = this.answer.trivia_answer.findIndex(
+          (obj) => obj.questionId === index.questionId
+        );
+        if (elementIndex == -1) {
+          this.answer.trivia_answer.push({
+            questionId: index.questionId,
+            answer: index.option,
+          });
+        } else {
+          this.answer.trivia_answer[elementIndex].answer = index.option;
         }
-      });
-  },
-  methods: {
-    startQuiz() {
-      this.$router.push("/trivia-content-quiz/" + this.trivia.id);
+      },
+      submitQuiz() {
+        this.loading = true;
+        if (this.check == "") {
+          this.errMessage =
+            "Please answer the questions before submitting quiz";
+          setTimeout(() => {
+            this.errMessage = "";
+          }, 4000);
+        } else {
+          TriviaService.answerTrivia(this.trivia.id, this.answer).then(
+            (res) => {
+              this.loading = false;
+              let data = res.data.data;
+              localStorage.setItem("TriviaResult", JSON.stringify(data));
+              this.$router.push({ name: "TriviaResult" });
+            }
+          );
+        }
+      },
+      getCountDown() {
+        const currentDate = new Date();
+        const oldDateObj = currentDate.toISOString();
+
+        var newDateObj = moment(oldDateObj).add(60, "m").format();
+
+        var current = moment().format();
+
+        // make it a moment object End
+        var event = moment(newDateObj);
+
+        // get current time/date
+        var current = moment().format();
+
+        if (current >= newDateObj) {
+          this.ended = true;
+          this.countdown.minutes = 0;
+          this.countdown.seconds = 0;
+        } else {
+          this.ended = false;
+          // get difference between event and current
+          var diffTime = event.diff(current);
+
+          // let moment.js make the duration out of the timestamp
+          var duration = moment.duration(diffTime, "milliseconds", true);
+
+          // Interval
+          var interval = 1000;
+          setInterval(() => {
+            duration = moment.duration(duration - interval, "milliseconds");
+            this.countdown.minutes = duration.minutes();
+            this.countdown.seconds = duration.seconds();
+          }, interval);
+        }
+      },
     },
-    next() {
-      this.questionIndex++;
+    mounted() {
+      window.scrollTo(0, 0);
     },
-    // Go to previous question
-    prev() {
-      this.questionIndex--;
-    },
-    selectOption(index){
-      
-      const elementIndex = this.answer.trivia_answer.findIndex((obj => obj.questionId === index.questionId));
-      if(elementIndex == -1){
-        this.answer.trivia_answer.push({
-          questionId: index.questionId, 
-          answer: index.option
-        })
-      }else{
-        this.answer.trivia_answer[elementIndex].answer = index.option;
-      }
-      
-    },
-    submitQuiz(){
-      this.loading = true
-      if (this.check == "") {
-        this.errMessage = "Please answer the questions before submitting quiz"
-        setTimeout(() => {
-          this.errMessage = ""
-        }, 4000);
-      } else {
-        TriviaService.answerTrivia( this.trivia.id, this.answer).then(res => {
-          this.loading = false
-          let data = res.data.data
-          localStorage.setItem('TriviaResult', JSON.stringify(data))
-          this.$router.push({ name: 'TriviaResult' })
-        })
-      }
-      
-    }
-  },
-  mounted() {
-    window.scrollTo(0, 0);
-  },
-};
+  };
 </script>

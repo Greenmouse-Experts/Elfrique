@@ -71,6 +71,10 @@
           </div>
         </div>
 
+        <div class="p-5" v-if="isLoading">
+          <LoaderVue />
+        </div>
+
         <!-- <div class="user" v-for="user in users" :key="user.first">
           <div class="user-avatar">
             <img :src="user.picture.large" />
@@ -95,100 +99,104 @@
   <elfrique-footer />
 </template>
 <script>
-import Header from "./elfrique-header.vue";
-import Newsletter from "./elfrique-newsletter.vue";
-import Footer from "./elfrique-footer.vue";
-import EventService from "../service/form.service";
-import moment from "moment";
-import axios from "axios";
-export default {
-  name: "Elfrique",
-  components: {
-    "elfrique-header": Header,
-    "elfrique-newsletter": Newsletter,
-    "elfrique-footer": Footer,
-  },
-  data() {
-    return {
-      eventContent: "",
-      users: [],
-    };
-  },
-
-  created() {
-    EventService.allForms().then((response) => {
-      this.eventContent = response.data.form;
-      console.log(this.eventContent);
-    });
-  },
-
-  methods: {
-    format_date(value) {
-      if (value) {
-        return moment(String(value)).format("MM/DD/YYYY hh:mm");
-      }
+  import Header from "./elfrique-header.vue";
+  import Newsletter from "./elfrique-newsletter.vue";
+  import Footer from "./elfrique-footer.vue";
+  import EventService from "../service/form.service";
+  import LoaderVue from "./components/Loader.vue";
+  import moment from "moment";
+  import axios from "axios";
+  export default {
+    name: "Elfrique",
+    components: {
+      "elfrique-header": Header,
+      "elfrique-newsletter": Newsletter,
+      "elfrique-footer": Footer,
+      LoaderVue,
     },
-    formatDate(dateString) {
-      let convertedDate = new Date(dateString);
-      return convertedDate.toDateString();
-    },
-    getInitialUsers() {
-      axios.get(`https://randomuser.me/api/?results=5`).then((response) => {
-        this.users = response.data.results;
-      });
-    },
-    getNextUser() {
-      window.onscroll = () => {
-        let bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight / 2 ===
-          1578.5;
-        console.log(window.innerHeight);
-        if (bottomOfWindow) {
-          axios.get(`https://randomuser.me/api/`).then((response) => {
-            this.users.push(response.data.results[0]);
-          });
-        }
+    data() {
+      return {
+        eventContent: "",
+        users: [],
+        isLoading: true,
       };
     },
-  },
-  beforeMount() {
-    this.getInitialUsers();
-  },
-  mounted() {
-    window.scrollTo(0, 0);
-    this.getNextUser();
-  },
-};
+
+    created() {
+      EventService.allForms().then((response) => {
+        this.eventContent = response.data.form;
+        this.isLoading = false;
+        console.log(this.eventContent);
+      });
+    },
+
+    methods: {
+      format_date(value) {
+        if (value) {
+          return moment(String(value)).format("MM/DD/YYYY hh:mm");
+        }
+      },
+      formatDate(dateString) {
+        let convertedDate = new Date(dateString);
+        return convertedDate.toDateString();
+      },
+      getInitialUsers() {
+        axios.get(`https://randomuser.me/api/?results=5`).then((response) => {
+          this.users = response.data.results;
+        });
+      },
+      getNextUser() {
+        window.onscroll = () => {
+          let bottomOfWindow =
+            document.documentElement.scrollTop + window.innerHeight / 2 ===
+            1578.5;
+          console.log(window.innerHeight);
+          if (bottomOfWindow) {
+            axios.get(`https://randomuser.me/api/`).then((response) => {
+              this.users.push(response.data.results[0]);
+            });
+          }
+        };
+      },
+    },
+    beforeMount() {
+      this.getInitialUsers();
+    },
+    mounted() {
+      window.scrollTo(0, 0);
+      this.getNextUser();
+    },
+  };
 </script>
 
 <style>
-.user {
-  display: flex;
-  background: #ccc;
-  border-radius: 1em;
-  margin: 1em auto;
-}
+  .user {
+    display: flex;
+    background: #ccc;
+    border-radius: 1em;
+    margin: 1em auto;
+  }
 
-.user-avatar {
-  padding: 1em;
-}
+  .user-avatar {
+    padding: 1em;
+  }
 
-.user-avatar img {
-  display: block;
-  width: 100%;
-  min-width: 64px;
-  height: auto;
-  border-radius: 50%;
-}
+  .user-avatar img {
+    display: block;
+    width: 100%;
+    min-width: 64px;
+    height: auto;
+    border-radius: 50%;
+  }
 
-.user-details {
-  padding: 1em;
-}
+  .user-details {
+    padding: 1em;
+  }
 
-.user-name {
-  margin: 0;
-  padding: 0;
-  font-size: 2rem;
-  font-weight: 900;
-}
+  .user-name {
+    margin: 0;
+    padding: 0;
+    font-size: 2rem;
+    font-weight: 900;
+  }
 </style>
