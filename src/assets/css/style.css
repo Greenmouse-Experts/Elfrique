@@ -1570,7 +1570,7 @@ header nav .offcanvas-header button i {
 }
 /********************************/
 .voting-content {
-  margin-top: 90px;
+  margin-top: 120px;
   padding: 30px 10px !important;
   color: #000000;
 }
@@ -4715,10 +4715,10 @@ footer .copyright p {
   display: flex;
   padding: 40px 0;
   align-items: center;
-  justify-content: center
+  justify-content: center;
 }
 
-.erroe_page_wrapper .errow_wrap .mainLogo{
+.erroe_page_wrapper .errow_wrap .mainLogo {
   width: 130px;
   display: block;
   margin: auto;
@@ -4726,32 +4726,33 @@ footer .copyright p {
   border-radius: 20px !important;
 }
 
-.erroe_page_wrapper .errow_wrap .sadFace{
+.erroe_page_wrapper .errow_wrap .sadFace {
   width: 100px;
   display: block;
   margin: auto;
 }
 
 .erroe_page_wrapper .errow_wrap .error_heading {
-  margin-top: 60px
+  margin-top: 60px;
 }
 
 .erroe_page_wrapper .errow_wrap .error_heading h3.headline {
   font-size: 200px;
   font-weight: 800;
-  line-height: 1
+  line-height: 1;
 }
 
-@media(max-width:991px) {
+@media (max-width: 991px) {
   .erroe_page_wrapper .errow_wrap .error_heading h3.headline {
-      font-size: 120px
+    font-size: 120px;
   }
 }
-.error_btn button{
+.error_btn button {
   border: none;
   background-color: #238d00;
   color: #fff;
-  padding: 10px 30px 10px 30px;border-radius: 8px;
+  padding: 10px 30px 10px 30px;
+  border-radius: 8px;
 }
 
 .erroe_page_wrapper .errow_wrap p {
@@ -4760,5 +4761,5 @@ footer .copyright p {
   font-weight: 500;
   margin-top: 30px;
   line-height: 35px;
-  margin-bottom: 30px
+  margin-bottom: 30px;
 }

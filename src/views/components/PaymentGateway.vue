@@ -9,6 +9,7 @@
         name="paymentGateway"
         class="d-flex flex-grow-1 mt-1"
         :value="selected"
+        :checked="selected"
       />
       <span class="ml-2 d-flex flex-grow-1">{{ selected }}</span>
     </span>

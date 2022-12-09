@@ -306,6 +306,7 @@
             text: `You have successfully voted for ${this.contestant.fullname}`,
             confirmButtonText: "Ok",
           });
+          this.$router.back();
         });
       },
       payWithPaystack() {
@@ -381,6 +382,7 @@
                 text: `You have successfully voted for ${this.contestant.fullname}`,
                 confirmButtonText: "Ok",
               });
+              this.$router.back();
             });
           },
           mode: "TEST",
@@ -423,6 +425,7 @@
                   text: `You have successfully voted for ${this.contestant.fullname}`,
                   confirmButtonText: "Ok",
                 });
+                this.$router.back();
               });
               paymentParams.close();
               window.close();
@@ -464,9 +467,9 @@
                   text: `You have successfully voted for ${this.contestant.fullname}`,
                   confirmButtonText: "Ok",
                 });
+                this.$router.back();
               });
               paymentParams.close();
-              this.$router.push("/contestant-profile/" + this.contestant.id);
               window.close();
             },
             onclose: () => paymentParams.close(),
@@ -475,7 +478,6 @@
       },
 
       onclose() {
-        this.$router.push("/contestant-profile/" + this.contestant.id);
         console.log("go");
       },
 
