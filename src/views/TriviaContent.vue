@@ -453,7 +453,7 @@
               this.loading = false;
               new Error(err);
               this.errMessage =
-                "You have already attemted this Trivia, please enter another email to cotinue";
+                "You have already attemted this Trivia, please enter another email to continue";
               setTimeout(() => {
                 this.errMessage = "";
               }, 3000);
@@ -467,8 +467,8 @@
         //  options
         this.loading = true;
         TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
-          .then((response) => {
-            this.$store.dispatch("vote/getTriviaPlayer", response.data.player);
+          .then((res) => {
+            this.$store.dispatch("vote/getTriviaPlayer", res.data.player);
             const paymentOptions = {
               // general options
               key: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f", //required
@@ -521,13 +521,12 @@
             };
             const paystack = new window.PaystackPop();
             paystack.newTransaction(paymentOptions);
-            this.modal.hide();
           })
           .catch((err) => {
             this.loading = false;
               Swal.fire({
                 icon: "error",
-                text: `You have already attempted this Trivia, please enter another email to cotinue`,
+                text: `You have already attempted this Trivia, please enter another email to continue`,
                 confirmButtonText: "Ok",
               });
           });
@@ -595,7 +594,7 @@
               this.loading = false;
               Swal.fire({
                 icon: "error",
-                text: `You have already attempted this Trivia, please enter another email to cotinue`,
+                text: `You have already attempted this Trivia, please enter another email to continue`,
                 confirmButtonText: "Ok",
               });
             });
@@ -659,10 +658,9 @@
             })
             .catch((err) => {
               this.loading = false;
-              console.log(err);
               Swal.fire({
                 icon: "error",
-                text: `You have already attempted this Trivia, please enter another email to cotinue`,
+                text: `You have already attempted this Trivia, please enter another email to continue`,
                 confirmButtonText: "Ok",
               });
             });
@@ -709,7 +707,7 @@
                 this.loading = false;
                 new Error(err);
                 this.errMessage =
-                  "You have already attemted this Trivia, please enter another email to cotinue";
+                  "You have already attemted this Trivia, please enter another email to continue";
                 setTimeout(() => {
                   this.errMessage = "";
                 }, 3000);

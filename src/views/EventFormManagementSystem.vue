@@ -52,17 +52,21 @@
           <div class="card">
             <img :src="con.image" class="card-img-top" />
             <div class="card-body">
-              <p class="card-text main-text">
+              <p class="card-text main-text" :title="con.title">
                 <i class="bi bi-award-fill"></i> : {{ con.title }}
               </p>
               <p class="card-text card-text-after">
                 <i class="bi bi-credit-card-fill"></i> : {{ con.type }}
               </p>
-              <p class="card-text card-text-after">
-                <i class="bi bi-calendar3"></i> : Start({{
-                  format_date(con.startdate)
+              <p class="card-text card-text-after d-flex">
+                <span class="d-flex">
+                <i class="bi bi-calendar3"></i> <span class="mx-1">:</span>
+                </span>
+                <span class="d-flex">Start({{
+                  reFormatDate(con.startdate)
                 }})<br />
-                End({{ format_date(con.closedate) }})
+                End({{ reFormatDate(con.closedate) }})
+              </span>
               </p>
               <router-link :to="'/event-form-content/' + con.id" class="routers"
                 ><a class="btn-view">Apply</a></router-link
@@ -106,8 +110,11 @@
   import LoaderVue from "./components/Loader.vue";
   import moment from "moment";
   import axios from "axios";
+  import timeFormat from "./utility/timeFormat";
+
   export default {
     name: "Elfrique",
+    mixins: [timeFormat],
     components: {
       "elfrique-header": Header,
       "elfrique-newsletter": Newsletter,

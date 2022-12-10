@@ -138,47 +138,59 @@
                           {{ voteContent[index].title }}
                         </div>
                         <div class="card-text">
-                          <p class="card-text card-text-after">
-                            <i class="bi bi-person-plus-fill"></i>:
-                            {{ voteContent[index].contestants.length }}
-                            Contestant(s)
+                          <p class="card-text card-text-after d-flex mt-1">
+                            <span class="d-flex">
+                              <i class="bi bi-person-plus-fill"></i>
+                              <span class="mx-1">:</span>
+                              {{ voteContent[index].contestants.length }}
+                              Contestant(s)
+                            </span>
                           </p>
                           <p></p>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                            aria-hidden="true"
-                            focusable="false"
-                            width="1em"
-                            height="1em"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 36 36"
-                            class="mr-2 iconify"
-                            data-icon="clarity:date-solid"
-                            data-inline="false"
-                            style="transform: rotate(360deg)"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M32.25 6h-4v3a2.2 2.2 0 1 1-4.4 0V6H12.2v3a2.2 2.2 0 0 1-4.4 0V6h-4A1.78 1.78 0 0 0 2 7.81v22.38A1.78 1.78 0 0 0 3.75 32h28.5A1.78 1.78 0 0 0 34 30.19V7.81A1.78 1.78 0 0 0 32.25 6ZM10 26H8v-2h2Zm0-5H8v-2h2Zm0-5H8v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Z"
-                              class="clr-i-solid clr-i-solid-path-1"
-                            ></path>
-                            <path
-                              fill="currentColor"
-                              d="M10 10a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z"
-                              class="clr-i-solid clr-i-solid-path-2"
-                            ></path>
-                            <path
-                              fill="currentColor"
-                              d="M26 10a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z"
-                              class="clr-i-solid clr-i-solid-path-3"
-                            ></path>
-                            <path fill="none" d="M0 0h36v36H0z"></path></svg
-                          >: STARTS: 00:00 - {{ voteContent[index].startdate }}
-                          <p></p>
-                          <p class="pl-4">
-                            &nbsp;&nbsp;&nbsp;&nbsp;ENDS: 23:59 -
-                            {{ voteContent[index].closedate }}
+                          <p class="card-text card-text-after d-flex mt-1">
+                            <span class="d-flex">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true"
+                                focusable="false"
+                                width="1em"
+                                height="1em"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 36 36"
+                                class="mr-2 iconify mt-1"
+                                data-icon="clarity:date-solid"
+                                data-inline="false"
+                                style="transform: rotate(360deg)"
+                              >
+                                <path
+                                  fill="currentColor"
+                                  d="M32.25 6h-4v3a2.2 2.2 0 1 1-4.4 0V6H12.2v3a2.2 2.2 0 0 1-4.4 0V6h-4A1.78 1.78 0 0 0 2 7.81v22.38A1.78 1.78 0 0 0 3.75 32h28.5A1.78 1.78 0 0 0 34 30.19V7.81A1.78 1.78 0 0 0 32.25 6ZM10 26H8v-2h2Zm0-5H8v-2h2Zm0-5H8v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Z"
+                                  class="clr-i-solid clr-i-solid-path-1"
+                                ></path>
+                                <path
+                                  fill="currentColor"
+                                  d="M10 10a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z"
+                                  class="clr-i-solid clr-i-solid-path-2"
+                                ></path>
+                                <path
+                                  fill="currentColor"
+                                  d="M26 10a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z"
+                                  class="clr-i-solid clr-i-solid-path-3"
+                                ></path>
+                                <path fill="none" d="M0 0h36v36H0z"></path>
+                              </svg>
+                            </span>
+                            <span class="mx-1"> : </span>
+                            <span class="d-flex"
+                              >STARTS:
+                              {{ reFormatTime(voteContent[index].startdate) }} -
+                              {{ reFormatDate(voteContent[index].startdate)
+                              }}<br />
+                              ENDS:
+                              {{ reFormatTime(voteContent[index].closedate) }} -
+                              {{ reFormatDate(voteContent[index].closedate) }}
+                            </span>
                           </p>
                         </div>
                         <div class="mt-3 link-container">
@@ -199,14 +211,15 @@
                     </div>
                   </div>
 
-                <div class="p-5" v-if="isLoadingPageantry">
-                  <LoaderVue />
-                </div>
+                  <div class="p-5" v-if="isLoadingPageantry">
+                    <LoaderVue />
+                  </div>
 
                   <div
                     v-if="
-                      ((voteContentToShow < voteContent.length ||
-                      voteContent.length > voteContentToShow) && (!isLoadingPageantry))
+                      (voteContentToShow < voteContent.length ||
+                        voteContent.length > voteContentToShow) &&
+                      !isLoadingPageantry
                     "
                     class="col-lg-12 text-center"
                   >
@@ -249,49 +262,67 @@
                           {{ awardContent[index].title }}
                         </div>
                         <div class="card-text">
-                          <p class="card-text card-text-after">
-                            <i class="bi bi-person-plus-fill"></i>:
-                            {{ awardContent[index].awardCategories.length }}
-                            Categories(s)
+                          <p class="card-text card-text-after d-flex mt-1">
+                            <span class="d-flex">
+                              <i class="bi bi-person-plus-fill"></i>
+                              <span class="mx-1">:</span>
+                              {{ awardContent[index].awardCategories.length }}
+                              Categories(s)
+                            </span>
                           </p>
                           <p></p>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                            aria-hidden="true"
-                            focusable="false"
-                            width="1em"
-                            height="1em"
-                            preserveAspectRatio="xMidYMid meet"
-                            viewBox="0 0 36 36"
-                            class="mr-2 iconify"
-                            data-icon="clarity:date-solid"
-                            data-inline="false"
-                            style="transform: rotate(360deg)"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M32.25 6h-4v3a2.2 2.2 0 1 1-4.4 0V6H12.2v3a2.2 2.2 0 0 1-4.4 0V6h-4A1.78 1.78 0 0 0 2 7.81v22.38A1.78 1.78 0 0 0 3.75 32h28.5A1.78 1.78 0 0 0 34 30.19V7.81A1.78 1.78 0 0 0 32.25 6ZM10 26H8v-2h2Zm0-5H8v-2h2Zm0-5H8v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Z"
-                              class="clr-i-solid clr-i-solid-path-1"
-                            ></path>
-                            <path
-                              fill="currentColor"
-                              d="M10 10a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z"
-                              class="clr-i-solid clr-i-solid-path-2"
-                            ></path>
-                            <path
-                              fill="currentColor"
-                              d="M26 10a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z"
-                              class="clr-i-solid clr-i-solid-path-3"
-                            ></path>
-                            <path fill="none" d="M0 0h36v36H0z"></path></svg
-                          >: STARTS: 00:00 - {{ awardContent[index].startdate }}
-                          <p></p>
-                          <p class="pl-4">
-                            &nbsp;&nbsp;&nbsp;&nbsp;ENDS: 23:59 -
-                            {{ awardContent[index].closedate }}
+                          <p class="card-text card-text-after d-flex mt-1">
+                            <span class="d-flex">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                aria-hidden="true"
+                                focusable="false"
+                                width="1em"
+                                height="1em"
+                                preserveAspectRatio="xMidYMid meet"
+                                viewBox="0 0 36 36"
+                                class="mr-2 iconify mt-1"
+                                data-icon="clarity:date-solid"
+                                data-inline="false"
+                                style="transform: rotate(360deg)"
+                              >
+                                <path
+                                  fill="currentColor"
+                                  d="M32.25 6h-4v3a2.2 2.2 0 1 1-4.4 0V6H12.2v3a2.2 2.2 0 0 1-4.4 0V6h-4A1.78 1.78 0 0 0 2 7.81v22.38A1.78 1.78 0 0 0 3.75 32h28.5A1.78 1.78 0 0 0 34 30.19V7.81A1.78 1.78 0 0 0 32.25 6ZM10 26H8v-2h2Zm0-5H8v-2h2Zm0-5H8v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Zm6 10h-2v-2h2Zm0-5h-2v-2h2Zm0-5h-2v-2h2Z"
+                                  class="clr-i-solid clr-i-solid-path-1"
+                                ></path>
+                                <path
+                                  fill="currentColor"
+                                  d="M10 10a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z"
+                                  class="clr-i-solid clr-i-solid-path-2"
+                                ></path>
+                                <path
+                                  fill="currentColor"
+                                  d="M26 10a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z"
+                                  class="clr-i-solid clr-i-solid-path-3"
+                                ></path>
+                                <path fill="none" d="M0 0h36v36H0z"></path></svg
+                            ></span>
+                            <span class="mx-1"> : </span>
+                            <span class="d-flex"
+                              >STARTS:
+                              {{
+                                reFormatTime(awardContent[index].startdate)
+                              }}
+                              -
+                              {{ reFormatDate(awardContent[index].startdate) }}
+                              <br />
+                              ENDS:
+                              {{
+                                reFormatTime(awardContent[index].closedate)
+                              }}
+                              -
+                              {{ reFormatDate(awardContent[index].closedate) }}
+                            </span>
                           </p>
                         </div>
+
                         <div class="mt-3 link-container">
                           <div
                             class="d-flex justify-content-between align-items-center"
@@ -310,14 +341,15 @@
                     </div>
                   </div>
 
-                <div class="p-5" v-if="isLoadingAward">
-                  <LoaderVue />
-                </div>
+                  <div class="p-5" v-if="isLoadingAward">
+                    <LoaderVue />
+                  </div>
 
                   <div
                     v-if="
-                      ((awardContentToShow < awardContent.length ||
-                      awardContent.length > awardContentToShow) && (!isLoadingAward))
+                      (awardContentToShow < awardContent.length ||
+                        awardContent.length > awardContentToShow) &&
+                      !isLoadingAward
                     "
                     class="col-lg-12 text-center"
                   >
@@ -461,10 +493,12 @@
   import Footer from "./elfrique-footer.vue";
   import VoteService from "../service/vote.service";
   import LoaderVue from "./components/Loader.vue";
-
+  import timeFormat from "./utility/timeFormat";
   import AOS from "aos";
+
   export default {
     name: "Elfrique",
+    mixins: [timeFormat],
     components: {
       "elfrique-header": Header,
       "elfrique-footer": Footer,
@@ -485,12 +519,18 @@
 
     created() {
       VoteService.getAllContests().then((response) => {
-        this.voteContent = response.data.voteContests;
+        const voteContent = response.data.voteContests;
+        this.voteContent = voteContent.sort(function (a, b) {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
         this.totalvoteContent = this.voteContent.length;
         this.isLoadingPageantry = false;
       });
       VoteService.getAllAwards().then((response) => {
-        this.awardContent = response.data.awards;
+        const awardContent = response.data.awards;
+        this.awardContent = awardContent.sort(function (a, b) {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
         this.totalAwardContent = this.awardContent.length;
         this.isLoadingAward = false;
       });

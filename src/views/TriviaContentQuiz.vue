@@ -113,7 +113,11 @@
               <div v-for="(question, index) in questions" :key="question.id">
                 <div v-show="index === questionIndex">
                   <h1>{{ question.question }}</h1>
-                  <div v-for="opt in question.questionOptions" :key="opt.id" class="p-2">
+                  <div
+                    v-for="opt in question.questionOptions"
+                    :key="opt.id"
+                    class="p-2"
+                  >
                     <input
                       v-model="check"
                       @change="selectOption(opt)"
@@ -138,7 +142,7 @@
               Next
             </button>
             <button
-              v-if="questionIndex == questions.length - 1"
+              v-if="questionIndex === questions.length - 1"
               style="margin-left: 30px"
               @click="submitQuiz"
               type="submit"
@@ -159,11 +163,14 @@
   import Footer from "./elfrique-footer.vue";
   import moment from "moment";
   import TriviaService from "../service/trivia.service";
+  import Swal from "sweetalert2";
+
   export default {
     name: "Elfrique",
     components: {
       "elfrique-header": Header,
       "elfrique-footer": Footer,
+      Swal,
     },
     data() {
       return {
@@ -233,11 +240,11 @@
       submitQuiz() {
         this.loading = true;
         if (this.check == "") {
-          this.errMessage =
-            "Please answer the questions before submitting quiz";
-          setTimeout(() => {
-            this.errMessage = "";
-          }, 4000);
+          Swal.fire({
+            icon: "error",
+            text: `You have already attempted this Trivia, please enter another email to continue`,
+            confirmButtonText: "Ok",
+          });
         } else {
           TriviaService.answerTrivia(this.trivia.id, this.answer).then(
             (res) => {
