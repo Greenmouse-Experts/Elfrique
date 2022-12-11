@@ -219,7 +219,7 @@
                         </p>
                         <p class="card-text card-text-after">
                           <i class="bi bi-circle-square"></i> :
-                          {{ con.contestantnumber }} (contestant number)
+                          {{ con.contestantnumber }} contestant number
                         </p>
                         <p class="card-text card-text-after d-flex flex-column">
                           <span class="flex-row">
@@ -227,7 +227,11 @@
                             {{ con.voteCount }} (votes)
                           </span>
                           <span class="ml-5">
-                            <ProgressBarVue :value="con.voteCount" :total="totalVotes" :percentage="true" />
+                            <ProgressBarVue
+                              :value="con.voteCount"
+                              :total="totalVotes"
+                              :percentage="true"
+                            />
                           </span>
                         </p>
                         <router-link
@@ -352,7 +356,7 @@
   import PieChart from "../Chart/PieChart.vue";
   import PolarChart from "../Chart/PolarChart.vue";
   import moment from "moment";
-import VoteService from "../service/vote.service";
+  import VoteService from "../service/vote.service";
   import ProgressBarVue from "./components/ProgressBar.vue";
   export default {
     name: "Elfrique",
@@ -362,7 +366,7 @@ import VoteService from "../service/vote.service";
       BarChart,
       PieChart,
       PolarChart,
-      ProgressBarVue
+      ProgressBarVue,
     },
     data() {
       return {
@@ -397,15 +401,15 @@ import VoteService from "../service/vote.service";
         this.getCountdown();
       });
     },
-  methods: {
-    getTotalVotes(contest) {
-      let sum = 0;
-      contest.contestants.forEach((contenstant) => {
-        sum += contenstant.voteCount;
-      });
+    methods: {
+      getTotalVotes(contest) {
+        let sum = 0;
+        contest.contestants.forEach((contenstant) => {
+          sum += contenstant.voteCount;
+        });
 
-      this.totalVotes = sum;
-    },
+        this.totalVotes = sum;
+      },
 
       getCountdown() {
         var endCount = moment(this.endDate).format("YYYY-MM-DDT11:00:00Z");

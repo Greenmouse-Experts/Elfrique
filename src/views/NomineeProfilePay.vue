@@ -101,7 +101,7 @@
                   Pay Now – Local & International
                 </button>
               </div>
-              <div class="col-lg-12 mb-3" v-if="selectedGateway == 'payu'">
+              <div class="col-lg-12 mb-3" v-if="selectedGateway == 'aimsToGet'">
                 <button :disabled="loading" @click="callAtgPay">
                   Pay Now – Airtime – Nigeria Only
                 </button>
@@ -115,7 +115,7 @@
       </div>
     </div>
     <!--Other Contestants-->
-    <!-- <div class="container service-content-vote mt-5">
+    <div class="container service-content-vote mt-5">
       <div class="row tab-content">
         <div class="col-lg-12">
           <h1 style="font-size: 25px; font-weight: 700; padding-bottom: 10px">
@@ -135,19 +135,19 @@
               </p>
               <p class="card-text card-text-after">
                 <i class="bi bi-circle-square"></i> :
-                {{ con.contestantnumber }} (contestant number)
+                 contestant number {{ con.contestantnumber }}
               </p>
               <p class="card-text card-text-after">
                 <i class="bi bi-activity"></i>: {{ con.voteCount }} (votes)
               </p>
-              <router-link :to="'/contestant-profile/' + con.id" class="routers"
+              <router-link :to="'/nominee-profile/' + con.id" class="routers"
                 ><a class="btn-view-contest">View Profile</a></router-link
               >
             </div>
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
   </section>
 
   <elfrique-footer />
@@ -186,6 +186,7 @@
     },
     data() {
       return {
+        otherContestants: "",
         contest: "",
         contestant: "",
         method: "",
@@ -202,24 +203,32 @@
         message: "",
         adminId: "",
         paymentGateway: "",
-        paymentMethods: ["paystack", "flutterwave", "interswitch", "payu"],
+        paymentMethods: ["paystack", "flutterwave", "interswitch", "aimsToGet"],
         selectedGateway: "",
         payContent: {},
       };
     },
     computed: {
-      otherContestants() {
+      /* otherContestants() {
         console.log(this.contest);
         const OC = this.contest.contestants.filter(
           (contestant) => contestant.id !== this.contestant.id
         );
         return OC;
-      },
+      }, */
     },
 
     created() {
       VoteService.getSingleNominee(this.$route.params.id).then((response) => {
         this.contestant = response.data.Nominees;
+
+        VoteService.getSingleCategory(
+          response.data.Nominees.Categories.id
+        ).then((response) => {
+          const contest = response.data.Categories.nominees;
+          this.otherContestants = contest.filter((contestant) => contestant.id !== this.$route.params.id);
+        });
+
         VoteService.getSingleAward(response.data.Nominees.awardContestId).then(
           (response) => {
             this.adminId = response.data.awards.adminuserId;
@@ -357,33 +366,34 @@
           amount: this.nairaToKobo(this.payContent.amount),
           currency: 566, // ISO 4217 numeric code of the currency used
           onComplete: (response) => {
-            console.log(response);
-            this.loading = false;
-            this.method = "InterSwitch";
-            console.log(this.voteForm);
-            Notification.addNotification({
-              receiverId: this.adminId,
-              type: "voting",
-              message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
-            });
-            TransactionService.submitVoteAwards(
-              this.contestant.id,
-              this.voteForm()
-            ).then((response) => {
+            if (response.desc) {
               this.loading = false;
-              this.message = response.data.message;
-              this.resetForm();
-              window.localStorage.removeItem("paymentForm");
-              this.contestant.voteCount += Number(
-                this.payContent.numberOfVotes
-              );
-              Swal.fire({
-                icon: "success",
-                text: `You have successfully voted for ${this.contestant.fullname}`,
-                confirmButtonText: "Ok",
+              this.method = "InterSwitch";
+              console.log(this.voteForm);
+              Notification.addNotification({
+                receiverId: this.adminId,
+                type: "voting",
+                message: `Someone just voted ${this.contestant.fullname} with ${this.numberOfVotes} vote`,
               });
-              this.$router.back();
-            });
+              TransactionService.submitVoteAwards(
+                this.contestant.id,
+                this.voteForm()
+              ).then((response) => {
+                this.loading = false;
+                this.message = response.data.message;
+                this.resetForm();
+                window.localStorage.removeItem("paymentForm");
+                this.contestant.voteCount += Number(
+                  this.payContent.numberOfVotes
+                );
+                Swal.fire({
+                  icon: "success",
+                  text: `You have successfully voted for ${this.contestant.fullname}`,
+                  confirmButtonText: "Ok",
+                });
+                this.$router.back();
+              });
+            }
           },
           mode: "TEST",
         };
@@ -564,7 +574,7 @@
 
       this.email = paymentForm.email;
       this.phone = paymentForm.phone;
-      this.amount = this.amount();
+      this.amount = this.payContent.amount;
       this.reference = paymentForm.reference;
       this.firstname = paymentForm.firstname;
       this.lastname = paymentForm.lastname;
