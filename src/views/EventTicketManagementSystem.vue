@@ -47,6 +47,9 @@
   <!--Service Content Event Form-->
   <section class="event-form-content">
     <div class="container">
+      <div class="p-5" v-if="isLoading">
+        <LoaderVue />
+      </div>
       <div class="row">
         <div class="col-md-3 py-2" v-for="con in eventContent" :key="con.id">
           <div class="card">
@@ -60,10 +63,11 @@
               </p>
               <p class="card-text card-text-after">
                 <i class="bi bi-calendar3"></i> :
-                {{ format_date(con.startdate) }}
+                {{ reFormatDate(con.startdate) }}
               </p>
               <p class="card-text card-text-after">
-                <i class="bi bi-alarm-fill"></i> : 13:50
+                <i class="bi bi-alarm-fill"></i> : 
+                {{reFormatTime(con.startdate)}}
               </p>
               <router-link
                 to="/ticket-content"
@@ -82,45 +86,55 @@
   <elfrique-footer />
 </template>
 <script>
-import Header from "./elfrique-header.vue";
-import Newsletter from "./elfrique-newsletter.vue";
-import Footer from "./elfrique-footer.vue";
-import EventService from "../service/event.service";
-import moment from "moment";
-export default {
-  name: "Elfrique",
-  components: {
-    "elfrique-header": Header,
-    "elfrique-newsletter": Newsletter,
-    "elfrique-footer": Footer,
-  },
-  data() {
-    return {
-      eventContent: "",
-    };
-  },
+  import Header from "./elfrique-header.vue";
+  import Newsletter from "./elfrique-newsletter.vue";
+  import Footer from "./elfrique-footer.vue";
+  import EventService from "../service/event.service";
+  import moment from "moment";
+  import timeFormat from "./utility/timeFormat";
+  import LoaderVue from "./components/Loader.vue";
 
-  created() {
-    EventService.allEvents().then((response) => {
-      this.eventContent = response.data.events;
-      console.log(response);
-    });
-  },
-
-  methods: {
-    format_date(value) {
-      if (value) {
-        return moment(String(value)).format("MM/DD/YYYY hh:mm");
-      }
+  export default {
+    name: "Elfrique",
+    mixins: [timeFormat],
+    components: {
+      "elfrique-header": Header,
+      "elfrique-newsletter": Newsletter,
+      "elfrique-footer": Footer,
+      LoaderVue,
+    },
+    data() {
+      return {
+        eventContent: "",
+        isLoading: true,
+      };
     },
 
-    getEvent(id) {
-      this.$router.push("/ticket-content/"+ id)
+    created() {
+      EventService.allEvents().then((response) => {
+        this.isLoading = false;
+        const eventContent = response.data.events;
+        this.eventContent = eventContent.sort(function (a, b) {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        console.log(response);
+      });
     },
-  },
 
-  mounted() {
-    window.scrollTo(0, 0);
-  },
-};
+    methods: {
+      format_date(value) {
+        if (value) {
+          return moment(String(value)).format("MM/DD/YYYY");
+        }
+      },
+
+      getEvent(id) {
+        this.$router.push("/ticket-content/" + id);
+      },
+    },
+
+    mounted() {
+      window.scrollTo(0, 0);
+    },
+  };
 </script>
