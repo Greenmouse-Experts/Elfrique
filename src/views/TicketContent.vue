@@ -130,11 +130,11 @@
               </button>
             </li>
             <li class="nav-item" role="presentation">
-              <!-- <button class="nav-link tabs-button" id="pills-organ-tab" data-bs-toggle="pill"
+              <button class="nav-link tabs-button" id="pills-organ-tab" data-bs-toggle="pill"
                 data-bs-target="#pills-organ" type="button" role="tab" aria-controls="pills-organ"
                 aria-selected="false">
                 <i class="fas fa-tv"></i> Organisers
-              </button> -->
+              </button>
             </li>
           </ul>
           <div class="tab-content" id="pills-tabContent">
@@ -473,7 +473,7 @@
               aria-labelledby="exampleModal"
               aria-hidden="true"
             >
-              <div class="modal-dialog" style="top: 180px; max-width: 60%">
+              <div class="modal-dialog" style="top: 100px; max-width: 60%">
                 <div class="modal-content">
                   <div class="modal-header" style="display: block">
                     <button
@@ -547,8 +547,8 @@
                               />
                               <span>
                                 I accept the
-                                <router-link to="#"
-                                  >terms and conditions</router-link
+                                <a href="#"
+                                  >terms and conditions</a
                                 >
                                 for using this service.
                               </span>
@@ -721,7 +721,7 @@ export default {
   created() {
     const script = document.createElement("script");
     script.src =
-      "https://qa.interswitchng.com/collections/public/javascripts/inline-checkout.js";
+      "https://newwebpay.interswitchng.com/inline-checkout.js";
     document.getElementsByTagName("head")[0].appendChild(script);
     this.getEvent();
   },
@@ -899,6 +899,7 @@ export default {
       this.checkQuantity();
     },
     buyTicket(paymentGateway, price) {
+      console.log(this.ticketQuantity);
       let amount = price * this.ticketQuantity;
       let adminId = this.$store.state.vote.event.adminuserId;
       let productTitle = this.event.title;
@@ -955,44 +956,43 @@ export default {
             cust_id: this.email,
             data_ref: "vjyLc2lgNK",
             txn_ref: this.reference,
-            amount: amount.toString(),
+            amount: (this.totalPrice * 100).toFixed(0),
             currency: 566, // ISO 4217 numeric code of the currency used
             onComplete: (response) => {
-              console.log(response);
-              this.method = paymentGateway;
-              //console.log(this.transactForm);
-              Notification.addNotification({
-                receiverId: adminId,
-                type: "Event Ticket Purchase",
-                message: `Someone just Successfully Purchased ${productTitle} ticket`,
-              });
-              TransactionService.makeTransaction(this.transactForm).then(
-                (response) => {
-                  //this.modal.hide();
-                  this.getEvent();
-                  this.proceedPayment = false;
-                  this.qutty = "";
-                  this.message = "Ticket has been sccessfully booked!!";
-                  Swal.fire({
-                    icon: "success",
-                    text: `You have successfully booked ${productTitle} ticket`,
-                    confirmButtonText: "Ok",
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      this.proceedPayment = false;
-                      this.qutty = "";
-                    }
-                  });
-                  //this.resetForm();
-                }
-              );
-              //this.$router.push("/fill-form/" + id);
+              if (response.desc) {
+                this.method = paymentGateway;
+                //console.log(this.transactForm);
+                Notification.addNotification({
+                  receiverId: adminId,
+                  type: "Event Ticket Purchase",
+                  message: `Someone just Successfully Purchased ${productTitle} ticket`,
+                });
+                TransactionService.makeTransaction(this.transactForm).then(
+                  (response) => {
+                    //this.modal.hide();
+                    this.getEvent();
+                    this.proceedPayment = false;
+                    this.qutty = "";
+                    this.message = "Ticket has been sccessfully booked!!";
+                    Swal.fire({
+                      icon: "success",
+                      text: `You have successfully booked ${productTitle} ticket`,
+                      confirmButtonText: "Ok",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        this.proceedPayment = false;
+                        this.qutty = "";
+                      }
+                    });
+                    //this.resetForm();
+                  }
+                );
+                //this.$router.push("/fill-form/" + id);
+              }
             },
             mode: "TEST",
           };
-          console.log(samplePaymentRequest);
-
-          window.webpayCheckout(samplePaymentRequest);
+        window.webpayCheckout(samplePaymentRequest);
         } else if (paymentGateway == "paystack") {
           const paymentOptions = {
             // general options

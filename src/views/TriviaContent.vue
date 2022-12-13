@@ -7,12 +7,12 @@
   <section class="voting-content">
     <div class="container header-cont">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 col-lg-4">
           <div class="img-area">
             <img :src="trivia.image" />
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-lg-4">
           <div class="text-title-area">
             <h1>{{ trivia.title }}</h1>
             <small

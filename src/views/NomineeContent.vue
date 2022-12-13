@@ -429,9 +429,9 @@ export default {
         return moment(String(value)).format("MM/DD/YYYY hh:mm");
       }
     },
-    getContestant(con) {
+   /* getContestant(con) {
       this.$store.dispatch("vote/getContestant", con);
-    },
+    }, */
   },
   mounted() {
     window.scrollTo(0, 0);

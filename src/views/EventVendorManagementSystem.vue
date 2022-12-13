@@ -248,7 +248,7 @@
                     ><i class="bi bi-calendar-week-fill"></i>
                     {{ format_date(con.event.startdate) }}</span
                   >
-                  <span class="location" title="Event Location"
+                  <span class="location card-text" :title="con.location"
                     ><i class="bi bi-geo-alt-fill"></i> {{ con.location }}</span
                   >
                   <span class="price" title="Starting Price"

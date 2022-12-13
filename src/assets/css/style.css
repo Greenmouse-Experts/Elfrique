@@ -1879,13 +1879,17 @@ header nav .offcanvas-header button i {
 .event-form-content .card .main-text {
   font-weight: 700 !important;
 }
+
+.card-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .event-form-content .card .card-text {
   text-transform: uppercase;
   font-size: 15px;
   font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .event-form-content .card .card-text i {
   font-size: 18px;

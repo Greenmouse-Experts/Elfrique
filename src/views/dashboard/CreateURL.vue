@@ -103,18 +103,12 @@
     methods:{
         createURL(){
             this.loading = true;
-            console.log(this.url)
-
-            
-
             let urlForm = {
                 alias: this.url.alias,
                 longUrl: this.url.longUrl,
             }
-            
-            
 
-            VendorService.createUrl(this.url).then(response => {
+            VendorService.createUrl(urlForm).then(response => {
                     
                     this.message = `URL Shorten Successfully`;
                     this.loading = false;

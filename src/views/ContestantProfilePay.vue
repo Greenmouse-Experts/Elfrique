@@ -101,7 +101,7 @@
                   Pay Now – Local & International
                 </button>
               </div>
-              <div class="col-lg-12 mb-3" v-if="selectedGateway == 'payu'">
+              <div class="col-lg-12 mb-3" v-if="selectedGateway == 'aimsToGet'">
                 <button :disabled="loading" @click="callAtgPay">
                   Pay Now – Airtime – Nigeria Only
                 </button>
@@ -135,10 +135,19 @@
               </p>
               <p class="card-text card-text-after">
                 <i class="bi bi-circle-square"></i> :
-                {{ con.contestantnumber }} (contestant number)
+                {{ con.contestantnumber }} contestant number
               </p>
-              <p class="card-text card-text-after">
-                <i class="bi bi-activity"></i>: {{ con.voteCount }} (votes)
+              <p class="card-text card-text-after d-flex flex-column">
+                <span class="flex-row">
+                  <i class="bi bi-activity"></i>: {{ con.voteCount }} (votes)
+                </span>
+                <span class="ml-5">
+                  <ProgressBarVue
+                    :value="con.voteCount"
+                    :total="totalVotes"
+                    :percentage="true"
+                  />
+                </span>
               </p>
               <router-link :to="'/contestant-profile/' + con.id" class="routers"
                 ><a class="btn-view-contest">View Profile</a></router-link
@@ -175,6 +184,7 @@
   import { throwStatement } from "@babel/types";
   import Swal from "sweetalert2";
   import PaymentGateway from "./components/PaymentGateway.vue";
+  import ProgressBarVue from "./components/ProgressBar.vue";
 
   export default {
     name: "Elfrique",
@@ -184,6 +194,7 @@
       paystack: paystack,
       PaymentGateway,
       Swal,
+      ProgressBarVue,
     },
     data() {
       return {
@@ -202,9 +213,11 @@
         message: "",
         adminId: "",
         paymentGateway: "",
-        paymentMethods: ["paystack", "flutterwave", "interswitch", "payu"],
+        paymentMethods: ["paystack", "flutterwave", "interswitch", "aimsToGet"],
         selectedGateway: "",
         payContent: {},
+        label: 0,
+        totalVotes: 0,
       };
     },
     computed: {
@@ -229,11 +242,21 @@
           this.selectedGateway = this.paymentGateway;
           const indexItem = this.paymentMethods.indexOf(this.paymentGateway);
           this.paymentMethods.splice(indexItem, 1);
+          this.getTotalVotes(response.data.voteContest);
         });
       });
     },
 
     methods: {
+      getTotalVotes(contest) {
+        let sum = 0;
+        contest.contestants.forEach((contenstant) => {
+          sum += contenstant.voteCount;
+        });
+
+        this.totalVotes = sum;
+      },
+
       format_date(value) {
         if (value) {
           return moment(String(value)).format("MM/DD/YYYY hh:mm");
@@ -338,16 +361,16 @@
           firstname: this.payContent.firstname,
           lastname: this.payContent.lastname,
           /* currency: this.currency,
-        channels: this.channels,
-        metadata: this.metadata,
-        label: this.label,  */
+          channels: this.channels,
+          metadata: this.metadata,
+          label: this.label,  */
           onSuccess: (response) => {
             this.successPaymentPaystack();
           },
 
           /*  onCancel: () => {
-          this.onCancel();
-        }, */
+            this.onCancel();
+          }, */
           // onBankTransferConfirmationPending: function(response) {
           //   this.onBankTransferConfirmationPending(response);
           // },
@@ -375,35 +398,37 @@
           amount: this.nairaToKobo(this.payContent.amount),
           currency: 566, // ISO 4217 numeric code of the currency used
           onComplete: (response) => {
-            this.loading = true;
-            this.method = "InterSwitch";
-            Notification.addNotification({
-              receiverId: this.adminId,
-              type: "voting",
-              message: `Someone just voted ${this.payContent.fullname} with ${this.payContent.numberOfVotes} vote`,
-            });
-            TransactionService.submitVote(
-              this.contestant.id,
-              this.voteForm()
-            ).then((response) => {
-              this.loading = false;
-              this.message = response.data.message;
-              window.localStorage.removeItem("paymentForm");
-              this.contestant.voteCount += Number(
-                this.payContent.numberOfVotes
-              );
-              Swal.fire({
-                icon: "success",
-                text: `You have successfully voted for ${this.contestant.fullname}`,
-                confirmButtonText: "Ok",
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  this.$router.push(
-                    "/contestant-profile/" + this.contestant.id
-                  );
-                }
+            if (response.desc) {
+              this.loading = true;
+              this.method = "InterSwitch";
+              Notification.addNotification({
+                receiverId: this.adminId,
+                type: "voting",
+                message: `Someone just voted ${this.payContent.fullname} with ${this.payContent.numberOfVotes} vote`,
               });
-            });
+              TransactionService.submitVote(
+                this.contestant.id,
+                this.voteForm()
+              ).then((response) => {
+                this.loading = false;
+                this.message = response.data.message;
+                window.localStorage.removeItem("paymentForm");
+                this.contestant.voteCount += Number(
+                  this.payContent.numberOfVotes
+                );
+                Swal.fire({
+                  icon: "success",
+                  text: `You have successfully voted for ${this.contestant.fullname}`,
+                  confirmButtonText: "Ok",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.$router.push(
+                      "/contestant-profile/" + this.contestant.id
+                    );
+                  }
+                });
+              });
+            }
           },
           mode: "TEST",
         };
@@ -445,7 +470,8 @@
                   text: `You have successfully voted for ${this.contestant.fullname}`,
                   confirmButtonText: "Ok",
                 }).then((result) => {
-                  if (result.isConfirmed) {}
+                  if (result.isConfirmed) {
+                  }
                 });
               });
               paymentParams.close();
@@ -487,7 +513,8 @@
                   text: `You have successfully voted for ${this.contestant.fullname}`,
                   confirmButtonText: "Ok",
                 }).then((result) => {
-                  if (result.isConfirmed) {}
+                  if (result.isConfirmed) {
+                  }
                 });
               });
               paymentParams.close();

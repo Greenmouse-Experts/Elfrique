@@ -284,13 +284,13 @@
       };
     },
     computed: {
-      /* otherContestants() {
+      otherContestants() {
       console.log(this.contest);
       const OC = this.contest.contestants.filter(
         (contestant) => contestant.id !== this.contestant.id
       );
       return OC;
-    }, */
+    },
       amount() {
         return (
           (Number(this.numberOfVotes) * Number(this.contest.fee)) /
