@@ -100,49 +100,48 @@
               <h6><strong>Amount</strong></h6>
               <p>{{ currency_symbol }} {{ (amount / toRate).toFixed(2) }}</p>
             </div>
-            <h5>Choose Payment Gateway</h5>
+            <h5 class="mt-2">Choose Payment Gateway</h5>
+            <PaymentGateway
+              :selected="paymentGateway"
+              :gateways="paymentMethods"
+              v-model="selectedGateway"
+            />
           </div>
-          <div v-if="currency_symbol != 'NGN'">
+          <div v-if="currency_symbol != 'NGN'" class="-mt-2">
             <div class="col-lg-12 d-grid gap-2 mb-3 mb-3">
-              <button class="btn btn-success" @click="flutterWave(trivia.id)">
+              <button @click="flutterWave(trivia.id)">
                 Pay Now – International
               </button>
             </div>
           </div>
-          <div v-else>
+          <div v-else class="mt-n3">
             <div
               class="col-lg-12 d-grid gap-2 mb-3"
-              v-if="method == 'paystack'"
+              v-if="selectedGateway == 'paystack'"
             >
-              <button class="btn btn-success" @click="PayStack(trivia.id)">
-                Pay Now – Local
-              </button>
+              <button @click="PayStack(trivia.id)" :disabled="loading">Pay Now – Local</button>
             </div>
             <div
               class="col-lg-12 d-grid gap-2 mb-3 mb-3"
-              v-if="method == 'flutterwave'"
+              v-if="selectedGateway == 'flutterwave'"
             >
-              <button class="btn btn-success" @click="flutterWave(trivia.id)">
+              <button @click="flutterWave(trivia.id)" :disabled="loading">
                 Pay Now – Local & International
               </button>
             </div>
             <div
               class="col-lg-12 d-grid gap-2 mb-3 mb-3"
-              v-if="method == 'interswitch'"
+              v-if="selectedGateway == 'interswitch'"
             >
-              <button class="btn btn-success" @click="Interswitch(trivia.id)">
+              <button @click="interSwitch(trivia.id)" :disabled="loading">
                 Pay Now – Local & International
               </button>
             </div>
             <div
               class="col-lg-12 d-grid gap-2 mb-3"
-              v-if="method == 'aimstoget'"
+              v-if="selectedGateway == 'aimstoget'"
             >
-              <button
-                class="btn btn-success"
-                :disabled="loading"
-                @click="callAtgPay(form_id)"
-              >
+              <button :disabled="loading" @click="callAtgPay(form_id)">
                 Pay Now – Airtime – Nigeria Only
               </button>
             </div>
@@ -333,210 +332,160 @@
 </template>
 
 <script>
-import Header from "./elfrique-header.vue";
-import Footer from "./elfrique-footer.vue";
-import uniqid from "uniqid";
-import moment from "moment";
-import axios from "axios";
-import TriviaService from "../service/trivia.service";
-import Notification from "../service/notitfication-service";
-import TransactionService from "../service/transaction.service";
-import Swal from "sweetalert2";
-export default {
-  name: "Elfrique",
-  components: {
-    "elfrique-header": Header,
-    "elfrique-footer": Footer,
-  },
-  data() {
-    return {
-      trivia: "",
-      triviaType: "",
-      loading: false,
-      admin_id: "",
-      paymentForm: false,
-      currency_symbol: "",
-      toRate: "",
-      method: "",
-      amount: "",
-      usd_rate: "",
-      triviaPlayer: {
-        name: "",
-        email: "",
-        phonenumber: "",
-        city: "",
+  import Header from "./elfrique-header.vue";
+  import Footer from "./elfrique-footer.vue";
+  import uniqid from "uniqid";
+  import moment from "moment";
+  import axios from "axios";
+  import TriviaService from "../service/trivia.service";
+  import Notification from "../service/notitfication-service";
+  import TransactionService from "../service/transaction.service";
+  import Swal from "sweetalert2";
+  import PaymentGateway from "./components/PaymentGateway.vue";
+
+  export default {
+    name: "Elfrique",
+    components: {
+      "elfrique-header": Header,
+      "elfrique-footer": Footer,
+      PaymentGateway,
+    },
+    data() {
+      return {
+        trivia: "",
+        triviaType: "",
+        loading: false,
+        admin_id: "",
+        paymentForm: false,
+        currency_symbol: "",
+        toRate: "",
+        method: "",
+        amount: "",
+        usd_rate: "",
+        triviaPlayer: {
+          name: "",
+          email: "",
+          phonenumber: "",
+          city: "",
+        },
+        triviaType: "",
+        errMessage: "",
+        reference: this.genRef(),
+        publicKey: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f",
+        flw_public_key: "FLWPUBK_TEST-0f353662b04aee976128e62946a59682-X",
+        paymentGateway: "",
+        paymentMethods: ["paystack", "flutterwave", "interswitch", "aimsToGet"],
+        selectedGateway: "",
+      };
+    },
+
+    computed: {
+      currentUrl() {
+        return window.location.href;
       },
-      triviaType: "",
-      errMessage: "",
-      reference: this.genRef(),
-      publicKey: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f",
-      flw_public_key: "FLWPUBK_TEST-0f353662b04aee976128e62946a59682-X",
-    };
-  },
-
-  computed: {
-    currentUrl() {
-      return window.location.href;
     },
-  },
 
-  created() {
-    TriviaService.getSingleTrivia(this.$route.params.id).then((response) => {
-      this.trivia = response.data.trivia;
-      //console.log(this.trivia);
-      this.triviaType = response.data.trivia.type;
-      this.amount = response.data.trivia.amount;
-      this.method = response.data.trivia.paymentgateway;
-      this.admin_id = response.data.trivia.adminuserId;
-      this.convert_price();
-    });
-
-    const script = document.createElement("script");
-    script.src =
-      "https://qa.interswitchng.com/collections/public/javascripts/inline-checkout.js";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  },
-
-  methods: {
-    convert_price() {
-      axios.get("https://ipapi.co/currency").then((res) => {
-        let currency = res.data;
-        axios
-          .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
-          .then((res) => {
-            this.currency_symbol = res.data.base;
-            this.toRate = res.data.rates["NGN"];
-          });
-        axios
-          .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
-          .then((res) => {
-            this.use_currency_symbol = res.data.base;
-            this.usd_rate = res.data.rates["USD"];
-            //console.log(this.usd_rate, this.amount)
-          });
+    created() {
+      TriviaService.getSingleTrivia(this.$route.params.id).then((response) => {
+        this.trivia = response.data.trivia;
+        //console.log(this.trivia);
+        this.triviaType = response.data.trivia.type;
+        this.amount = response.data.trivia.amount;
+        this.paymentGateway = response.data.trivia.paymentgateway;
+        this.selectedGateway = this.paymentGateway;
+        const indexItem = this.paymentMethods.indexOf(this.paymentGateway);
+        this.paymentMethods.splice(indexItem, 1);
+        this.admin_id = response.data.trivia.adminuserId;
+        this.convert_price();
       });
+
+      const script = document.createElement("script");
+      script.src = "https://newwebpay.interswitchng.com/inline-checkout.js";
+      document.getElementsByTagName("head")[0].appendChild(script);
     },
-    submitPlayer() {
-      this.loading = true;
-      if (this.triviaType == "paid") {
-        this.paymentForm = true;
-        this.loading = false;
-      } else {
-        TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
-          .then((response) => {
-            this.$store
-              .dispatch("vote/getTriviaPlayer", response.data.player)
-              .then(() => {
-                this.$router.push(
-                  "/trivia-content-instruction/" + this.trivia.id
-                );
-              });
-          })
-          .catch((err) => {
-            this.loading = false;
-            new Error(err);
-            this.errMessage =
-              "You have already attemted this Trivia, please enter another email to cotinue";
-            setTimeout(() => {
-              this.errMessage = "";
-            }, 3000);
-          });
-      }
-    },
-    genRef() {
-      return uniqid();
-    },
-    PayStack(id) {
-      //  options
-      TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
+
+    methods: {
+      convert_price() {
+        axios.get("https://ipapi.co/currency").then((res) => {
+          let currency = res.data;
+          axios
+            .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+            .then((res) => {
+              this.currency_symbol = res.data.base;
+              this.toRate = res.data.rates["NGN"];
+            });
+          axios
+            .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+            .then((res) => {
+              this.use_currency_symbol = res.data.base;
+              this.usd_rate = res.data.rates["USD"];
+              //console.log(this.usd_rate, this.amount)
+            });
+        });
+      },
+      submitPlayer() {
+        this.loading = true;
+        var triviaPlayerObj = {};
+
+        if (this.triviaType == "paid") {
+          this.paymentForm = true;
+          this.loading = false;
+          window.scrollTo(0, 0);
+
+          triviaPlayerObj = this.triviaPlayer;
+          window.localStorage.setItem(
+            "triviaPlayer",
+            JSON.stringify(triviaPlayerObj)
+          );
+
+        } else {
+          TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
             .then((response) => {
               this.$store
                 .dispatch("vote/getTriviaPlayer", response.data.player)
-                const paymentOptions = {
-        // general options
-        key: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f", //required
-        email: this.triviaPlayer.email, //required
-        amount: (this.amount * 100).toFixed(0), //required
-        reference: this.reference, //required
-        firstname: this.triviaPlayer.name,
-        lastname: "",
-        /* currency: this.currency,
-                channels: this.channels,
-                metadata: this.metadata,
-                label: this.label,  */
-        onSuccess: (response) => {
-          console.log(response);
-          this.method = "Paystack";
-          Notification.addNotification({
-            receiverId: this.admin_id,
-            type: "Trivia Payment",
-            message: `${this.triviaPlayer.name} just Successfully Paid for ${this.trivia.title} Trivia`,
-          });
-          TransactionService.makeTransaction({
-            admin_id: this.admin_id,
-            reference: this.reference,
-            category: "Trivia Payment",
-            email: this.triviaPlayer.email,
-            method: this.method,
-            product_title: this.trivia.title,
-            product_id: this.trivia.id,
-            currency: this.currency_symbol,
-            type: "paid",
-            amount: (this.amount / this.toRate).toFixed(2),
-            payer_name: this.triviaPlayer.name,
-          }).then((response) => {
-            //this.modal.hide();
-            this.message = response.data.message;
-            //this.resetForm();
-            Swal.fire({
-              icon: "success",
-              text: `You have successfully Paid for ${this.trivia.title} Trivia`,
-              confirmButtonText: "Ok",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.$router.push(
-                  "/trivia-content-instruction/" + this.trivia.id
-                );
-              }
-            });
-          });
-        },
-      };
-      const paystack = new window.PaystackPop();
-      paystack.newTransaction(paymentOptions);
-      this.modal.hide();
-      })
-      .catch((err) => {
+                .then(() => {
+                  this.$router.push(
+                    "/trivia-content-instruction/" + this.trivia.id
+                  );
+                });
+            })
+            .catch((err) => {
               this.loading = false;
               new Error(err);
               this.errMessage =
-                "You have already attemted this Trivia, please enter another email to cotinue";
+                "You have already attemted this Trivia, please enter another email to continue";
               setTimeout(() => {
                 this.errMessage = "";
               }, 3000);
             });
-      
-    },
-    flutterWave(id) {
-      if (this.currency_symbol != "NGN") {
+        }
+      },
+      genRef() {
+        return uniqid();
+      },
+      PayStack(id) {
+        //  options
+        this.loading = true;
         TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
           .then((res) => {
             this.$store.dispatch("vote/getTriviaPlayer", res.data.player);
-            let paymentParams = FlutterwaveCheckout({
-              public_key: this.flw_public_key,
-              tx_ref: this.reference,
-              amount: (this.amount / this.toRate) * this.usd_rate,
-              currency: "USD",
-              customer: {
-                email: this.triviaPlayer.email,
-                /* phone_number: this.payContent.phone, */
-              },
-              callback: (response) => {
+            const paymentOptions = {
+              // general options
+              key: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f", //required
+              email: this.triviaPlayer.email, //required
+              amount: (this.amount * 100).toFixed(0), //required
+              reference: this.reference, //required
+              firstname: this.triviaPlayer.name,
+              lastname: "",
+              /* currency: this.currency,
+                channels: this.channels,
+                metadata: this.metadata,
+                label: this.label,  */
+              onSuccess: (response) => {
                 console.log(response);
-                this.loading = false;
-                this.method = "Flutterwave";
+                this.method = "Paystack";
                 Notification.addNotification({
-                  receiverId: this.adminId,
+                  receiverId: this.admin_id,
                   type: "Trivia Payment",
                   message: `${this.triviaPlayer.name} just Successfully Paid for ${this.trivia.title} Trivia`,
                 });
@@ -553,8 +502,9 @@ export default {
                   amount: (this.amount / this.toRate).toFixed(2),
                   payer_name: this.triviaPlayer.name,
                 }).then((response) => {
-                  this.loading = false;
+                  //this.modal.hide();
                   this.message = response.data.message;
+                  //this.resetForm();
                   Swal.fire({
                     icon: "success",
                     text: `You have successfully Paid for ${this.trivia.title} Trivia`,
@@ -567,175 +517,253 @@ export default {
                     }
                   });
                 });
-
-                paymentParams.close();
-
-                window.close();
               },
-              onclose: () => paymentParams.close(),
-            });
+            };
+            const paystack = new window.PaystackPop();
+            paystack.newTransaction(paymentOptions);
           })
           .catch((err) => {
             this.loading = false;
-            new Error(err);
-            this.errMessage =
-              "You have already attemted this Trivia, please enter another email to cotinue";
-            setTimeout(() => {
-              this.errMessage = "";
-            }, 3000);
+              Swal.fire({
+                icon: "error",
+                text: `You have already attempted this Trivia, please enter another email to continue`,
+                confirmButtonText: "Ok",
+              });
           });
-      } else {
-        TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
-          .then((res) => {
-            this.$store.dispatch("vote/getTriviaPlayer", res.data.player);
-            let paymentParams = FlutterwaveCheckout({
-              public_key: this.flw_public_key,
-              tx_ref: this.payContent.reference,
-              amount: this.payContent.amount,
-              currency: "NGN",
-              customer: {
-                email: this.payContent.email,
-                phone_number: this.payContent.phone,
-              },
-              callback: (response) => {
-                //console.log(response);
-                this.loading = false;
-                this.method = "Flutterwave";
-                Notification.addNotification({
-                  receiverId: this.adminId,
-                  type: "Trivia Payment",
-                  message: `${this.triviaPlayer.name} just Successfully Paid for ${this.trivia.title} Trivia`,
-                });
-                TransactionService.makeTransaction({
-                  admin_id: this.admin_id,
-                  reference: this.reference,
-                  category: "Trivia Payment",
-                  email: this.triviaPlayer.email,
-                  method: this.method,
-                  product_title: this.trivia.title,
-                  product_id: this.trivia.id,
-                  currency: this.usd_rate,
-                  type: "paid",
-                  amount: (this.amount / this.toRate).toFixed(2),
-                  payer_name: this.triviaPlayer.name,
-                }).then((response) => {
-                  this.loading = false;
-                  Swal.fire({
-                    icon: "success",
-                    text: `You have successfully Paid for ${this.trivia.title} Trivia`,
-                    confirmButtonText: "Ok",
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      this.$router.push(
-                        "/trivia-content-instruction/" + this.trivia.id
-                      );
-                    }
-                  });
-                  //this.message = response.data.message;
-                });
-
-                paymentParams.close();
-
-                window.close();
-              },
-              onclose: () => paymentParams.close(),
-            });
-          })
-          .catch((err) => {
-            this.loading = false;
-            new Error(err);
-            this.errMessage =
-              "You have already attemted this Trivia, please enter another email to cotinue";
-            setTimeout(() => {
-              this.errMessage = "";
-            }, 3000);
-          });
-      }
-    },
-    interSwitch(id) {
-      let samplePaymentRequest = {
-        merchant_code: "MX60729",
-        pay_item_id: "6294592",
-        site_redirect_url: window.location.origin,
-        cust_id: this.triviaPlayer.email,
-        data_ref: "vjyLc2lgNK",
-        txn_ref: this.reference,
-        amount: this.amount.toString(),
-        currency: 566, // ISO 4217 numeric code of the currency used
-        onComplete: (response) => {
-          console.log(response);
-          this.method = "InterSwitch";
-          //console.log(this.transactForm);
-          Notification.addNotification({
-            receiverId: this.admin_id,
-            type: "Ticket Payment",
-            message: `${this.triviaPlayer.name} just Successfully Paid for ${this.trivia.title}`,
-          });
+      },
+      flutterWave(id) {
+        if (this.currency_symbol !== "NGN") {
+          this.loading = true;
           TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
-            .then((response) => {
-              this.$store
-                .dispatch("vote/getTriviaPlayer", response.data.player)
-                .then(() => {
-                  Swal.fire({
-                    icon: "success",
-                    text: `You have successfully Paid for ${this.trivia.title} Trivia`,
-                    confirmButtonText: "Ok",
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      this.$router.push(
-                        "/trivia-content-instruction/" + this.trivia.id
-                      );
-                    }
+            .then((res) => {
+              this.$store.dispatch("vote/getTriviaPlayer", res.data.player);
+              let paymentParams = FlutterwaveCheckout({
+                public_key: this.flw_public_key,
+                tx_ref: this.reference,
+                amount: (this.amount / this.toRate) * this.usd_rate,
+                currency: "USD",
+                customer: {
+                  email: this.triviaPlayer.email,
+                  /* phone_number: this.payContent.phone, */
+                },
+                callback: (response) => {
+                  console.log(response);
+                  this.loading = false;
+                  this.method = "Flutterwave";
+                  Notification.addNotification({
+                    receiverId: this.adminId,
+                    type: "Trivia Payment",
+                    message: `${this.triviaPlayer.name} just Successfully Paid for ${this.trivia.title} Trivia`,
                   });
-                });
+                  TransactionService.makeTransaction({
+                    admin_id: this.admin_id,
+                    reference: this.reference,
+                    category: "Trivia Payment",
+                    email: this.triviaPlayer.email,
+                    method: this.method,
+                    product_title: this.trivia.title,
+                    product_id: this.trivia.id,
+                    currency: this.currency_symbol,
+                    type: "paid",
+                    amount: (this.amount / this.toRate).toFixed(2),
+                    payer_name: this.triviaPlayer.name,
+                  }).then((response) => {
+                    this.loading = false;
+                    this.message = response.data.message;
+                    Swal.fire({
+                      icon: "success",
+                      text: `You have successfully Paid for ${this.trivia.title} Trivia`,
+                      confirmButtonText: "Ok",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        this.$router.push(
+                          "/trivia-content-instruction/" + this.trivia.id
+                        );
+                      }
+                    });
+                  });
+
+                  paymentParams.close();
+
+                  window.close();
+                },
+                onclose: () => paymentParams.close(),
+              });
             })
             .catch((err) => {
               this.loading = false;
-              new Error(err);
-              this.errMessage =
-                "You have already attemted this Trivia, please enter another email to cotinue";
-              setTimeout(() => {
-                this.errMessage = "";
-              }, 3000);
+              Swal.fire({
+                icon: "error",
+                text: `You have already attempted this Trivia, please enter another email to continue`,
+                confirmButtonText: "Ok",
+              });
             });
-          TransactionService.makeTransaction({
-            admin_id: this.admin_id,
-            reference: this.reference,
-            category: "Trivia Payment",
-            email: this.triviaPlayer.email,
-            method: this.method,
-            product_title: this.trivia.title,
-            product_id: this.trivia.id,
-            currency: this.currency_symbol,
-            type: "paid",
-            amount: (this.amount / this.toRate).toFixed(2),
-            payer_name: this.triviaPlayer.name,
-          }).then((response) => {
-            //this.modal.hide();
-            this.message = response.data.message;
-            //this.resetForm();
-          });
-        },
-        mode: "TEST",
-      };
-      console.log(samplePaymentRequest);
-      window.webpayCheckout(samplePaymentRequest);
-      //this.modal.hide();
-    },
-  },
+        } else {
+          this.loading = true;
+          TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
+            .then((res) => {
+              this.$store.dispatch("vote/getTriviaPlayer", res.data.player);
+              let paymentParams = FlutterwaveCheckout({
+                public_key: this.flw_public_key,
+                tx_ref: this.reference,
+                amount: this.amount,
+                currency: "NGN",
+                customer: {
+                  email: this.triviaPlayer.email,
+                  phone_number: this.triviaPlayer.phonenumber,
+                },
+                callback: (response) => {
+                  //console.log(response);
+                  this.loading = false;
+                  this.method = "Flutterwave";
+                  Notification.addNotification({
+                    receiverId: this.adminId,
+                    type: "Trivia Payment",
+                    message: `${this.triviaPlayer.name} just Successfully Paid for ${this.trivia.title} Trivia`,
+                  });
+                  TransactionService.makeTransaction({
+                    admin_id: this.admin_id,
+                    reference: this.reference,
+                    category: "Trivia Payment",
+                    email: this.triviaPlayer.email,
+                    method: this.method,
+                    product_title: this.trivia.title,
+                    product_id: this.trivia.id,
+                    currency: this.usd_rate,
+                    type: "paid",
+                    amount: (this.amount / this.toRate).toFixed(2),
+                    payer_name: this.triviaPlayer.name,
+                  }).then((response) => {
+                    this.loading = false;
+                    Swal.fire({
+                      icon: "success",
+                      text: `You have successfully Paid for ${this.trivia.title} Trivia`,
+                      confirmButtonText: "Ok",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        this.$router.push(
+                          "/trivia-content-instruction/" + this.trivia.id
+                        );
+                      }
+                    });
+                    //this.message = response.data.message;
+                  });
 
-  mounted() {
-    window.scrollTo(0, 0);
-    const popup = document.createElement("script");
-    popup.setAttribute("src", "https://js.paystack.co/v2/inline.js");
-    popup.async = true;
-    document.head.appendChild(popup);
-    const inlineSdk = "https://checkout.flutterwave.com/v3.js";
-    const script = document.createElement("script");
-    script.src = inlineSdk;
-    if (!document.querySelector(`[src="${inlineSdk}"]`)) {
-      document.body.appendChild(script);
-    }
-  },
-};
+                  paymentParams.close();
+
+                  window.close();
+                },
+                onclose: () => paymentParams.close(),
+              });
+            })
+            .catch((err) => {
+              this.loading = false;
+              Swal.fire({
+                icon: "error",
+                text: `You have already attempted this Trivia, please enter another email to continue`,
+                confirmButtonText: "Ok",
+              });
+            });
+        }
+      },
+      interSwitch(id) {
+        let samplePaymentRequest = {
+          merchant_code: "MX60729",
+          pay_item_id: "6294592",
+          site_redirect_url: window.location.origin,
+          cust_id: this.triviaPlayer.email,
+          data_ref: "vjyLc2lgNK",
+          txn_ref: this.reference,
+          amount: this.amount.toString(),
+          currency: 566, // ISO 4217 numeric code of the currency used
+          onComplete: (response) => {
+            console.log(response);
+            this.method = "InterSwitch";
+            //console.log(this.transactForm);
+            Notification.addNotification({
+              receiverId: this.admin_id,
+              type: "Ticket Payment",
+              message: `${this.triviaPlayer.name} just Successfully Paid for ${this.trivia.title}`,
+            });
+            TriviaService.createPlayer(this.triviaPlayer, this.trivia.id)
+              .then((response) => {
+                this.$store
+                  .dispatch("vote/getTriviaPlayer", response.data.player)
+                  .then(() => {
+                    Swal.fire({
+                      icon: "success",
+                      text: `You have successfully Paid for ${this.trivia.title} Trivia`,
+                      confirmButtonText: "Ok",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        this.$router.push(
+                          "/trivia-content-instruction/" + this.trivia.id
+                        );
+                      }
+                    });
+                  });
+              })
+              .catch((err) => {
+                this.loading = false;
+                new Error(err);
+                this.errMessage =
+                  "You have already attemted this Trivia, please enter another email to continue";
+                setTimeout(() => {
+                  this.errMessage = "";
+                }, 3000);
+              });
+            TransactionService.makeTransaction({
+              admin_id: this.admin_id,
+              reference: this.reference,
+              category: "Trivia Payment",
+              email: this.triviaPlayer.email,
+              method: this.method,
+              product_title: this.trivia.title,
+              product_id: this.trivia.id,
+              currency: this.currency_symbol,
+              type: "paid",
+              amount: (this.amount / this.toRate).toFixed(2),
+              payer_name: this.triviaPlayer.name,
+            }).then((response) => {
+              //this.modal.hide();
+              this.message = response.data.message;
+              //this.resetForm();
+            });
+          },
+          mode: "TEST",
+        };
+        console.log(samplePaymentRequest);
+        window.webpayCheckout(samplePaymentRequest);
+        //this.modal.hide();
+      },
+    },
+
+    mounted() {
+      window.scrollTo(0, 0);
+      const popup = document.createElement("script");
+      popup.setAttribute("src", "https://js.paystack.co/v2/inline.js");
+      popup.async = true;
+      document.head.appendChild(popup);
+      const inlineSdk = "https://checkout.flutterwave.com/v3.js";
+      const script = document.createElement("script");
+      script.src = inlineSdk;
+      if (!document.querySelector(`[src="${inlineSdk}"]`)) {
+        document.body.appendChild(script);
+      }
+
+      const triviaPlayerObj = JSON.parse(
+        window.localStorage.getItem("triviaPlayer")
+      );
+
+      if (triviaPlayerObj) {
+        this.triviaPlayer = triviaPlayerObj;
+
+        const isEmpty = Object.keys(this.triviaPlayer).length === 0;
+
+        if (!isEmpty) {
+          this.paymentForm = true;
+        }
+      }
+    },
+  };
 </script>
