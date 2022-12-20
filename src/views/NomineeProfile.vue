@@ -432,16 +432,29 @@
       },
 
       convert_price() {
-        axios.get("https://ipapi.co/currency").then((res) => {
-          let currency = res.data;
-          axios
-            .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
-            .then((res) => {
-              this.currency_symbol = res.data.base;
-              this.toRate = res.data.rates["NGN"];
-            });
+        axios.get("https://ipinfo.io?token=79cd3ae8cbc7b1").then((res) => { 
+        axios.get(`http://ip-api.com/json/${res.data.ip}?fields=country,countryCode,currency,as,query`).then((res) => {
+          let currency = res.data.currency;
+          if (currency === 'NGN' || currency === 'GHS' || currency === 'KES') {
+            axios
+              .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+              .then((res) => {
+                this.currency_symbol = res.data.base;
+                this.toRate = res.data.rates["NGN"];
+              });
+          }
+          else { 
+            axios
+              .get(`https://api.exchangerate-api.com/v4/latest/USD`)
+              .then((res) => {
+                this.currency_symbol = res.data.base;
+                this.toRate = res.data.rates["NGN"];
+              });
+          }
         });
+        })
       },
+
       format_date(value) {
         if (value) {
           return moment(String(value)).format("MM/DD/YYYY hh:mm");

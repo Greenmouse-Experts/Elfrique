@@ -41,17 +41,17 @@
               <h6><strong>Amount</strong></h6>
               <p>{{ currency_symbol }} {{ amount }}</p>
             </div>
-            <h5>Choose Payment Gateway</h5>
+            <h5 v-if="currency_symbol === 'NGN'">Choose Payment Gateway</h5>
             <PaymentGateway
               :selected="paymentGateway"
               :gateways="paymentMethods"
               v-model="selectedGateway"
+              v-if="currency_symbol === 'NGN'"
             />
           </div>
           <div v-if="currency_symbol != 'NGN'">
             <div class="col-lg-12 mb-3">
-              <button @click="flutterWave(form_id)"
-              v-if="selectedGateway == 'flutterwave'">
+              <button @click="flutterWave(form_id)">
                 Pay Now – International
               </button>
             </div>
@@ -229,7 +229,7 @@
                 this.message = response.data.message;
               });
               paymentParams.close();
-              this.$router.push("/form-fill/" + id);
+              this.$router.push("/fill-form/" + id);
               window.close();
             },
             onclose: () => paymentParams.close(),

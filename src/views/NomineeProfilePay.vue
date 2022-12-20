@@ -65,18 +65,18 @@
               <h6>Reference number</h6>
               <p class="text-uppercase">{{ payContent.reference }}</p>
             </div>
-            <h5>Choose Payment Gateway</h5>
+            <h5 v-if="payContent.currency_symbol === 'NGN'">Choose Payment Gateway</h5>
             <PaymentGateway
               :selected="paymentGateway"
               :gateways="paymentMethods"
               v-model="selectedGateway"
+              v-if="payContent.currency_symbol === 'NGN'"
             />
           </div>
           <div v-if="payContent.amount != '0.00'">
             <div v-if="payContent.currency_symbol != 'NGN'">
               <div
                 class="col-lg-12 mb-3"
-                v-if="selectedGateway == 'flutterwave'"
               >
                 <button @click="payWithFlutter">Pay Now – International</button>
               </div>

@@ -93,7 +93,7 @@
     width: 10px;
     display: block;
     position: absolute;
-    background: #3ce75b;
+    background: #356226;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
