@@ -130,9 +130,16 @@
               </button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link tabs-button" id="pills-organ-tab" data-bs-toggle="pill"
-                data-bs-target="#pills-organ" type="button" role="tab" aria-controls="pills-organ"
-                aria-selected="false">
+              <button
+                class="nav-link tabs-button"
+                id="pills-organ-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-organ"
+                type="button"
+                role="tab"
+                aria-controls="pills-organ"
+                aria-selected="false"
+              >
                 <i class="fas fa-tv"></i> Organisers
               </button>
             </li>
@@ -202,6 +209,7 @@
                             </div>
                             <div v-if="con.price != 'free'">
                               <span
+                              v-if="toRate"
                                 >{{ currency_symbol }}
                                 {{ (con.price / toRate).toFixed(2) }}</span
                               >
@@ -216,7 +224,6 @@
                               <option>0</option>
                             </select>
                             <select
-                              v-model="qutty"
                               @change="selectTicketQty(con, $event)"
                               class="form-control"
                               v-else
@@ -236,9 +243,9 @@
                         </div>
                         <div class="col-lg-12 text-center d-grid gap-2">
                           <button
-                            v-if="qutty != ''"
                             class="btn btn-buy-ticket btn-block"
                             type="submit"
+                            :disabled="totalPrice === 0"
                             @click="showModal"
                           >
                             Buy Ticket
@@ -547,9 +554,7 @@
                               />
                               <span>
                                 I accept the
-                                <a href="#"
-                                  >terms and conditions</a
-                                >
+                                <a href="#">terms and conditions</a>
                                 for using this service.
                               </span>
                             </div>
@@ -661,310 +666,372 @@
 </template>
 
 <script>
-import Header from "./elfrique-header.vue";
-import Footer from "./elfrique-footer.vue";
-import TransactionService from "../service/transaction.service";
-import Notification from "../service/notitfication-service";
-import EventService from "../service/event.service";
-import uniqid from "uniqid";
-import moment from "moment";
-import IPGeolocationAPI from "ip-geolocation-api-javascript-sdk";
-import axios from "axios";
-import { Modal } from "bootstrap";
-import { Store } from "vuex";
-import Swal from "sweetalert2";
-export default {
-  name: "Elfrique",
-  components: {
-    "elfrique-header": Header,
-    "elfrique-footer": Footer,
-  },
-  data() {
-    return {
-      momentT: moment().format(),
-      currency_symbol: "",
-      tickets: [],
-      proceedPayment: false,
-      ticketQuantity: 0,
-      toRate: "",
-      salesEnd: false,
-      formDatas: "",
-      qutty: "",
-      email: "",
-      admin_id: "",
-      firstname: "",
-      lastname: "",
-      method: this.$store.state.vote.event.paymentgateway,
-      phone: "",
-      reference: this.genRef(),
-      publicKey: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f",
-      flw_public_key: "FLWPUBK_TEST-0f353662b04aee976128e62946a59682-X",
-      ended: false,
-      endDate: "",
-      countdown: {
-        months: 0,
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-      },
-      message: "",
-      event: {
-        adminuser: {},
-      },
-      toUsdRate: "",
-      newTicket: [],
-      eventId: this.$route.params.id,
-      modal: false,
-    };
-  },
-  created() {
-    const script = document.createElement("script");
-    script.src =
-      "https://newwebpay.interswitchng.com/inline-checkout.js";
-    document.getElementsByTagName("head")[0].appendChild(script);
-    this.getEvent();
-  },
-  computed: {
-    currentUrl() {
-      return window.location.href;
+  import Header from "./elfrique-header.vue";
+  import Footer from "./elfrique-footer.vue";
+  import TransactionService from "../service/transaction.service";
+  import Notification from "../service/notitfication-service";
+  import EventService from "../service/event.service";
+  import uniqid from "uniqid";
+  import moment from "moment";
+  import IPGeolocationAPI from "ip-geolocation-api-javascript-sdk";
+  import axios from "axios";
+  import { Modal } from "bootstrap";
+  import { Store } from "vuex";
+  import Swal from "sweetalert2";
+  export default {
+    name: "Elfrique",
+    components: {
+      "elfrique-header": Header,
+      "elfrique-footer": Footer,
     },
-    transactForm() {
+    data() {
       return {
-        admin_id: this.admin_id,
-        reference: this.reference,
-        category: "Event Ticket",
-        ticketQuantity: this.newTicket,
-        email: this.email,
-        method: this.method,
-        product_title: this.event.title,
-        product_id: this.event.id,
-        type: "paid",
-        amount: this.totalPrice,
-        currency: this.currency_symbol,
-        payer_name: this.firstname + " " + this.lastname,
-        phone_no: this.phone,
+        momentT: moment().format(),
+        currency_symbol: "",
+        tickets: [],
+        proceedPayment: false,
+        ticketQuantity: 0,
+        toRate: "",
+        salesEnd: false,
+        formDatas: "",
+        qutty: "",
+        email: "",
+        admin_id: "",
+        firstname: "",
+        lastname: "",
+        method: this.$store.state.vote.event.paymentgateway,
+        phone: "",
+        reference: this.genRef(),
+        publicKey: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f",
+        flw_public_key: "FLWPUBK_TEST-0f353662b04aee976128e62946a59682-X",
+        ended: false,
+        endDate: "",
+        countdown: {
+          months: 0,
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        },
+        quantity: 0,
+        message: "",
+        event: {
+          adminuser: {},
+        },
+        toUsdRate: "",
+        newTicket: [],
+        eventId: this.$route.params.id,
+        modal: false,
       };
     },
-    totalPrice() {
-      if (this.newTicket.length > 0) {
-        let total = this.newTicket
-          .map((item) => {
-            if (item.price == "free") {
-              let free = 0 * item.quantity;
-              console.log(free);
-              return free;
-            } else {
-              let paid = item.price * item.quantity;
-              return paid;
-            }
-          })
-          .reduce((prev, next) => prev + next);
-        console.log(total);
-        return total;
-      } else {
-        return 0;
-      }
+    created() {
+      const script = document.createElement("script");
+      script.src = "https://newwebpay.interswitchng.com/inline-checkout.js";
+      document.getElementsByTagName("head")[0].appendChild(script);
+      this.getEvent();
     },
-  },
-  methods: {
-    proceedPay() {
-      this.proceedPayment = true;
-      this.modal.hide();
+    computed: {
+      currentUrl() {
+        return window.location.href;
+      },
+      transactForm() {
+        return {
+          admin_id: this.admin_id,
+          reference: this.reference,
+          category: "Event Ticket",
+          ticketQuantity: this.newTicket,
+          email: this.email,
+          method: this.method,
+          product_title: this.event.title,
+          product_id: this.event.id,
+          type: "paid",
+          amount: this.totalPrice,
+          currency: this.currency_symbol,
+          payer_name: this.firstname + " " + this.lastname,
+          phone_no: this.phone,
+        };
+      },
+      totalPrice() {
+        if (this.newTicket.length > 0) {
+          let total = this.newTicket
+            .map((item) => {
+              if (item.price == "free") {
+                let free = 0 * item.quantity;
+                console.log(free);
+                return free;
+              } else {
+                let paid = item.price * item.quantity;
+                return paid;
+              }
+            })
+            .reduce((prev, next) => prev + next);
+          console.log(total);
+          return total;
+        } else {
+          return 0;
+        }
+      },
     },
-    selectTicketQty(item, qty) {
-      const elementIndex = this.newTicket.findIndex((obj) => obj.id == item.id);
-      console.log(qty);
-      if (elementIndex == -1) {
-        if (item.price != "free") {
-          let newPrice = (item.price / this.toRate).toFixed(2);
-          let sub_total = (newPrice * qty.target.value).toFixed(2);
-          let orifinal_price = item.price;
-          this.newTicket.push({
-            id: item.id,
-            name: item.name,
-            price: newPrice,
-            orifinal_price: orifinal_price,
-            quantity: qty.target.value,
-            sub_total: sub_total,
+    methods: {
+      proceedPay() {
+        this.proceedPayment = true;
+        this.modal.hide();
+      },
+      selectTicketQty(item, qty) {
+        const elementIndex = this.newTicket.findIndex(
+          (obj) => obj.id == item.id
+        );
+        if (elementIndex == -1) {
+          if (item.price != "free") {
+            let newPrice = (item.price / this.toRate).toFixed(2);
+            let sub_total = (newPrice * qty.target.value).toFixed(2);
+            let orifinal_price = item.price;
+            this.newTicket.push({
+              id: item.id,
+              name: item.name,
+              price: newPrice,
+              orifinal_price: orifinal_price,
+              quantity: qty.target.value,
+              sub_total: sub_total,
+            });
+          } else {
+            let newPrice = "free";
+            this.newTicket.push({
+              id: item.id,
+              name: item.name,
+              price: newPrice,
+              quantity: qty.target.value,
+              sub_total: 0,
+            });
+          }
+        } else {
+          this.newTicket[elementIndex].quantity = qty.target.value;
+          console.log(this.newTicket[elementIndex].quantity);
+        }
+      },
+      convert_price() {
+        axios.get("https://ipinfo.io?token=79cd3ae8cbc7b1").then((res) => {
+          axios
+            .get(
+              `http://ip-api.com/json/${res.data.ip}?fields=country,countryCode,currency,as,query`
+            )
+            .then((res) => {
+              let currency = res.data.currency;
+              if (
+                currency === "NGN" ||
+                currency === "GHS" ||
+                currency === "KES"
+              ) {
+                axios
+                  .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+                  .then((res) => {
+                    this.currency_symbol = res.data.base;
+                    this.toRate = res.data.rates["NGN"];
+                  });
+              } else {
+                axios
+                  .get(`https://api.exchangerate-api.com/v4/latest/USD`)
+                  .then((res) => {
+                    this.currency_symbol = res.data.base;
+                    this.toRate = res.data.rates["NGN"];
+                  });
+              }
+            });
+        });
+      },
+      sales_time(value) {
+        return moment(value).format();
+      },
+      getEvent() {
+        EventService.getSingleEvent(this.$route.params.id).then((res) => {
+          this.event = res.data.events;
+          this.admin_id = res.data.events.adminuserId;
+          this.endDate = res.data.events.enddate;
+          this.convert_price();
+          this.getCountdown();
+        });
+      },
+      getCountdown() {
+        var endCount = moment(this.endDate).format("YYYY-MM-DDT11:00:00Z");
+
+        // make it a moment object End
+        var event = moment(endCount);
+
+        // get current time/date
+        var current = moment().format();
+        /* console.log(current);
+      console.log(endCount); */
+        if (current >= endCount) {
+          this.ended = true;
+          this.countdown.days = 0;
+          this.countdown.hours = 0;
+          this.countdown.minutes = 0;
+          this.countdown.seconds = 0;
+        } else {
+          this.ended = false;
+          // get difference between event and current
+          var diffTime = event.diff(current);
+
+          // let moment.js make the duration out of the timestamp
+          var duration = moment.duration(diffTime, "milliseconds", true);
+
+          // Interval
+          var interval = 1000;
+          setInterval(() => {
+            duration = moment.duration(duration - interval, "milliseconds");
+            this.countdown.days = parseInt(duration.asDays());
+            this.countdown.hours = duration.hours();
+            this.countdown.minutes = duration.minutes();
+            this.countdown.seconds = duration.seconds();
+          }, interval);
+        }
+      },
+      format_date(value) {
+        if (value) {
+          return moment(String(value)).format("MM/DD/YYYY hh:mm");
+        }
+      },
+      isNumber(evt) {
+        const charCode = evt.which ? evt.which : evt.keyCode;
+        if (
+          charCode > 31 &&
+          (charCode < 48 || charCode > 57) &&
+          charCode !== 46
+        ) {
+          evt.preventDefault();
+        }
+      },
+      checkQuantity() {
+        if (this.ticketQuantity > this.formDatas.quantity) {
+          this.ticketQuantity = this.formDatas.quantity;
+        }
+      },
+      showModal() {
+        this.modal = new Modal(this.$refs.exampleModal);
+        this.modal.show();
+      },
+      genRef() {
+        return uniqid();
+      },
+      selectTicket(item) {
+        this.ticketSelected = true;
+        this.formDatas = item;
+        this.checkQuantity();
+      },
+      buyTicket(paymentGateway, price) {
+        console.log(this.ticketQuantity);
+        let amount = price * this.ticketQuantity;
+        let adminId = this.$store.state.vote.event.adminuserId;
+        let productTitle = this.event.title;
+        if (this.currency_symbol != "NGN" || this.currency_symbol == "USD") {
+          let paymentParams = FlutterwaveCheckout({
+            public_key: this.flw_public_key,
+            tx_ref: this.reference,
+            amount: this.totalPrice,
+            currency: "USD",
+            customer: {
+              email: this.email,
+              phone_number: this.phone,
+            },
+            callback: (response) => {
+              console.log(response);
+              this.method = "Flutterwave";
+              Notification.addNotification({
+                receiverId: adminId,
+                type: "Event Ticket Purchased",
+                message: `Someone just Successfully Purchased ${productTitle} ticket`,
+              });
+              TransactionService.makeTransaction(this.transactForm).then(
+                (response) => {
+                  this.message = "Ticket has been sccessfully booked!!";
+                  //this.resetForm();
+                  this.getEvent();
+                  this.genRef();
+                  this.proceedPayment = false;
+                  this.qutty = "";
+                  Swal.fire({
+                    icon: "success",
+                    text: `You have successfully booked ${productTitle} ticket`,
+                    confirmButtonText: "Ok",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.proceedPayment = false;
+                      this.qutty = "";
+                    }
+                  });
+                  paymentParams.close();
+                  window.close();
+                }
+              );
+              //this.$router.push("/fill-form/" + id);
+            },
+            onclose: () => paymentParams.close(),
           });
         } else {
-          let newPrice = "free";
-          this.newTicket.push({
-            id: item.id,
-            name: item.name,
-            price: newPrice,
-            quantity: qty.target.value,
-            sub_total: 0,
-          });
-        }
-      } else {
-        this.newTicket[elementIndex].quantity = qty.target.value;
-      }
-    },
-    convert_price() {
-      axios.get("https://ipapi.co/currency").then((res) => {
-        let currency = res.data;
-        axios
-          .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
-          .then((res) => {
-            this.currency_symbol = res.data.base;
-            this.toRate = res.data.rates["NGN"];
-          });
-        axios
-          .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
-          .then((res) => {
-            this.currency_symbol = res.data.base;
-            this.toUsdRate = res.data.rates["USD"];
-          });
-      });
-    },
-    sales_time(value) {
-      return moment(value).format();
-    },
-    getEvent() {
-      EventService.getSingleEvent(this.$route.params.id).then((res) => {
-        this.event = res.data.events;
-        this.admin_id = res.data.events.adminuserId;
-        this.endDate = res.data.events.enddate;
-        this.convert_price();
-        this.getCountdown();
-      });
-    },
-    getCountdown() {
-      var endCount = moment(this.endDate).format("YYYY-MM-DDT11:00:00Z");
-
-      // make it a moment object End
-      var event = moment(endCount);
-
-      // get current time/date
-      var current = moment().format();
-      /* console.log(current);
-      console.log(endCount); */
-      if (current >= endCount) {
-        this.ended = true;
-        this.countdown.days = 0;
-        this.countdown.hours = 0;
-        this.countdown.minutes = 0;
-        this.countdown.seconds = 0;
-      } else {
-        this.ended = false;
-        // get difference between event and current
-        var diffTime = event.diff(current);
-
-        // let moment.js make the duration out of the timestamp
-        var duration = moment.duration(diffTime, "milliseconds", true);
-
-        // Interval
-        var interval = 1000;
-        setInterval(() => {
-          duration = moment.duration(duration - interval, "milliseconds");
-          this.countdown.days = parseInt(duration.asDays());
-          this.countdown.hours = duration.hours();
-          this.countdown.minutes = duration.minutes();
-          this.countdown.seconds = duration.seconds();
-        }, interval);
-      }
-    },
-    format_date(value) {
-      if (value) {
-        return moment(String(value)).format("MM/DD/YYYY hh:mm");
-      }
-    },
-    isNumber(evt) {
-      const charCode = evt.which ? evt.which : evt.keyCode;
-      if (
-        charCode > 31 &&
-        (charCode < 48 || charCode > 57) &&
-        charCode !== 46
-      ) {
-        evt.preventDefault();
-      }
-    },
-    checkQuantity() {
-      if (this.ticketQuantity > this.formDatas.quantity) {
-        this.ticketQuantity = this.formDatas.quantity;
-      }
-    },
-    showModal() {
-      this.modal = new Modal(this.$refs.exampleModal);
-      this.modal.show();
-    },
-    genRef() {
-      return uniqid();
-    },
-    selectTicket(item) {
-      this.ticketSelected = true;
-      this.formDatas = item;
-      this.checkQuantity();
-    },
-    buyTicket(paymentGateway, price) {
-      console.log(this.ticketQuantity);
-      let amount = price * this.ticketQuantity;
-      let adminId = this.$store.state.vote.event.adminuserId;
-      let productTitle = this.event.title;
-      if (this.currency_symbol != "NGN" || this.currency_symbol == "USD") {
-        let paymentParams = FlutterwaveCheckout({
-          public_key: this.flw_public_key,
-          tx_ref: this.reference,
-          amount: this.totalPrice * this.toUsdRate,
-          currency: "USD",
-          customer: {
-            email: this.email,
-            phone_number: this.phone,
-          },
-          callback: (response) => {
-            console.log(response);
-            this.method = "Flutterwave";
-            Notification.addNotification({
-              receiverId: adminId,
-              type: "Event Ticket Purchased",
-              message: `Someone just Successfully Purchased ${productTitle} ticket`,
-            });
-            TransactionService.makeTransaction(this.transactForm).then(
-              (response) => {
-                this.message = "Ticket has been sccessfully booked!!";
-                //this.resetForm();
-                this.getEvent();
-                this.genRef();
-                this.proceedPayment = false;
-                this.qutty = "";
-                Swal.fire({
-                  icon: "success",
-                  text: `You have successfully booked ${productTitle} ticket`,
-                  confirmButtonText: "Ok",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    this.proceedPayment = false;
-                    this.qutty = "";
-                  }
-                });
-                paymentParams.close();
-                window.close();
-              }
-            );
-            //this.$router.push("/fill-form/" + id);
-          },
-          onclose: () => paymentParams.close(),
-        });
-      } else {
-        if (paymentGateway == "interswitch") {
-          let samplePaymentRequest = {
-            merchant_code: "MX60729",
-            pay_item_id: "6294592",
-            site_redirect_url: window.location.origin,
-            cust_id: this.email,
-            data_ref: "vjyLc2lgNK",
-            txn_ref: this.reference,
-            amount: (this.totalPrice * 100).toFixed(0),
-            currency: 566, // ISO 4217 numeric code of the currency used
-            onComplete: (response) => {
-              if (response.desc) {
-                this.method = paymentGateway;
-                //console.log(this.transactForm);
+          if (paymentGateway == "interswitch") {
+            let samplePaymentRequest = {
+              merchant_code: "MX60729",
+              pay_item_id: "6294592",
+              site_redirect_url: window.location.origin,
+              cust_id: this.email,
+              data_ref: "vjyLc2lgNK",
+              txn_ref: this.reference,
+              amount: (this.totalPrice * 100).toFixed(0),
+              currency: 566, // ISO 4217 numeric code of the currency used
+              onComplete: (response) => {
+                if (response.desc) {
+                  this.method = paymentGateway;
+                  //console.log(this.transactForm);
+                  Notification.addNotification({
+                    receiverId: adminId,
+                    type: "Event Ticket Purchase",
+                    message: `Someone just Successfully Purchased ${productTitle} ticket`,
+                  });
+                  TransactionService.makeTransaction(this.transactForm).then(
+                    (response) => {
+                      //this.modal.hide();
+                      this.getEvent();
+                      this.proceedPayment = false;
+                      this.qutty = "";
+                      this.message = "Ticket has been sccessfully booked!!";
+                      Swal.fire({
+                        icon: "success",
+                        text: `You have successfully booked ${productTitle} ticket`,
+                        confirmButtonText: "Ok",
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          this.proceedPayment = false;
+                          this.qutty = "";
+                        }
+                      });
+                      //this.resetForm();
+                    }
+                  );
+                  //this.$router.push("/fill-form/" + id);
+                }
+              },
+              mode: "TEST",
+            };
+            window.webpayCheckout(samplePaymentRequest);
+          } else if (paymentGateway == "paystack") {
+            const paymentOptions = {
+              // general options
+              key: this.publicKey, //required
+              email: this.email, //required
+              amount: (this.totalPrice * 100).toFixed(0), //required
+              reference: this.reference, //required
+              firstname: this.firstname,
+              lastname: this.lastname,
+              /* currency: this.currency,
+                  channels: this.channels,
+                  metadata: this.metadata,
+                  label: this.label,  */
+              onSuccess: (response) => {
+                console.log(response);
+                this.method = "Paystack";
                 Notification.addNotification({
                   receiverId: adminId,
-                  type: "Event Ticket Purchase",
+                  type: "Event Ticket Purchased",
                   message: `Someone just Successfully Purchased ${productTitle} ticket`,
                 });
                 TransactionService.makeTransaction(this.transactForm).then(
@@ -984,149 +1051,102 @@ export default {
                         this.qutty = "";
                       }
                     });
-                    //this.resetForm();
                   }
                 );
                 //this.$router.push("/fill-form/" + id);
-              }
-            },
-            mode: "TEST",
-          };
-        window.webpayCheckout(samplePaymentRequest);
-        } else if (paymentGateway == "paystack") {
-          const paymentOptions = {
-            // general options
-            key: this.publicKey, //required
-            email: this.email, //required
-            amount: (this.totalPrice * 100).toFixed(0), //required
-            reference: this.reference, //required
-            firstname: this.firstname,
-            lastname: this.lastname,
-            /* currency: this.currency,
-                  channels: this.channels,
-                  metadata: this.metadata,
-                  label: this.label,  */
-            onSuccess: (response) => {
-              console.log(response);
-              this.method = "Paystack";
-              Notification.addNotification({
-                receiverId: adminId,
-                type: "Event Ticket Purchased",
-                message: `Someone just Successfully Purchased ${productTitle} ticket`,
-              });
-              TransactionService.makeTransaction(this.transactForm).then(
-                (response) => {
-                  //this.modal.hide();
-                  this.getEvent();
-                  this.proceedPayment = false;
-                  this.qutty = "";
-                  this.message = "Ticket has been sccessfully booked!!";
-                  Swal.fire({
-                    icon: "success",
-                    text: `You have successfully booked ${productTitle} ticket`,
-                    confirmButtonText: "Ok",
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      this.proceedPayment = false;
-                      this.qutty = "";
-                    }
-                  });
-                }
-              );
-              //this.$router.push("/fill-form/" + id);
-            },
+              },
 
-            /*  onCancel: () => {
+              /*  onCancel: () => {
                   this.onCancel();
                   }, */
-            // onBankTransferConfirmationPending: function(response) {
-            //   this.onBankTransferConfirmationPending(response);
-            // },
-            // single split payments
-            //subaccount:this.subaccount,  //required for single split
-            //transaction_charge:this.transaction_charge,
-            //bearer:this.bearer,
-            // multi-split payments
-            //split_code:this.split_code, //required for multi-split
-            // subscriptionss
-            // plan: this.plan, //required for subscriptions
-            // quantity: this.quantity,
-          };
-          const paystack = new window.PaystackPop();
-          paystack.newTransaction(paymentOptions);
-        } else if (paymentGateway == "flutterwave") {
-          let paymentParams = FlutterwaveCheckout({
-            public_key: this.flw_public_key,
-            tx_ref: this.reference,
-            amount: amount.toString(),
-            currency: "{{currency_symbol}}",
-            customer: {
-              email: this.email,
-              phone_number: this.phone,
-            },
-            callback: (response) => {
-              console.log(response);
-              this.method = "Flutterwave";
-              Notification.addNotification({
-                receiverId: adminId,
-                type: "Event Ticket Purchased",
-                message: `Someone just Successfully Purchased ${productTitle} ticket`,
-              });
-              TransactionService.makeTransaction(this.transactForm).then(
-                (response) => {
-                  this.message = "Ticket has been sccessfully booked!!";
-                  //this.resetForm();
-                  this.getEvent();
-                  this.proceedPayment = false;
-                  this.qutty = "";
-                  Swal.fire({
-                    icon: "success",
-                    text: `You have successfully booked ${productTitle} ticket`,
-                    confirmButtonText: "Ok",
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      this.proceedPayment = false;
-                      this.qutty = "";
-                    }
-                  });
-                  paymentParams.close();
-                  window.close();
-                }
-              );
-              //this.$router.push("/fill-form/" + id);
-            },
-            onclose: () => this.onclose(),
-          });
+              // onBankTransferConfirmationPending: function(response) {
+              //   this.onBankTransferConfirmationPending(response);
+              // },
+              // single split payments
+              //subaccount:this.subaccount,  //required for single split
+              //transaction_charge:this.transaction_charge,
+              //bearer:this.bearer,
+              // multi-split payments
+              //split_code:this.split_code, //required for multi-split
+              // subscriptionss
+              // plan: this.plan, //required for subscriptions
+              // quantity: this.quantity,
+            };
+            const paystack = new window.PaystackPop();
+            paystack.newTransaction(paymentOptions);
+          } else if (paymentGateway == "flutterwave") {
+            let paymentParams = FlutterwaveCheckout({
+              public_key: this.flw_public_key,
+              tx_ref: this.reference,
+              amount: amount.toString(),
+              currency: "{{currency_symbol}}",
+              customer: {
+                email: this.email,
+                phone_number: this.phone,
+              },
+              callback: (response) => {
+                console.log(response);
+                this.method = "Flutterwave";
+                Notification.addNotification({
+                  receiverId: adminId,
+                  type: "Event Ticket Purchased",
+                  message: `Someone just Successfully Purchased ${productTitle} ticket`,
+                });
+                TransactionService.makeTransaction(this.transactForm).then(
+                  (response) => {
+                    this.message = "Ticket has been sccessfully booked!!";
+                    //this.resetForm();
+                    this.getEvent();
+                    this.proceedPayment = false;
+                    this.qutty = "";
+                    Swal.fire({
+                      icon: "success",
+                      text: `You have successfully booked ${productTitle} ticket`,
+                      confirmButtonText: "Ok",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        this.proceedPayment = false;
+                        this.qutty = "";
+                      }
+                    });
+                    paymentParams.close();
+                    window.close();
+                  }
+                );
+                //this.$router.push("/fill-form/" + id);
+              },
+              onclose: () => this.onclose(),
+            });
 
-          // window.FlutterwaveCheckout(paymentParams);
-        } else {
+            // window.FlutterwaveCheckout(paymentParams);
+          } else {
+          }
         }
+      },
+    },
+    mounted() {
+      window.scrollTo(0, 0);
+      const popup = document.createElement("script");
+      popup.setAttribute("src", "https://js.paystack.co/v2/inline.js");
+      popup.async = true;
+      document.head.appendChild(popup);
+      const inlineSdk = "https://checkout.flutterwave.com/v3.js";
+      const script = document.createElement("script");
+      script.src = inlineSdk;
+      if (!document.querySelector(`[src="${inlineSdk}"]`)) {
+        document.body.appendChild(script);
       }
     },
-  },
-  mounted() {
-    window.scrollTo(0, 0);
-    const popup = document.createElement("script");
-    popup.setAttribute("src", "https://js.paystack.co/v2/inline.js");
-    popup.async = true;
-    document.head.appendChild(popup);
-    const inlineSdk = "https://checkout.flutterwave.com/v3.js";
-    const script = document.createElement("script");
-    script.src = inlineSdk;
-    if (!document.querySelector(`[src="${inlineSdk}"]`)) {
-      document.body.appendChild(script);
-    }
-  },
-};
+  };
 </script>
 
 <style>
-.btn.btn-buy-ticket {
-  background: #4c8f35;
-  color: #fff;
-  margin-top: 2rem;
-  font-size: 18px;
-  font-weight: 600;
-  padding: 6px 50px;
-}
+  .btn.btn-buy-ticket {
+    background: #4c8f35;
+    color: #fff;
+    margin-top: 2rem;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 6px 50px;
+  }
 </style>

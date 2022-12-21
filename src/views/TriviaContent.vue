@@ -98,13 +98,14 @@
             </div>
             <div>
               <h6><strong>Amount</strong></h6>
-              <p>{{ currency_symbol }} {{ (amount / toRate).toFixed(2) }}</p>
+              <p v-if="toRate">{{ currency_symbol }} {{ (amount / toRate).toFixed(2) }}</p>
             </div>
-            <h5 class="mt-2">Choose Payment Gateway</h5>
+            <h5 class="mt-2" v-if="currency_symbol === 'NGN'">Choose Payment Gateway</h5>
             <PaymentGateway
               :selected="paymentGateway"
               :gateways="paymentMethods"
               v-model="selectedGateway"
+              v-if="currency_symbol === 'NGN'"
             />
           </div>
           <div v-if="currency_symbol != 'NGN'" class="-mt-2">
@@ -406,22 +407,27 @@
 
     methods: {
       convert_price() {
-        axios.get("https://ipapi.co/currency").then((res) => {
-          let currency = res.data;
-          axios
-            .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
-            .then((res) => {
-              this.currency_symbol = res.data.base;
-              this.toRate = res.data.rates["NGN"];
-            });
-          axios
-            .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
-            .then((res) => {
-              this.use_currency_symbol = res.data.base;
-              this.usd_rate = res.data.rates["USD"];
-              //console.log(this.usd_rate, this.amount)
-            });
+        axios.get("https://ipinfo.io?token=79cd3ae8cbc7b1").then((res) => { 
+        axios.get(`http://ip-api.com/json/${res.data.ip}?fields=country,countryCode,currency,as,query`).then((res) => {
+          let currency = res.data.currency;
+          if (currency === 'NGN' || currency === 'GHS' || currency === 'KES') {
+            axios
+              .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+              .then((res) => {
+                this.use_currency_symbol = res.data.base;
+                this.toRate = res.data.rates["NGN"];
+              });
+          }
+          else { 
+            axios
+              .get(`https://api.exchangerate-api.com/v4/latest/USD`)
+              .then((res) => {
+                this.currency_symbol = res.data.base;
+                this.toRate = res.data.rates["NGN"];
+              });
+          }
         });
+        })
       },
       submitPlayer() {
         this.loading = true;
@@ -540,7 +546,7 @@
               let paymentParams = FlutterwaveCheckout({
                 public_key: this.flw_public_key,
                 tx_ref: this.reference,
-                amount: (this.amount / this.toRate) * this.usd_rate,
+                amount: (this.amount / this.toRate),
                 currency: "USD",
                 customer: {
                   email: this.triviaPlayer.email,

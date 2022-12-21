@@ -527,17 +527,29 @@ export default {
   },
 
   methods: {
-    convert_price() {
-      axios.get("https://ipapi.co/currency").then((res) => {
-        let currency = res.data;
-        axios
-          .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
-          .then((res) => {
-            this.currency_symbol = res.data.base;
-            this.toRate = res.data.rates["NGN"];
-          });
-      });
-    },
+      convert_price() {
+        axios.get("https://ipinfo.io?token=79cd3ae8cbc7b1").then((res) => { 
+        axios.get(`http://ip-api.com/json/${res.data.ip}?fields=country,countryCode,currency,as,query`).then((res) => {
+          let currency = res.data.currency;
+          if (currency === 'NGN' || currency === 'GHS' || currency === 'KES') {
+            axios
+              .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+              .then((res) => {
+                this.currency_symbol = res.data.base;
+                this.toRate = res.data.rates["NGN"];
+              });
+          }
+          else { 
+            axios
+              .get(`https://api.exchangerate-api.com/v4/latest/USD`)
+              .then((res) => {
+                this.currency_symbol = res.data.base;
+                this.toRate = res.data.rates["NGN"];
+              });
+          }
+        });
+        })
+      },
     getCountdown() {
       var endCount = moment(this.endDate).format("YYYY-MM-DDT11:00:00Z");
 
