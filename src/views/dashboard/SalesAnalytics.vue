@@ -70,7 +70,12 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr v-for="(item, i) in ticketBooked" :key="item.id">
+                                <tr v-if="loading">
+                                    <td style="text-align: center; border: 0px" colspan="9">
+                                <LoaderVue />
+                                    </td>
+                                </tr>
+                                <tr v-for="(item, i) in ticketBooked" :key="item.id" v-else>
                                   <th scope="row">{{i + 1}}</th>
                                   <th>{{item.eventsTicketId}}</th>
                                   <td>{{item.name}}</td>
@@ -112,13 +117,14 @@
     import Footer from './dash-footer.vue'
     import VoteService from '../../service/vote.service'
 import eventService from '../../service/event.service'
+  import LoaderVue from "../components/Loader.vue";
 
     export default {
       name: "Elfrique",
       components:{
       'dash-header': Header,
       'dash-footer': Footer,
-      
+      LoaderVue
       },
       data(){
             return{
@@ -154,7 +160,9 @@ import eventService from '../../service/event.service'
 
     methods: {
         getBookedTicket(){
+            this.loading = true;
             eventService.getAllUserSingleBookedTicket(this.eventId).then(res => {
+                this.loading = false;
                 this.ticketBooked = res.data.booked_tickets
                 setTimeout(function () {
                     $("#TicketBooked").DataTable({
