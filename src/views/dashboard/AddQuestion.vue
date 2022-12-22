@@ -61,7 +61,7 @@
               aria-label="Close"
             ></button>
           </div>
-          <form name="form" @submit.prevent="createQuestions">
+          <form name="form" ref="form" @submit.prevent="createQuestions">
             <div class="row">
               <div class="col-lg-12 mt-4">
                 <label for="vote option">Trivia Name</label>
@@ -120,8 +120,7 @@
                       class="radio"
                       type="radio"
                       name="question"
-                      id="multichoice"
-                      checked
+                      value="multichoice"
                     />
                     <span>Multichoice</span>
                     <input
@@ -129,13 +128,16 @@
                       class="radio"
                       type="radio"
                       name="question"
-                      id="theory"
+                      value="theory"
                     />
                     <span>Theory</span>
                   </div>
                   <!--Option-->
                   <div
-                    v-for="(n, index) in numberOFOption"
+                    v-if="con.questionDetails.nature === 'multichoice'"
+                    >
+                  <div
+                    v-for="(n, index) in 4"
                     :key="index"
                     class="
                       col-lg-12
@@ -175,6 +177,7 @@
                       v-on:click="addOption"
                       >Add Option</a
                     >
+                  </div>
                   </div>
                   <!--Add New Question-->
                   <div class="col-lg-12 mt-4">
@@ -224,12 +227,21 @@ export default {
     return {
       content: "",
       triviaId: "",
-      numberOFOption: 4,
+      numberOFOption: 0,
       numberOfQuestion: 1,
       file: "",
       error: "",
       loading: false,
       message: "",
+      questionForm: [{
+        questionDetails: {
+            question: "",
+            nature: "",
+            answer: "",
+          },
+          options: [],
+          file: "",
+      }]
     };
   },
 
@@ -237,7 +249,7 @@ export default {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
     },
-    questionForm: function () {
+    /*questionForm: function () {
       let questionForm = [];
       for (let i = 0; i < this.numberOfQuestion; i++) {
         questionForm.push({
@@ -251,8 +263,8 @@ export default {
         });
       }
 
-      return questionForm;
-    },
+      return questionForm; 
+    }, */
   },
   created() {
     if (!this.loggedIn) {
@@ -297,6 +309,7 @@ export default {
               console.log(response);
               this.message = "Question(s) added successfully";
               this.loading = false;
+              this.$refs.form.reset();
               window.scrollTo(0, 0);
             },
 

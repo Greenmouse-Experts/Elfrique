@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-bs-dismiss="modal">Close</button>
+                <button type="button" data-bs-dismiss="modal" @click="ticketBooked = []">Close</button>
             </div>
             </div>
         </div>
@@ -161,6 +161,7 @@ import eventService from '../../service/event.service'
     methods: {
         getBookedTicket(){
             this.loading = true;
+            this.ticketBooked = [];
             eventService.getAllUserSingleBookedTicket(this.eventId).then(res => {
                 this.loading = false;
                 this.ticketBooked = res.data.booked_tickets

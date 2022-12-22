@@ -3,7 +3,7 @@
   <div class="progress progress-striped active mt-2 flex-grow-1">
     <div class="progress-bar elfrique" :style="`width: ${Math.round((value / total) * 100)}% ; background-color: #3b702a`"></div>
   </div>
-      <span class="mx-3 text-xsm d-flex flex-column justify-content-end" v-if="percentage">{{Math.round((value / total) * 100)}} %</span>
+      <span class="mx-3 text-xsm d-flex flex-column justify-content-end" v-if="percentage">{{calculateScore(value,total)}}%</span>
   </div>
 </template>
 
@@ -26,6 +26,12 @@ export default {
             type: Boolean,
             default: false
         }
+    },
+
+    methods: {
+      calculateScore(value,total) {
+        return Math.round((value / total) * 100) || 0
+      }
     }
 }
 </script>
