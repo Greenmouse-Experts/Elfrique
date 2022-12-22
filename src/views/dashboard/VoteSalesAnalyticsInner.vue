@@ -139,8 +139,8 @@
                         <td style="font-size: 13px;">{{item.currency}} {{item.amount}}</td>
                         <td style="font-size: 13px;">{{item.reference}}</td>
                         <td style="font-size: 13px;">{{item.payment_method}}</td>
-                        <td style="font-size: 13px;"></td>
-                        <td style="font-size: 13px;"></td>
+                        <td style="font-size: 13px;">{{item.contestant.fullname}}</td>
+                        <td style="font-size: 13px;">{{item.contestant.contestantnumber}}</td>
                         <td style="font-size: 13px;"></td>
                       </tr>
                     </tbody>

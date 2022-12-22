@@ -947,6 +947,8 @@ export default {
         //  _BASE_URL + "signup?referral=" + this.ref_Id;
         this.adminId = response.data.profile.adminuser.id;
 
+        localStorage.setItem('adminId', this.adminId);
+
         GetDashboard.getDashboard(this.adminId).then((res) => {
           let data = res.data;
           this.form = res.data.eventforms.length;

@@ -364,7 +364,7 @@ export default {
   },
   data() {
     return {
-      content: "",
+      content: [],
       eventId: "",
       numberOfFreeTickets: "",
       numberOfPaidTickets: "",
@@ -382,6 +382,7 @@ export default {
       return this.$store.state.auth.status.loggedIn;
     },
     eventName: function () {
+      console.log(this.content);
       this.content.find((event) => {
         if (event.id == this.eventId) {
           console.log(event.title);
@@ -430,8 +431,18 @@ export default {
       this.$router.push("/login");
     }
 
+    const adminId = localStorage.getItem('adminId');
+
     EventService.getEvents().then((response) => {
-      this.content = response.data.events;
+      const events = response.data.events;
+      events.map((event) =>  {
+        if(event.adminuserId === adminId) {
+          this.content.push({
+            id: event.id,
+            title: event.title
+          })
+        }
+      })
     });
     
   },
