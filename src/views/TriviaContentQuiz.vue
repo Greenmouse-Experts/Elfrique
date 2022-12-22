@@ -205,13 +205,13 @@
         .then((response) => {
           this.trivia = response.data.trivia;
           this.questions = response.data.trivia.questions;
+          this.getCountDown();
         })
         .then(() => {
           if (this.player.id == null) {
             // this.$router.push("/trivia-content/" + this.trivia.id);
           }
         });
-      this.getCountDown();
     },
     methods: {
       startQuiz() {
@@ -239,7 +239,8 @@
       },
       submitQuiz() {
         this.loading = true;
-        if (this.check == "") {
+        alert(this.check);
+        if (this.check === "") {
           Swal.fire({
             icon: "error",
             text: `You have already attempted this Trivia, please enter another email to continue`,
@@ -260,7 +261,7 @@
         const currentDate = new Date();
         const oldDateObj = currentDate.toISOString();
 
-        var newDateObj = moment(oldDateObj).add(60, "m").format();
+        var newDateObj = moment(oldDateObj).add(1, "m").format();
 
         var current = moment().format();
 
@@ -273,7 +274,7 @@
         if (current >= newDateObj) {
           this.ended = true;
           this.countdown.minutes = 0;
-          this.countdown.seconds = 0;
+          this.countdown.seconds = 1;
         } else {
           this.ended = false;
           // get difference between event and current
@@ -288,6 +289,17 @@
             duration = moment.duration(duration - interval, "milliseconds");
             this.countdown.minutes = duration.minutes();
             this.countdown.seconds = duration.seconds();
+
+            if (duration.minutes() === 0 && duration.seconds() === 0) {
+              TriviaService.answerTrivia(this.trivia.id, this.answer).then(
+                (res) => {
+                  this.loading = false;
+                  let data = res.data.data;
+                  localStorage.setItem("TriviaResult", JSON.stringify(data));
+                  this.$router.push({ name: "TriviaResult" });
+                }
+              );
+            }
           }, interval);
         }
       },
