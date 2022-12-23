@@ -98,7 +98,6 @@
               <span>{{ countdown.seconds }}</span>
             </div>
             <div class="clear"></div>
-            <p id="timeUpText"></p>
           </div>
         </div>
       </div>
@@ -132,12 +131,19 @@
             </div>
           </form>
           <div>
-            <button v-if="questionIndex > 0" @click="prev">Previous</button>
+            <button
+              v-if="questionIndex > 0"
+              @click="prev"
+              :disabled="disableBtn"
+            >
+              Previous
+            </button>
 
             <button
               style="margin-left: 20px"
               v-if="questionIndex < questions.length - 1"
               @click="next"
+              :disabled="disableBtn"
             >
               Next
             </button>
@@ -146,6 +152,7 @@
               style="margin-left: 30px"
               @click="submitQuiz"
               type="submit"
+              :disabled="disableBtn"
             >
               Submit Quiz
             </button>
@@ -164,6 +171,7 @@
   import moment from "moment";
   import TriviaService from "../service/trivia.service";
   import Swal from "sweetalert2";
+  import { error } from "jquery";
 
   export default {
     name: "Elfrique",
@@ -178,7 +186,7 @@
         loading: false,
         questions: "",
         answer: {
-          playerEmail: this.$store.state.vote.player.email,
+          playerEmail: "",
           trivia_answer: [],
         },
         questionIndex: 0,
@@ -190,6 +198,8 @@
           minutes: 0,
           seconds: 0,
         },
+        disableBtn: false,
+        timeUpMessage: "",
       };
     },
     computed: {
@@ -201,6 +211,9 @@
       },
     },
     created() {
+      const trivia = JSON.parse(window.localStorage.getItem("triviaPlayer"));
+      this.answer.playerEmail = trivia.email;
+
       TriviaService.getSingleTrivia(this.$route.params.id)
         .then((response) => {
           this.trivia = response.data.trivia;
@@ -239,7 +252,6 @@
       },
       submitQuiz() {
         this.loading = true;
-        alert(this.check);
         if (this.check === "") {
           Swal.fire({
             icon: "error",
@@ -261,7 +273,7 @@
         const currentDate = new Date();
         const oldDateObj = currentDate.toISOString();
 
-        var newDateObj = moment(oldDateObj).add(1, "m").format();
+        var newDateObj = moment(oldDateObj).add(Number(this.trivia.duration), "m").format();
 
         var current = moment().format();
 
@@ -287,10 +299,15 @@
           var interval = 1000;
           setInterval(() => {
             duration = moment.duration(duration - interval, "milliseconds");
-            this.countdown.minutes = duration.minutes();
-            this.countdown.seconds = duration.seconds();
+
+            if (duration.minutes() >= 0 && duration.seconds() >= 0) {
+              this.countdown.minutes = duration.minutes();
+              this.countdown.seconds = duration.seconds();
+            }
 
             if (duration.minutes() === 0 && duration.seconds() === 0) {
+              this.countdown.minutes = 0;
+              this.countdown.seconds = 0;
               TriviaService.answerTrivia(this.trivia.id, this.answer).then(
                 (res) => {
                   this.loading = false;
@@ -298,7 +315,15 @@
                   localStorage.setItem("TriviaResult", JSON.stringify(data));
                   this.$router.push({ name: "TriviaResult" });
                 }
-              );
+              )
+              this.disableBtn = true;
+              Swal.fire({
+                icon: "error",
+                text: `Time is up, Submitting trivia...`,
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+              });
             }
           }, interval);
         }
