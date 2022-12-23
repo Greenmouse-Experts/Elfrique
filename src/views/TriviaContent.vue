@@ -414,7 +414,7 @@
             axios
               .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
               .then((res) => {
-                this.use_currency_symbol = res.data.base;
+                this.currency_symbol = res.data.base;
                 this.toRate = res.data.rates["NGN"];
               });
           }
