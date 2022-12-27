@@ -2,6 +2,13 @@
   <title>
     Contestant Profile | Elfrique – Complete Event Management System
   </title>
+
+    <template v-if="isLoading">
+    <LoaderVue loaderImage center /> 
+  </template>
+
+  <template v-else>
+
   <elfrique-header />
 
   <section class="contestant-profile">
@@ -160,6 +167,7 @@
   </section>
 
   <elfrique-footer />
+  </template>
 </template>
 <style scoped>
   .contestant-profile .header-contestant .col-lg-12 {
@@ -185,6 +193,7 @@
   import Swal from "sweetalert2";
   import PaymentGateway from "./components/PaymentGateway.vue";
   import ProgressBarVue from "./components/ProgressBar.vue";
+  import LoaderVue from './components/Loader.vue';
 
   export default {
     name: "Elfrique",
@@ -193,6 +202,7 @@
       "elfrique-footer": Footer,
       paystack: paystack,
       PaymentGateway,
+      LoaderVue,
       Swal,
       ProgressBarVue,
     },
@@ -203,6 +213,8 @@
         method: "",
         email: "",
         loading: false,
+        isLoading: true,
+        contestId: "",
         reference: "",
         phone: "",
         numberOfVotes: "",
@@ -233,6 +245,7 @@
     created() {
       VoteService.getAContestant(this.$route.params.id).then((response) => {
         this.contestant = response.data.contestants;
+        this.contestId = response.data.contestants.votingContest.id;
         VoteService.getSingleContest(
           response.data.contestants.votingContest.id
         ).then((response) => {
@@ -243,6 +256,7 @@
           const indexItem = this.paymentMethods.indexOf(this.paymentGateway);
           this.paymentMethods.splice(indexItem, 1);
           this.getTotalVotes(response.data.voteContest);
+          this.isLoading = false;
         });
       });
     },
@@ -315,7 +329,7 @@
               confirmButtonText: "Ok",
             }).then((result) => {
               if (result.isConfirmed) {
-                this.$router.push("/contestant-profile/" + this.contestant.id);
+                this.$router.push("/voting-content/" + this.contestId);
               }
             });
           }
@@ -344,7 +358,7 @@
               confirmButtonText: "Ok",
             }).then((result) => {
               if (result.isConfirmed) {
-                this.$router.push("/contestant-profile/" + this.contestant.id);
+                this.$router.push("/voting-content/" + this.contestId);
               }
             });
           }
@@ -422,9 +436,7 @@
                   confirmButtonText: "Ok",
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    this.$router.push(
-                      "/contestant-profile/" + this.contestant.id
-                    );
+                this.$router.push("/voting-content/" + this.contestId);
                   }
                 });
               });
@@ -528,8 +540,7 @@
       },
 
       onclose() {
-        this.$router.push("/contestant-profile/" + this.contestant.id);
-        console.log("go");
+        this.$router.push("/voting-content/" + this.contestId);
       },
 
       callAtgPay(e) {
@@ -580,9 +591,7 @@
                 confirmButtonText: "Ok",
               }).then((result) => {
                 if (result.isConfirmed) {
-                  this.$router.push(
-                    "/contestant-profile/" + this.contestant.id
-                  );
+                this.$router.push("/voting-content/" + this.contestId);
                 }
               });
             });

@@ -2,6 +2,13 @@
   <title>
     Event Form Management System | Elfrique – Complete Event Management System
   </title>
+
+    <template v-if="loading">
+    <LoaderVue loaderImage center /> 
+  </template>
+
+  <template v-else>
+
   <elfrique-header />
 
   <section class="voting-content">
@@ -427,6 +434,7 @@
   </section>
 
   <elfrique-footer />
+  </template>
 </template>
 <script>
 import Header from "./elfrique-header.vue";
@@ -439,11 +447,14 @@ import { Modal } from "bootstrap";
 import paystack from "vue-paystack";
 import moment from "moment";
 import axios from "axios";
+import LoaderVue from './components/Loader.vue';
+
 export default {
   name: "Elfrique",
   components: {
     "elfrique-header": Header,
     "elfrique-footer": Footer,
+    LoaderVue
   },
   data() {
     return {
@@ -476,6 +487,7 @@ export default {
         minutes: 0,
         seconds: 0,
       },
+      loading: true,
     };
   },
   computed: {
@@ -518,6 +530,7 @@ export default {
       this.endDate = response.data.form.closedate;
       this.getCountdown();
       //console.log(response.data.form);
+      this.loading = false;
     });
     this.convert_price();
     const script = document.createElement("script");

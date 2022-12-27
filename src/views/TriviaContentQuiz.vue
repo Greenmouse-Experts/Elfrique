@@ -2,6 +2,13 @@
   <title>
     Trivia Management System | Elfrique – Complete Event Management System
   </title>
+
+        <template v-if="isLoading">
+    <LoaderVue loaderImage center /> 
+  </template>
+
+  <template v-else>
+
   <elfrique-header />
 
   <section class="voting-content trivia-content">
@@ -163,6 +170,7 @@
   </section>
 
   <elfrique-footer />
+  </template>
 </template>
 
 <script>
@@ -171,6 +179,7 @@
   import moment from "moment";
   import TriviaService from "../service/trivia.service";
   import Swal from "sweetalert2";
+  import LoaderVue from './components/Loader.vue';
   import { error } from "jquery";
 
   export default {
@@ -178,12 +187,14 @@
     components: {
       "elfrique-header": Header,
       "elfrique-footer": Footer,
+      LoaderVue,
       Swal,
     },
     data() {
       return {
         trivia: "",
         loading: false,
+        isLoading: true,
         questions: "",
         answer: {
           playerEmail: "",
@@ -219,6 +230,7 @@
           this.trivia = response.data.trivia;
           this.questions = response.data.trivia.questions;
           this.getCountDown();
+          this.isLoading = false;
         })
         .then(() => {
           if (this.player.id == null) {

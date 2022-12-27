@@ -1,5 +1,12 @@
 <template>
   <title>Form Title Here | Elfrique – Complete Event Management System</title>
+
+  <template v-if="loading">
+    <LoaderVue loaderImage center /> 
+  </template>
+
+  <template v-else>
+
   <elfrique-header />
 
   <section class="voting-content">
@@ -166,22 +173,27 @@
   </section>
 
   <elfrique-footer />
+  </template>
 </template>
 <script>
 import Header from "./elfrique-header.vue";
 import Footer from "./elfrique-footer.vue";
 import EventService from "../service/form.service";
 import moment from "moment";
+import LoaderVue from './components/Loader.vue';
+
 export default {
   name: "Elfrique",
   components: {
     "elfrique-header": Header,
     "elfrique-footer": Footer,
+    LoaderVue,
   },
   data() {
     return {
       eventContent: "",
       question: "",
+      loading: true
     };
   },
 
@@ -197,8 +209,7 @@ export default {
     EventService.getSingleForm(this.$route.params.id).then((response) => {
       this.eventContent = response.data.form;
       this.question = response.data.form.formQuestions;
-      console.log(this.eventContent);
-      console.log(this.question);
+      this.loading = false;
     });
   },
 

@@ -2,6 +2,13 @@
   <title>
     Trivia Management System | Elfrique – Complete Event Management System
   </title>
+
+    <template v-if="isLoading">
+    <LoaderVue loaderImage center /> 
+  </template>
+
+  <template v-else>
+
   <elfrique-header />
 
   <section class="voting-content">
@@ -330,6 +337,7 @@
   </section>
 
   <elfrique-footer />
+  </template>
 </template>
 
 <script>
@@ -343,6 +351,7 @@
   import TransactionService from "../service/transaction.service";
   import Swal from "sweetalert2";
   import PaymentGateway from "./components/PaymentGateway.vue";
+  import LoaderVue from './components/Loader.vue';
 
   export default {
     name: "Elfrique",
@@ -350,12 +359,14 @@
       "elfrique-header": Header,
       "elfrique-footer": Footer,
       PaymentGateway,
+      LoaderVue
     },
     data() {
       return {
         trivia: "",
         triviaType: "",
         loading: false,
+        isLoading: true,
         admin_id: "",
         paymentForm: false,
         currency_symbol: "",
@@ -398,6 +409,7 @@
         this.paymentMethods.splice(indexItem, 1);
         this.admin_id = response.data.trivia.adminuserId;
         this.convert_price();
+        this.isLoading = false;
       });
 
       const script = document.createElement("script");

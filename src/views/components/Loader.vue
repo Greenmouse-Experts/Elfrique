@@ -1,6 +1,7 @@
 <template>
   <div class="loading-screen">
-    <div class="loading-animation">
+    <div :class="center ? `loading-animation` : `loading-unanimation`">
+      <img src="@/assets/images/logo.png" v-if="loaderImage" class="logo" />
       <div v-if="loadingBar" class="loading-bar" />
     </div>
   </div>
@@ -12,6 +13,14 @@ export default {
     loadingBar: {
       type: Boolean,
       default: true
+    },
+    loaderImage: {
+      type: Boolean,
+      default: false
+    },
+    center: {
+      type: Boolean,
+      default: false,
     }
   }
 };
@@ -24,7 +33,19 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 12px 24px;
+  position: relative;
+  margin-top: 40vh;
+  transform: translateY(-50%);
 }
+
+.loading-unanimation {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 24px;
+}
+
 .loading-screen {
   top: 0;
   left: 0;
@@ -36,6 +57,10 @@ export default {
   text-align: center;
 }
 
+.logo {
+  width: 100px;
+  animation: bounce 1.5s infinite ease;
+}
 
 @keyframes bounce {
   0% {
