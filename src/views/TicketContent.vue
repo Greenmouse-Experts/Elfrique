@@ -3,6 +3,13 @@
     Event Tickets Management System | Elfrique – Complete Event Management
     System
   </title>
+
+        <template v-if="isLoading">
+    <LoaderVue loaderImage center /> 
+  </template>
+
+  <template v-else>
+
   <elfrique-header />
 
   <section class="voting-content event-ticket">
@@ -208,8 +215,7 @@
                               <span>Free</span>
                             </div>
                             <div v-if="con.price != 'free'">
-                              <span
-                              v-if="toRate"
+                              <span v-if="toRate"
                                 >{{ currency_symbol }}
                                 {{ (con.price / toRate).toFixed(2) }}</span
                               >
@@ -374,6 +380,15 @@
                               </div>
                             </div>
                           </div>
+                          <div class="row mt-4">
+                            <PaymentGateway
+                              radioStyle
+                              :selected="selectedGateway"
+                              :gateways="paymentMethods"
+                              v-model="event.paymentgateway"
+                              v-if="currency_symbol === 'NGN'"
+                            />
+                          </div>
                           <div class="col-lg-12 mt-5 d-grid gap-2">
                             <button
                               style="width: auto"
@@ -465,7 +480,7 @@
               </div>
               <div class="container" v-if="ended == true">
                 <h6 style="color: red">
-                  oOps! This event has ended, goto event page to view another
+                  oOps! This event has ended, go to event page to view another
                   one
                 </h6>
               </div>
@@ -643,7 +658,7 @@
               <div class="container organiser-area">
                 <div class="row justify-content-center px-2">
                   <div class="col-lg-12">
-                    <h1>Oragniser Details</h1>
+                    <h1>Organiser Details</h1>
                     <h4>Name</h4>
                     <p>{{ event.organisation }}</p>
                     <h4>Email</h4>
@@ -663,6 +678,7 @@
   </section>
 
   <elfrique-footer></elfrique-footer>
+  </template>
 </template>
 
 <script>
@@ -678,11 +694,16 @@
   import { Modal } from "bootstrap";
   import { Store } from "vuex";
   import Swal from "sweetalert2";
+    import LoaderVue from './components/Loader.vue';
+  import PaymentGateway from "./components/PaymentGateway.vue";
+
   export default {
     name: "Elfrique",
     components: {
       "elfrique-header": Header,
       "elfrique-footer": Footer,
+      PaymentGateway,
+      LoaderVue
     },
     data() {
       return {
@@ -699,8 +720,11 @@
         admin_id: "",
         firstname: "",
         lastname: "",
+        selectedGateway: "",
         method: this.$store.state.vote.event.paymentgateway,
+        paymentMethods: ["paystack", "flutterwave", "interswitch"],
         phone: "",
+        isLoading: true,
         reference: this.genRef(),
         publicKey: "pk_test_be803d46f5a6348c3643967d0e6b7b2303d42b4f",
         flw_public_key: "FLWPUBK_TEST-0f353662b04aee976128e62946a59682-X",
@@ -728,6 +752,8 @@
       const script = document.createElement("script");
       script.src = "https://newwebpay.interswitchng.com/inline-checkout.js";
       document.getElementsByTagName("head")[0].appendChild(script);
+      const indexItem = this.paymentMethods.indexOf(this.event.paymentgateway);
+      this.paymentMethods.splice(indexItem, 1);
       this.getEvent();
     },
     computed: {
@@ -849,6 +875,8 @@
           this.endDate = res.data.events.enddate;
           this.convert_price();
           this.getCountdown();
+          this.selectedGateway = this.event.paymentgateway;
+          this.isLoading = false
         });
       },
       getCountdown() {
@@ -1078,8 +1106,8 @@
             let paymentParams = FlutterwaveCheckout({
               public_key: this.flw_public_key,
               tx_ref: this.reference,
-              amount: amount.toString(),
-              currency: "{{currency_symbol}}",
+              amount: this.totalPrice,
+              currency: "NGN",
               customer: {
                 email: this.email,
                 phone_number: this.phone,

@@ -2,6 +2,12 @@
   <title>
     Vote Management System | Elfrique – Complete Event Management System
   </title>
+
+  <template v-if="loading">
+    <LoaderVue loaderImage center /> 
+  </template>
+
+  <template v-else>
   <elfrique-header />
 
   <section class="voting-content">
@@ -347,6 +353,7 @@
     </div>
   </section>
   <elfrique-footer />
+  </template>
 </template>
 
 <script>
@@ -358,6 +365,8 @@
   import moment from "moment";
   import VoteService from "../service/vote.service";
   import ProgressBarVue from "./components/ProgressBar.vue";
+  import LoaderVue from './components/Loader.vue';
+
   export default {
     name: "Elfrique",
     components: {
@@ -367,12 +376,14 @@
       PieChart,
       PolarChart,
       ProgressBarVue,
+        LoaderVue,
     },
     data() {
       return {
         contest: "",
         ended: false,
         endDate: "",
+        loading: true,
         countdown: {
           months: 0,
           days: 0,
@@ -399,6 +410,7 @@
         this.endDate = response.data.voteContest.closedate;
         this.getTotalVotes(response.data.voteContest);
         this.getCountdown();
+        this.loading = false;
       });
     },
     methods: {

@@ -666,7 +666,6 @@
       },
     },
     mounted() {
-      window.scrollTo(0, 0);
       const popup = document.createElement("script");
       popup.setAttribute("src", "https://js.paystack.co/v2/inline.js");
       popup.async = true;
