@@ -15,6 +15,8 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
 import 'aos/dist/aos.css'
 
+window.$ = window.jQuery = require('jquery');
+
 createApp(App).component(VueCountdown.name, VueCountdown);
 
 createApp(App).use(router).use(VueApexCharts).use(infiniteScroll).use(VueSocialSharing).use(Vuex).use(store).mount("#app");

@@ -1,7 +1,7 @@
 <template>
   <div class="loading-screen">
     <div :class="center ? `loading-animation` : `loading-unanimation`">
-      <img src="@/assets/images/logo.png" v-if="loaderImage" class="logo" />
+      <img src="@/assets/images/logo.png" v-if="loaderImage" class="logo-elfrique" />
       <div v-if="loadingBar" class="loading-bar" />
     </div>
   </div>
@@ -57,7 +57,7 @@ export default {
   text-align: center;
 }
 
-.logo {
+.logo-elfrique {
   width: 100px;
   animation: bounce 1.5s infinite ease;
 }
