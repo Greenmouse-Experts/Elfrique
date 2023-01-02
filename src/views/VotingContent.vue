@@ -236,7 +236,8 @@
                             <ProgressBarVue
                               :value="con.voteCount"
                               :total="totalVotes"
-                              :percentage="true"
+                              :percentage="(contest.percentage_result_display === 'true')"
+                              v-if="(contest.progress_result_display === 'true')"
                             />
                           </span>
                         </p>

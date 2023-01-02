@@ -1,5 +1,11 @@
 <template>
     <title>View Organiser | Elfrique - Super Admin</title>
+
+  <template v-if="isLoading">
+    <LoaderVue loaderImage center /> 
+  </template>
+
+  <template v-else>
     <dash-header/>
 
     <!--------Main Content--------->
@@ -82,23 +88,28 @@
     </main>
 
     <dash-footer/>
+  </template>
 </template>
 <style scoped src="@/assets/css/dashStyle.css"></style>
 <script>
     import Header from './dash-header.vue'
     import Footer from './dash-footer.vue'
     import AuthService from '../../service/auth.service'
+  import LoaderVue from '../components/Loader.vue';
+
     export default {
         name: "Elfrique",
         components:{
             'dash-header': Header,
             'dash-footer': Footer,
+            LoaderVue
         },
         data() {
             return {
                 Content: '',
                 size: 10,
                 current_page: 1, 
+                isLoading: true
             }
         }, 
 
@@ -121,6 +132,7 @@
             }
             AuthService.getOrganizers().then(response => {
                 this.Content = response.data.users;
+                this.isLoading = false;
                 //console.log(this.Content);
             })
         },

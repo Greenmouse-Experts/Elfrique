@@ -61,6 +61,10 @@ class EventService {
     return axios.get(API_URL + "getAllShortUrl", { headers: authHeader2() });
   }
 
+  deleteShortUrl(id) {
+    return axios.get(API_URL + "deleteUrl/" + id);
+  }
+
   getSingleEvent(id) {
     return axios.get(API_URL + "getSingleEvent/" + id, {
       headers: authHeader(),

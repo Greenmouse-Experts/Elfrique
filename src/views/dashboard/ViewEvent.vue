@@ -86,15 +86,15 @@
                       </div>
                     </td>
                     <td>
-                      <router-link
-                        :to="
+                      <a
+                        :href="
                           'http://sandbox.elfrique.com/ticket-content/' + con.id
                         "
                       >
                         {{
                           "http://sandbox.elfrique.com/ticket-content/" + con.id
                         }}
-                      </router-link>
+                      </a>
                     </td>
                   </tr>
                 </tbody>
