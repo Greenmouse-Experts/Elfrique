@@ -762,6 +762,9 @@
           "acceptCryptoPayments",
           this.voteContent.acceptCryptoPayments
         );
+        formData.append("percentage_result_display", false);
+        formData.append("number_result_display", false);
+        formData.append("progress_result_display", false);
 
         if (this.voteContent.category == "peageant") {
           VoteService.createVote(formData).then(

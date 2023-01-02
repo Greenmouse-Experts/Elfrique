@@ -182,7 +182,7 @@
               </button>
             </li>
             <li class="nav-item" role="presentation">
-              <!-- <button
+            <button
                 class="nav-link tabs-button"
                 id="pills-organ-tab"
                 data-bs-toggle="pill"
@@ -193,7 +193,7 @@
                 aria-selected="false"
               >
                 <i class="fas fa-tv"></i> Organisers
-              </button> -->
+              </button>
             </li>
             <li class="nav-item" role="presentation">
               <button
@@ -209,6 +209,20 @@
                 <i class="fas fa-info"></i> Event Details
               </button>
             </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link tabs-button"
+                  id="pills-trans-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-trans"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-trans"
+                  aria-selected="false"
+                >
+                  <i class="fas fa-images"></i> Verify Transaction
+                </button>
+              </li>
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <!--Trivia-->
@@ -330,6 +344,40 @@
                 </div>
               </div>
             </div>
+
+              <!--Verify Transaction-->
+              <div
+                class="tab-pane fade"
+                id="pills-trans"
+                role="tabpanel"
+                aria-labelledby="pills-trans-tab"
+              >
+                <div class="container organiser-area">
+                  <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                      <h1>Verify Transaction</h1>
+                      <h5>
+                        Enter your reference number below to verify your
+                        transaction status
+                      </h5>
+                      <form @submit.prevent="verifyTransaction">
+                        <div class="row">
+                          <div class="col-lg-6">
+                            <label>Reference Number</label>
+                            <input
+                              type="text"
+                              placeholder="Enter Reference Number"
+                              v-model="payload.reference"
+                            />
+                            <button type="submit" class="mt-2">Verify</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
           </div>
         </div>
       </div>
@@ -352,6 +400,7 @@
   import Swal from "sweetalert2";
   import PaymentGateway from "./components/PaymentGateway.vue";
   import LoaderVue from './components/Loader.vue';
+  import transactionService from "../service/transaction.service";
 
   export default {
     name: "Elfrique",
@@ -359,7 +408,8 @@
       "elfrique-header": Header,
       "elfrique-footer": Footer,
       PaymentGateway,
-      LoaderVue
+      LoaderVue,
+      Swal
     },
     data() {
       return {
@@ -369,6 +419,7 @@
         isLoading: true,
         admin_id: "",
         paymentForm: false,
+        disableBtn: false,
         currency_symbol: "",
         toRate: "",
         method: "",
@@ -388,6 +439,9 @@
         paymentGateway: "",
         paymentMethods: ["paystack", "flutterwave", "interswitch", "aimsToGet"],
         selectedGateway: "",
+        payload: {
+          reference: ""
+        }
       };
     },
 
@@ -418,6 +472,27 @@
     },
 
     methods: {
+      verifyTransaction() {
+        this.disableBtn = true;
+        transactionService
+          .verifyTransaction(this.payload)
+          .then((response) => {
+            Swal.fire({
+              icon: "success",
+              text: `The status for Your Trivia Subscription with reference number ${this.payload.reference} is Paid`,
+              confirmButton: 'OK'
+            });
+            this.disableBtn = false;
+          }).catch(err => {
+            Swal.fire({
+              icon: "error",
+              text: err.response.data.message,
+              confirmButton: 'OK'
+            });
+            this.disableBtn = false;
+          })
+      },
+
       convert_price() {
         axios.get("https://ipinfo.io?token=79cd3ae8cbc7b1").then((res) => { 
         axios.get(`http://ip-api.com/json/${res.data.ip}?fields=country,countryCode,currency,as,query`).then((res) => {
