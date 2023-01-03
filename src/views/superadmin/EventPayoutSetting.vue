@@ -37,6 +37,7 @@
               type="button"
               class="btn-close"
               data-bs-dismiss="alert"
+              @click="message = null"
               aria-label="Close"
             ></a>
           </div>
@@ -265,6 +266,7 @@
           cash_company_percent_airtime: "",
           amount_threshold: "",
           set_level: false,
+          amount_deduct: ""
         },
         setLevel: false,
         message: null,
@@ -282,6 +284,9 @@
       updatePayout() {
         delete this.payload.id;
         delete this.payload.product_name;
+        delete this.payload.createdAt;
+        delete this.payload.updatedAt;
+
 
         this.payload.set_level = this.setLevel.toString();
 

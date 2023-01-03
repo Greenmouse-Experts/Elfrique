@@ -398,7 +398,7 @@
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/superadmin/form-payout-setting" class="routers">
+                    <router-link to="/superadmin/trivia-payout-setting" class="routers">
                         <a><i class="bi bi-circle"></i><span>Payout Setting</span></a>
                     </router-link>
                 </li>
