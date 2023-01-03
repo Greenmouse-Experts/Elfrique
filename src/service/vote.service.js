@@ -121,6 +121,10 @@ class VoteService {
   getAllContestForAdmin() {
     return axios.get(API_URL + "getAllContests", { headers: spHeader() });
   }
+
+  resultSetting(id, payload) {
+    return axios.patch(API_URL + "updateVoteResultSetting/" + id, payload, {headers: spHeader()})
+  }
 }
 
 export default new VoteService();
