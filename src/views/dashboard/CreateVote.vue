@@ -108,7 +108,7 @@
               <!--Timezone-->
               <div class="col-lg-12 mt-4">
                 <label for="select timezone">Select Your Timezone</label>
-                <select name="timezone" id="timezone" required>
+                <select name="timezone" id="timezone" required v-model="votecontent.timezone">
                   <option value="Africa/Abidjan">Africa/Abidjan</option>
                   <option value="Africa/Accra">Africa/Accra</option>
                   <option value="Africa/Addis_Ababa">Africa/Addis_Ababa</option>
@@ -762,6 +762,9 @@
           "acceptCryptoPayments",
           this.voteContent.acceptCryptoPayments
         );
+        formData.append("percentage_result_display", this.voteContent.percentageResultDisplay);
+        formData.append("number_result_display", this.voteContent.numberResultDisplay);
+        formData.append("progress_result_display", this.voteContent.progressResultDisplay);
 
         if (this.voteContent.category == "peageant") {
           VoteService.createVote(formData).then(

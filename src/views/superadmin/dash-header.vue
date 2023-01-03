@@ -166,11 +166,6 @@
                         <a><i class="bi bi-circle"></i><span>View Organisers</span></a>
                     </router-link>
                 </li>
-                <li>
-                    <router-link to="/superadmin/short-links" class="routers">
-                        <a><i class="bi bi-circle"></i><span>Short Links</span></a>
-                    </router-link>
-                </li>
                 <!-- <li>
                     <router-link to="/superadmin/subscribers" class="routers"><a><i class="bi bi-circle"></i><span>Subscribers</span></a>
                     </router-link>
@@ -234,11 +229,11 @@
                         <a><i class="bi bi-circle"></i><span>Pending Online</span></a>
                     </router-link>
                 </li> -->
-                <!-- <li>
+                <li>
                     <router-link to="/superadmin/vote-payout-setting" class="routers">
                         <a><i class="bi bi-circle"></i><span>Payout Setting</span></a>
                     </router-link>
-                </li> -->
+                </li>
                 <!-- <li>
                     <router-link to="/superadmin/view-categories" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Categories</span></a>
@@ -402,6 +397,12 @@
                         <a><i class="bi bi-circle"></i><span>Sales Analytics</span></a>
                     </router-link>
                 </li>
+                <li>
+                    <router-link to="/superadmin/form-payout-setting" class="routers">
+                        <a><i class="bi bi-circle"></i><span>Payout Setting</span></a>
+                    </router-link>
+                </li>
+
                 <!-- <li>
                     <router-link to="/superadmin/view-result" class="routers">
                         <a><i class="bi bi-circle"></i><span>View Results</span></a>

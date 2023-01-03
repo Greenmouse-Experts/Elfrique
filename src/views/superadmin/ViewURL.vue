@@ -25,6 +25,12 @@
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body card-table">
+
+                <div class= 'alert-success alert  alert-dismissible fade show' role="alert">
+                      Message
+                      <a type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+                    </div>
+
                 <!--Table-->
                 <table class="table datatable card-table-table" id="viewTableUrl">
                   <thead>
@@ -51,7 +57,7 @@
                       <td>{{ format_date(con.createdAt) }}</td>
                       <td class="td-link"><a href="#"></a></td>
                       <td>
-                        <button type="button" class="table-delete-button">
+                        <button type="button" @click="deleteURL(con.id)" class="table-delete-button">
                           Delete
                         </button>
                       </td>
@@ -124,6 +130,13 @@
           return moment(String(value)).format("MM/DD/YYYY hh:mm");
         }
       },
+
+      deleteURL(id) {
+        EventService.deleteShortUrl(id).then(
+        (response) => {
+          console.log(response);
+        });
+      }
     },
     mounted() {
       window.scrollTo(0, 0);

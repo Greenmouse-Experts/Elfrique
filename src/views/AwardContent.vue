@@ -2,6 +2,13 @@
   <title>
     Vote Management System | Elfrique – Complete Event Management System
   </title>
+
+  <template v-if="isLoading">
+    <LoaderVue loaderImage center /> 
+  </template>
+
+  <template v-else>
+
   <elfrique-header />
 
   <section class="voting-content">
@@ -304,15 +311,16 @@
                       Enter your reference number below to verify your
                       transaction status
                     </h5>
-                    <form>
+                    <form @submit.prevent="verifyTransaction">
                       <div class="row">
                         <div class="col-lg-6">
                           <label>Reference Number</label>
                           <input
                             type="text"
                             placeholder="Enter Reference Number"
+                            v-model="payload.reference"
                           />
-                          <button type="submit" class="mt-2">Verify</button>
+                          <button type="submit" :disabled="disableBtn" class="mt-2">Verify</button>
                         </div>
                       </div>
                     </form>
@@ -327,6 +335,7 @@
   </section>
 
   <elfrique-footer />
+  </template>
 </template>
 
 <script>
@@ -337,17 +346,22 @@ import PieChart from "../Chart/PieChart.vue";
 import PolarChart from "../Chart/PolarChart.vue";
 import moment from "moment";
 import VoteService from "../service/vote.service";
+  import LoaderVue from './components/Loader.vue';
+import transactionService from '../service/transaction.service';
+
 export default {
   name: "Elfrique",
   components: {
     "elfrique-header": Header,
     "elfrique-footer": Footer,
+    LoaderVue
   },
   data() {
     return {
       contest: "",
       ended: false,
       endDate: "",
+      disableBtn: false,
       countdown: {
         months: 0,
         days: 0,
@@ -357,6 +371,10 @@ export default {
       },
       chartType: "",
       label: 0,
+      isLoading: true,
+      payload: {
+        reference: ""
+      }
     };
   },
   computed: {
@@ -369,10 +387,32 @@ export default {
     VoteService.getSingleAward(this.$route.params.id).then((response) => {
       this.contest = response.data.awards;
       this.endDate = response.data.awards.closedate;
+      this.isLoading = false;
       this.getCountdown();
     });
   },
   methods: {
+      verifyTransaction() {
+        this.disableBtn = true;
+        transactionService
+          .verifyTransaction(this.payload)
+          .then((response) => {
+            Swal.fire({
+              icon: "success",
+              text: `The status for Your Vote with reference number ${this.payload.reference} is Paid`,
+              confirmButton: 'OK'
+            });
+            this.disableBtn = false;
+          }).catch(err => {
+            Swal.fire({
+              icon: "error",
+              text: err.response.data.message,
+              confirmButton: 'OK'
+            });
+            this.disableBtn = false;
+          })
+      },
+
     getCountdown() {
       var endCount = moment(this.endDate).format("YYYY-MM-DDT11:00:00Z");
 

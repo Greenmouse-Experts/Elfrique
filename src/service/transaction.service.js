@@ -35,6 +35,10 @@ class TransactionService {
       headers: authHeader(),
     });
   }
+
+  verifyTransaction(payload) {
+    return axios.post(API_URL + "verifyTransaction", payload, {});
+  }
 }
 
 export default new TransactionService();

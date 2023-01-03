@@ -236,7 +236,8 @@
                             <ProgressBarVue
                               :value="con.voteCount"
                               :total="totalVotes"
-                              :percentage="true"
+                              :percentage="(contest.percentage_result_display === 'true')"
+                              v-if="(contest.progress_result_display === 'true')"
                             />
                           </span>
                         </p>
@@ -331,15 +332,16 @@
                       Enter your reference number below to verify your
                       transaction status
                     </h5>
-                    <form>
+                    <form @submit.prevent="verifyTransaction">
                       <div class="row">
                         <div class="col-lg-6">
                           <label>Reference Number</label>
                           <input
                             type="text"
                             placeholder="Enter Reference Number"
+                            v-model="payload.reference"
                           />
-                          <button type="submit" class="mt-2">Verify</button>
+                          <button type="submit" :disabled="disableBtn" class="mt-2">Verify</button>
                         </div>
                       </div>
                     </form>
@@ -366,6 +368,7 @@
   import VoteService from "../service/vote.service";
   import ProgressBarVue from "./components/ProgressBar.vue";
   import LoaderVue from './components/Loader.vue';
+import transactionService from '../service/transaction.service';
 
   export default {
     name: "Elfrique",
@@ -384,6 +387,7 @@
         ended: false,
         endDate: "",
         loading: true,
+        disableBtn: false,
         countdown: {
           months: 0,
           days: 0,
@@ -394,6 +398,9 @@
         chartType: "",
         label: 0,
         totalVotes: 0,
+        payload: {
+          reference: ""
+        }
       };
     },
     computed: {
@@ -414,6 +421,26 @@
       });
     },
     methods: {
+      verifyTransaction() {
+        this.disableBtn = true;
+        transactionService
+          .verifyTransaction(this.payload)
+          .then((response) => {
+            Swal.fire({
+              icon: "success",
+              text: `The status for Your Vote with reference number ${this.payload.reference} is Paid`,
+              confirmButton: 'OK'
+            });
+            this.disableBtn = false;
+          }).catch(err => {
+            Swal.fire({
+              icon: "error",
+              text: err.response.data.message,
+              confirmButton: 'OK'
+            });
+            this.disableBtn = false;
+          })
+      },
       getTotalVotes(contest) {
         let sum = 0;
         contest.contestants.forEach((contenstant) => {

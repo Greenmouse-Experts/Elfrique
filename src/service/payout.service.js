@@ -70,6 +70,14 @@ class PayoutService {
   allEventsforAdmin() {
     return axios.get(API_URL + "getEvents", { headers: authHeader() });
   } */
+
+  getAllPayOut(params) {
+    return axios.get(API_URL + "getPayout/" + params, { headers: authHeader() });
+  }
+
+  updatePayOut(params, payload) {
+    return axios.patch(API_URL + "updatePayout/" + params, payload, { headers: authHeader() });
+  }
 }
 
 export default new PayoutService();

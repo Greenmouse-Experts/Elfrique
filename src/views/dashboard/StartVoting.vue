@@ -60,6 +60,21 @@
                                 <input v-model="votecontent.contestantProfileView" class="radio" type="radio" name="contestant" id="on" value="on"> <span>On</span>
                             </div>
                             <div class="col-lg-12 mt-4">
+                                <label for="category selection">Display Result Percentage</label>
+                                <input v-model="votecontent.percentageResultDisplay" class="radio" type="radio" name="percentage_result_display" id="true"  :value="true"> <span>Yes</span>
+                                <input v-model="votecontent.percentageResultDisplay" class="radio" type="radio" name="percentage_result_display" id="false"  :value="false"> <span>No</span>
+                            </div>
+                            <div class="col-lg-12 mt-4">
+                                <label for="category selection">Display Result Numbers</label>
+                                <input v-model="votecontent.numberResultDisplay" class="radio" type="radio" name="number_result_display" id="true"  :value="true"> <span>Yes</span>
+                                <input v-model="votecontent.numberResultDisplay" class="radio" type="radio" name="number_result_display" id="false"  :value="false"> <span>No</span>
+                            </div>
+                            <div class="col-lg-12 mt-4">
+                                <label for="category selection">Display Result Progress Bar</label>
+                                <input v-model="votecontent.progressResultDisplay" class="radio" type="radio" name="progress_result_display" id="true"  :value="true"> <span>Yes</span>
+                                <input v-model="votecontent.progressResultDisplay" class="radio" type="radio" name="progress_result_display" id="false"  :value="false"> <span>No</span>
+                            </div>
+                            <div class="col-lg-12 mt-4">
                                 <label for="preferred payment gateway">Select Preferred Payment Gateway</label>
                                 <select v-model="votecontent.preferredPaymentGateway" name="gateway" id="gateway" required>
                                     <option value="paystack">Paystack</option>
@@ -106,6 +121,9 @@
                     dailyVoteLimit:'unlimited',
                     preferredPaymentGateway:'',
                     acceptCryptoPayments:'on',
+                    percentageResultDisplay: true,
+                    numberResultDisplay: true,
+                    progressResultDisplay: true
               }
           }
           
@@ -130,7 +148,7 @@
 
       methods:{
           startVoting(){
-              this.$store.dispatch('vote/getVoteContent',this.votecontent).then(
+             this.$store.dispatch('vote/getVoteContent',this.votecontent).then(
             () => {
             //console.log(this.$store.state.vote.voteContent)
               this.$router.push('/organiser/create-voting');
