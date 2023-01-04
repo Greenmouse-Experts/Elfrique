@@ -188,7 +188,6 @@
 
             EvisaService.getEvisas().then(response => {
                 this.content = response.data.evisa;
-                console.log(this.content);
             }
             )
         },

@@ -26,9 +26,19 @@
                 {{error}}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div  v-if="message" class= 'alert-success alert  alert-dismissible fade show' role="alert">
-                {{message}} 
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div
+              v-if="clipMessage"
+              class="alert-success alert alert-dismissible fade show"
+              role="alert"
+            >
+              {{ clipMessage }}
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+                @click="clipMessage = null"
+              ></button>
             </div>
             <div v-if="successful" class="created-url-here mt-5">
               <h3 class="mb-3 text-dark font-weight-bold">Your new created Short-URL:</h3>
@@ -82,9 +92,8 @@
                 alias: '',
                 longUrl: '',
                 shortUrl: '',
-            }
-            
-    
+            },
+        clipMessage: "",
             }  
         },
       computed: {
@@ -101,6 +110,19 @@
     },
 
     methods:{
+      copyURL() {
+        var copyText = document.getElementById("input");
+
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+
+        this.clipMessage = "Link copied to clipboard";
+      },
+
         createURL(){
             this.loading = true;
             let urlForm = {
