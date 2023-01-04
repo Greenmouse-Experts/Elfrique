@@ -216,6 +216,7 @@ import SuperAdminFomSearchForm from "../views/superadmin/SearchForm.vue";
 import SuperAdminTriOverviewTrivia from "../views/superadmin/OverviewTrivia.vue";
 import SuperAdminTriCreateTrivia from "../views/superadmin/CreateTrivia.vue";
 import SuperAdminTriViewTrivia from "../views/superadmin/ViewTrivia.vue";
+import SuperAdminPayoutTrivia from "../views/superadmin/triviaPayout.vue";
 import SuperAdminTriUpdateTrivia from "../views/superadmin/UpdateTrivia.vue";
 import SuperAdminTriViewResult from "../views/superadmin/ViewResult.vue";
 import SuperAdminTriTriviaCashPayment from "../views/superadmin/TriviaCashPayment.vue";
@@ -1148,6 +1149,11 @@ const routes = [
     path: "/superadmin/view-trivia",
     name: "SuperAdminTriViewTrivia",
     component: SuperAdminTriViewTrivia,
+  },
+  {
+    path: "/superadmin/trivia-payout-setting",
+    name: "SuperAdminPayoutTrivia",
+    component: SuperAdminPayoutTrivia,
   },
   {
     path: "/superadmin/update-trivia",

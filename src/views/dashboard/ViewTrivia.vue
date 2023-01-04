@@ -57,7 +57,7 @@
                         width="150"
                       />
                     </td>
-                    <td>{{ con.duration }}</td>
+                    <td>{{ con.duration }} minutes</td>
                     <td></td>
                     <td></td>
                     <td></td>

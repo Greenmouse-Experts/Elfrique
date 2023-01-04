@@ -10,7 +10,7 @@
             </h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><router-link to="/organiser/dashboard" class="routers"><a>Home</a></router-link></li>
+                    <li class="breadcrumb-item"><router-link to="/superadmin/dashboard" class="routers"><a>Home</a></router-link></li>
                     <li class="breadcrumb-item active">Trivia</li>
                     <li class="breadcrumb-item active">Trivia Sales Analytics</li>
                 </ol>
@@ -20,16 +20,16 @@
         <div class="container start-voting-div">
             <div class="row justify-content-center">
                 <div class="col-lg-12 start-voting-inner-div">
-                    <form>
+                    <form @submit.prevent="getBookedTicket">
                         <div class="row">
                             <div class="col-lg-12 mt-4">
-                                <select name="gateway" id="gateway">
+                                <select name="gateway" v-model="triviaId" id="gateway">
                                     <option value="select vote option">Select Your Trivia Option</option>
-                                    <option value="select vote option">Select Your Trivia <Option-1></Option-1></option>
+                                    <option v-for="item in trivias" :key="item" :value="item.id" >{{item.title}}</option>
                                 </select>
                             </div>
                             <div class="col-lg-12 mt-4">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">View Analytics</button>
+                                <button type="submit" data-bs-toggle="modal" data-bs-target="#staticBackdrop">View Analytics</button>
                             </div>
                         </div>
                     </form>
@@ -50,7 +50,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
-                    <div class="card-body card-table">
+                    <div class="card-body card-table" id="TicketBooked">
                         <div class="buttons-table">
                             <button type="button">Copy</button>
                             <button type="button">CSV</button>
@@ -67,33 +67,31 @@
                         <table class="table datatable card-table-table">
                             <thead>
                             <tr>
-                                <th scope="col">Email	</th>
+                                <th scope="col">S/N</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Reference	</th>
+                                <th scope="col">Description	</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Payment gateway</th>
                                 <th scope="col">Date added</th>
-                                <th scope="col">Country</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                                <tr v-for="(item, i) in ticketBooked" :key="item.id">
+                                  <th scope="row">{{i + 1}}</th>
+                                  <th>{{item.title}}</th>
+                                  <td>{{item.details}}</td>
+                                  <td v-if="item.amount">{{item.currency}} {{item.amount}}</td>
+                                  <td v-else>Free</td>
+                                  <td v-if="item.status">On</td>
+                                  <td v-else> Off </td>
+                                  <td>{{item.paymentgateway}}</td>
+                                  <td>{{new Date(item.createdAt).getDate()}}/{{new Date(item.createdAt).getMonth() + 1}}/{{new Date(item.createdAt).getFullYear()}}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>  
                     <div class="analyticsNote">
-                        <p>Number of people that paid : 2</p>
-                        <p>Total Amount : NGN700</p>
                     </div>
                     <div class="analyticsLinkBelow">
                         <!-- <a href="#">View narration so far</a> -->
@@ -115,12 +113,65 @@
 <script>
     import Header from './dash-header.vue'
     import Footer from './dash-footer.vue'
+import triviaService from '../../service/trivia.service'
+  import LoaderVue from "../components/Loader.vue";
+
     export default {
       name: "Elfrique",
       components:{
       'dash-header': Header,
       'dash-footer': Footer,
+      LoaderVue
       },
+      data(){
+            return{
+            trivias: [],
+            triviaId: '',
+            ticketBooked: [],
+            message: '',
+            error: '',
+            loading: false,
+            }  
+        },
+        computed: {
+        loggedIn() {
+            return this.$store.state.auth.status.loggedIn;
+            },
+  },
+
+  created() {
+
+     if (!this.loggedIn) {
+      this.$router.push('/login');
+    }
+
+
+    triviaService.getAllTrivias().then
+    (
+        response => {
+            this.trivias = response.data.trivias;
+        }
+    )
+    },
+
+    methods: {
+        getBookedTicket(){
+            this.loading = true;
+            this.ticketBooked = [];
+            triviaService.getSingleTrivia(this.triviaId).then(res => {
+                this.loading = false;
+                this.ticketBooked.push(res.data.trivia)
+                setTimeout(function () {
+                    $("#TicketBooked").DataTable({
+                    dom: "Bfrtip",
+                    pageLength: 10,
+                    buttons: ["copy", "csv", "excel", "pdf", "print"],
+                    });
+                }, 1000);
+                //console.log(res.data)
+            })
+        }
+    },
       mounted(){
         window.scrollTo(0,0)
       }

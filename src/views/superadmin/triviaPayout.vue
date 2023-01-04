@@ -1,11 +1,11 @@
 <template>
-  <title>Vote Payout Setting | Elfrique - Super Admin</title>
+  <title>Event Payout Setting | Elfrique - Super Admin</title>
   <dash-header />
 
   <!--------Main Content--------->
   <main id="main" class="main">
     <div class="pagetitle">
-      <h1 class="create">Payout Setting</h1>
+      <h1>Payout Setting</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
@@ -13,9 +13,9 @@
               ><a>Home</a></router-link
             >
           </li>
-          <li class="breadcrumb-item active">Voting</li>
-          <li class="breadcrumb-item active">
-            <router-link to="/superadmin/overview-voting" class="routers"
+          <li class="breadcrumb-item active">Registration</li>
+          <li class="breadcrumb-item">
+            <router-link to="/superadmin/overview-registration" class="routers"
               ><a>Overview</a></router-link
             >
           </li>
@@ -37,6 +37,7 @@
               type="button"
               class="btn-close"
               data-bs-dismiss="alert"
+              @click="message = null"
               aria-label="Close"
             ></a>
           </div>
@@ -45,9 +46,9 @@
         <form @submit.prevent="updatePayout">
           <div class="row justify-content-center">
             <div class="col-lg-11 event-details-header">
-              Update Vote Payout Presetting
+              Update Trivia Payout Presetting
             </div>
-            <!--Update Vote Payout Presetting DIV-->
+            <!--Update Event Payout Presetting DIV-->
             <div class="col-lg-11 start-voting-inner-div">
               <div class="row">
                 <!--Payment Gateway (Local)-->
@@ -248,6 +249,7 @@
     components: {
       "dash-header": Header,
       "dash-footer": Footer,
+      PayoutService,
     },
 
     data() {
@@ -264,6 +266,7 @@
           cash_company_percent_airtime: "",
           amount_threshold: "",
           set_level: false,
+          amount_deduct: ""
         },
         setLevel: false,
         message: null,
@@ -271,7 +274,7 @@
     },
 
     created() {
-      PayoutService.getAllPayOut("Voting").then((response) => {
+      PayoutService.getAllPayOut("Trivia").then((response) => {
         this.payload = response.data.payout;
         this.setLevel = response.data.payout.set_level;
       });
@@ -284,12 +287,13 @@
         delete this.payload.createdAt;
         delete this.payload.updatedAt;
 
+
         this.payload.set_level = this.setLevel.toString();
 
-        PayoutService.updatePayOut("Voting", this.payload).then((response) => {
+        PayoutService.updatePayOut("Trivia", this.payload).then((response) => {
           this.message = response.data.message;
           window.scrollTo(0, 0);
-          PayoutService.getAllPayOut("Voting").then((response) => {
+          PayoutService.getAllPayOut("Trivia").then((response) => {
             this.payload = response.data.payout;
             this.setLevel = response.data.payout.set_level;
           });
