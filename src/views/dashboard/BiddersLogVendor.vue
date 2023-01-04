@@ -172,7 +172,7 @@ export default {
     };
   },
   created() {
-    vendorService.getAllSellerJob().then((response) => {
+    vendorService.getAllJobs().then((response) => {
       this.content = response.data;
     });
   },

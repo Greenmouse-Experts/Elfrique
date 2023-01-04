@@ -196,6 +196,7 @@
             this.payload.number_result_display = false;
             this.payload.progress_result_display = false;
             this.payload.percentage_result_display = false;
+            this.display = false;
             window.scrollTo(0, 0);
           })
           .catch((err) => {

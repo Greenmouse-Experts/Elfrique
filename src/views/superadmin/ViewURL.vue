@@ -26,11 +26,6 @@
             <div class="card">
               <div class="card-body card-table">
 
-                <div class= 'alert-success alert  alert-dismissible fade show' role="alert">
-                      Message
-                      <a type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
-                    </div>
-
                 <!--Table-->
                 <table class="table datatable card-table-table" id="viewTableUrl">
                   <thead>
@@ -134,7 +129,27 @@
       deleteURL(id) {
         EventService.deleteShortUrl(id).then(
         (response) => {
-          console.log(response);
+           EventService.getAllShortUrls().then(
+        (response) => {
+            this.content = response.data.data;
+          setTimeout(function () {
+            
+            $("#viewTableUrl").DataTable({
+              dom: "Bfrtip",
+              pageLength: 10,
+              buttons: ["copy", "csv", "excel", "pdf", "print"],
+            });
+          }, 1000);
+        },
+        (error) => {
+          this.message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+        }
+      );
         });
       }
     },

@@ -62,7 +62,7 @@ class EventService {
   }
 
   deleteShortUrl(id) {
-    return axios.get(API_URL + "deleteUrl/" + id);
+    return axios.patch(API_URL + "deleteUrl/" + id);
   }
 
   getSingleEvent(id) {
