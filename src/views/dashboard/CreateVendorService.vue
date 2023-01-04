@@ -36,6 +36,15 @@
                             <form name="form" @submit.prevent="createJobs">
                                 <div class="row">
      
+                                         <div class="col-lg-12 mt-4">
+                                        <label for="vote option">Category</label>
+                                        <select v-model="category" name="eventCategory" id="gateway" aria-placeholder="Select Categories" required>
+                                            <option value="select vote option" disabled >Select Your Vote Option</option>
+                                            <option :value="con.title" v-for="con in categoryArr" :key="con.id" >{{con.name}}</option>
+
+                                        </select>
+                                    </div>
+
                                     <div class="col-lg-12 mt-4">
                                         <label for="vote option">Event Name</label>
                                         <select v-model="eventId" name="gateway" id="gateway" aria-placeholder="Select your event name" required>
@@ -90,7 +99,6 @@
 </template>
 <style scoped src="@/assets/css/dashStyle.css"></style>
 <script>
-
     import Header from './dash-header.vue'
     import Footer from './dash-footer.vue'
     import EventService from '../../service/event.service'
@@ -114,9 +122,55 @@
                 description: '',
                 title: '',
                 price: '',
+            },
+            category: "",
+            categoryArr: [
+                {
+                id: 1,
+                name: "Event Decorators",
+                title: "eventdecorators"
+            },
+            {
+                id: 2,
+                name: "Photographers",
+                title: "photographers"
+            },
+            {
+                id: 3,
+                name: "Caterers",
+                title: "caterers"
+            },
+            {
+                id: 4,
+                name: "Disc Jockey",
+                title: "discJockey"
+            },
+            {
+                id: 5,
+                name: "Fashion Designers",
+                title: "fashionDesigners"
+            },
+            {
+                id: 6,
+                name: "Event Planers",
+                title: "eventPlaners"
+            },
+            {
+                id: 7,
+                name: "Invitations and Printing",
+                title: "invitationsAndPrinting"
+            },
+            {
+                id: 8,
+                name: "Make up Artist",
+                title: "makeUpArtist",
+            },
+            {
+                id: 9,
+                name: "Others",
+                title: "others"
             }
-            
-    
+            ]
             }  
         },
         computed: {
@@ -157,8 +211,8 @@
             formData.append('job_type', this.job.title);
             formData.append('job_description', this.job.description);
             formData.append('budget', this.job.price);
+            formData.append('eventCategory', this.category);
             
-
             VendorService.createJobs(formData, this.eventId).then(response => {
                     
                     this.message = `${this.job.title} JOB Created Successfully`;
