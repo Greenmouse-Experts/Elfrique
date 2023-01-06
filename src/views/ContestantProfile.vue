@@ -350,8 +350,8 @@
 
     methods: {
       convert_price() {
-        axios.get("http://ipinfo.io?token=79cd3ae8cbc7b1").then((res) => { 
-        axios.get(`https://ip-api.com/json/${res.data.ip}?fields=country,countryCode,currency,as,query`).then((res) => {
+        axios.get("https://ipinfo.io?token=79cd3ae8cbc7b1").then((res) => { 
+        axios.get(`http://ip-api.com/json/${res.data.ip}?fields=country,countryCode,currency,as,query`).then((res) => {
           let currency = res.data.currency;
           if (currency === 'NGN' || currency === 'GHS' || currency === 'KES') {
             axios
