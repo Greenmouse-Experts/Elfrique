@@ -100,8 +100,8 @@ export default {
       this.$router.push("/login");
     }
 
-    TriviaService.getTrivias().then((response) => {
-      this.content = response.data.trivia;
+    TriviaService.getAllTrivias().then((response) => {
+      this.content = response.data.trivias;
       setTimeout(function () {
         $("#example").DataTable({
           dom: "Bfrtip",

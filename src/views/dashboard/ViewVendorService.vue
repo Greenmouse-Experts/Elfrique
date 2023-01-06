@@ -130,7 +130,7 @@ import vendorService from '../../service/vendor.service'
     vendorService.getAllSellerJob().then
     (
         response => {
-            this.content = response.data;
+            this.content = response.data.job;
             setTimeout(function () {
                     $("#vendorJob").DataTable({
                     dom: "Bfrtip",

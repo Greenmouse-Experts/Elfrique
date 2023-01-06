@@ -31,6 +31,18 @@ class TriviaService {
     });
   }
 
+  updateTrivia(id, payload) {
+    return axios.patch(API_URL + "updateTrivia/" + id, payload, {
+      headers: authHeader(),
+    });
+  }
+
+  updateQuestions(id, payload) {
+    return axios.patch(API_URL + "updateQuestion/" + id, payload, {
+      headers: authHeader(),
+    });
+  }
+
   createPlayer(playerForm, triviaId) {
     return axios.post(API_URL + "createPlayer/" + triviaId, {
       email: playerForm.email,

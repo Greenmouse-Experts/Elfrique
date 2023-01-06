@@ -85,7 +85,7 @@
                             </div>
                         </div>
                         <div class="text-under">
-                            <p>By clicking "Sign Up", you agree to the <router-link to="/terms" target="_blank" class="routers"><a>Terms of Use</a></router-link> and <router-link to="/privacy" target="_blank" class="routers"><a>Privacy Policy</a></router-link></p>
+                            <p>By clicking "Sign Up", you agree to the <router-link to="/terms" class="routers"><a>Terms of Use</a></router-link> and <router-link to="/privacy" target="_blank" class="routers"><a>Privacy Policy</a></router-link></p>
                         </div>
                     </div>
                 </div>
