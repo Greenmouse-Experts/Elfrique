@@ -108,6 +108,9 @@
                           </li>
                           <li>
                             <a class="dropdown-item" href="#"
+                            @click="formResponse(con.id)"
+                              data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop"
                               >View Form Response</a
                             >
                           </li>
@@ -126,18 +129,18 @@
                               >Switch To Flutterwave</a
                             >
                           </li>
-                          <li>
+                         <!---- <li>
                             <a class="dropdown-item" href="#">Open Form</a>
-                          </li>
-                          <li><a class="dropdown-item" href="#">Edit</a></li>
+                          </li>-->
+                          <!----<li><a class="dropdown-item" href="#">Edit</a></li>--
                           <li>
                             <a class="dropdown-item" href="#">Payout Setting</a>
-                          </li>
+                          </li>-
                           <li>
                             <a class="dropdown-item" href="#"
                               >Disable Form View</a
                             >
-                          </li>
+                          </li>-->
                           <li><a class="dropdown-item" href="#">Delete</a></li>
                         </ul>
                       </div>
@@ -170,6 +173,129 @@
         </div>
       </div>
     </section>
+
+
+
+        <!-- Modal -->
+    <div
+      class="modal fade"
+      id="staticBackdrop"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl container">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">
+              <b>Form Response</b>
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="card-body card-table">
+                  <div class="buttons-table">
+                    <button type="button">Copy</button>
+                    <button type="button">CSV</button>
+                    <button type="button">Excel</button>
+                    <button type="button">PDF</button>
+                    <button type="button">Print</button>
+                  </div>
+                  <div class="search-table">
+                    <form>
+                      <input type="text" placeholder="Search..." />
+                    </form>
+                  </div>
+                  <!--Table-->
+                  <table class="table datatable card-table-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">S/N</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Form Field Value</th>
+                        <th scope="col">Form Field Name</th>
+                        <th scope="col">Payment Gateway</th>
+                        <th scope="col">Payment Type</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Date Added</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(item, i) in eventTickets" :key="i">
+                        <th scope="row">{{ i + 1 }}</th>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.booked ? item.booked : "" }}</td>
+                        <td>
+                          {{ new Date(item.salesstart).getDate() }}/{{
+                            new Date(item.salesstart).getMonth() + 1
+                          }}/{{ new Date(item.salesstart).getFullYear() }}
+                        </td>
+                        <td>
+                          {{ new Date(item.salesend).getDate() }}/{{
+                            new Date(item.salesend).getMonth() + 1
+                          }}/{{ new Date(item.salesend).getFullYear() }}
+                        </td>
+                        <td>
+                          <a :href="'/ticket-content/' + item.eventId">
+                            Event Link</a
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <nav>
+                    <ul class="pagination pagination-md">
+                      <li class="page-item disabled">
+                        <a class="page-link"
+                          ><span aria-hidden="true">&laquo;</span></a
+                        >
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link"
+                          ><span aria-hidden="true">&raquo;</span></a
+                        >
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="close"
+              id="close"
+              type="button"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </main>
 
   <dash-footer />
@@ -213,6 +339,11 @@ export default {
         return moment(String(value)).format("MM/DD/YYYY hh:mm");
       }
     },
+    formResponse(id) {
+      EventService.getFormResponse(id).then((res) => {
+        console.log(res.data);
+      })
+    }
   },
   mounted() {
     window.scrollTo(0, 0);

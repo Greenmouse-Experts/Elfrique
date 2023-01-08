@@ -13,6 +13,12 @@ class EventService {
     });
   }
 
+  updateEvent(id, eventForm) {
+    return axios.patch(API_URL + "updateEvent/" + id, eventForm, {
+      headers: authHeader(),
+    });
+  }
+
   createRef(dataForm) {
     return axios.post(API_URL + "userEventReferral", dataForm, {
       headers: authHeader2(),
@@ -63,6 +69,10 @@ class EventService {
 
   deleteShortUrl(id) {
     return axios.patch(API_URL + "deleteUrl/" + id);
+  }
+
+  deleteEvent(id) {
+    return axios.delete(API_URL + "deleteEvent/" + id);
   }
 
   getSingleEvent(id) {

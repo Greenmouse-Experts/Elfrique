@@ -125,6 +125,10 @@ class VoteService {
   resultSetting(id, payload) {
     return axios.patch(API_URL + "updateVoteResultSetting/" + id, payload, {headers: spHeader()})
   }
+
+  updateVotingContest(id, payload) {
+    return axios.patch(API_URL + "updateVote/" + id, payload, { headers: spHeader() })
+  }
 }
 
 export default new VoteService();

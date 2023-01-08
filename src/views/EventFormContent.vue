@@ -638,13 +638,12 @@
       },
 
       convert_price() {
-        axios.get("https://ipinfo.io?token=79cd3ae8cbc7b1").then((res) => {
           axios
             .get(
-              `https://ip-api.com/json/${res.data.ip}?fields=country,countryCode,currency,as,query`
+              `https://ipgeolocation.abstractapi.com/v1/?api_key=b7acd834a4b846e9b9476c67e52b76eb`
             )
             .then((res) => {
-              let currency = res.data.currency;
+              let currency = res.data.currency.currency_code;
               if (
                 currency === "NGN" ||
                 currency === "GHS" ||
@@ -665,7 +664,6 @@
                   });
               }
             });
-        });
       },
       getCountdown() {
         var endCount = moment(this.endDate).format("YYYY-MM-DDT11:00:00Z");

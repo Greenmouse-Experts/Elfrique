@@ -57,6 +57,12 @@ class VendorService {
     });
   }
 
+  deleteJob(eventId, id) {
+    return axios.delete(API_URL + "deletejob/" + eventId + "/" + id, {
+      headers: authHeader(),
+    });
+  }
+
   createAdvert(advertForm) {
     return axios.post(API_URL + "createAds", advertForm, {
       headers: authHeader(),

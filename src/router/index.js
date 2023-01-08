@@ -74,6 +74,7 @@ import DashCreateEvent from "../views/dashboard/CreateEvent.vue";
 import DashAddTicket from "../views/dashboard/AddTicket.vue";
 import DashAddQuestion from "../views/dashboard/AddQuestion.vue";
 import DashViewEvent from "../views/dashboard/ViewEvent.vue";
+import DashEditEvent from "../views/dashboard/EditEvent.vue";
 /* LATEST IMPORT FROM HAMZAT; */
 import CreateReferral from "../views/dashboard/CreateReferral.vue";
 import ViewReferral from "../views/dashboard/ViewReferral.vue";
@@ -181,12 +182,14 @@ import SuperAdminGenViewFaq from "../views/superadmin/ViewFAQs.vue";
 import SuperAdminVotOverviewVoting from "../views/superadmin/OverviewVoting.vue";
 import SuperAdminVotViewContest from "../views/superadmin/ViewContest.vue";
 import SuperAdminVotVotePayoutSetting from "../views/superadmin/VotePayoutSetting.vue";
+import SuperAdminUpdateVote from "../views/superadmin/UpdateVote.vue";
 import SuperAdminVotStartVoting from "../views/superadmin/StartVoting.vue";
 import SuperAdminVotCreateVote from "../views/superadmin/CreateVote.vue";
 import SuperAdminVotAddContestant from "../views/superadmin/AddContestant.vue";
 import SuperAdminVotAddSponsors from "../views/superadmin/AddSponsors.vue";
 import SuperAdminVotAddCategory from "../views/superadmin/AddCategory.vue";
 import SuperAdminVotAddInfo from "../views/superadmin/AddInfo.vue";
+import SuperAdminDashEditEvent from "../views/superadmin/EditEvent.vue";
 import SuperAdminVotViewContestants from "../views/superadmin/ViewContestants.vue";
 import SuperAdminVotVoteSalesAnalytics from "../views/superadmin/VoteSalesAnalytics.vue";
 import SuperAdminVotResultSetting from "../views/superadmin/ResultSetting.vue";
@@ -372,6 +375,11 @@ const routes = [
     component: TriTriviaContent,
   },
   {
+    path: "/superadmin/updateContest/:id",
+    name: "SuperAdminUpdateVote",
+    component: SuperAdminUpdateVote,
+  },
+  {
     path: "/trivia-content-instruction/:id",
     name: "TriTriviaContentInstruction",
     component: TriTriviaContentInstruction,
@@ -527,6 +535,11 @@ const routes = [
     path: "/organiser/view-event",
     name: "DashViewEvent",
     component: DashViewEvent,
+  },
+  {
+    path: "/organiser/edit-event/:id",
+    name: "DashEditEvent",
+    component: DashEditEvent,
   },
   // LASTEST CHANGES FROM HAMZAT
   {
@@ -1067,6 +1080,11 @@ const routes = [
     path: "/superadmin/personal-ticket",
     name: "SuperAdminRegPersonalTicket",
     component: SuperAdminRegPersonalTicket,
+  },
+  {
+    path: "/superadmin/edit-event/:id",
+    name: "SuperAdminDashEditEvent",
+    component: SuperAdminDashEditEvent,
   },
   {
     path: "/superadmin/event-cash-payment",
