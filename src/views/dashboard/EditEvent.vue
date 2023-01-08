@@ -1193,7 +1193,7 @@
 
     created() {
       if (!this.loggedIn) {
-        this.$router.push("/login");
+        this.$router.push("/login") ;
       }
 
         EventService.getSingleEvent(this.$route.params.id).then((res) => {
