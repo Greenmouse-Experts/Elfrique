@@ -83,6 +83,10 @@ class EventForm {
   allFormForAdmin() {
     return axios.get(API_URL + "allForms", { headers: authHeader() });
   }
+
+  getFormResponse(id) {
+    return axios.get(API_URL + "getFormReplies/" + id, { headers: authHeader() });
+  }
 }
 
 export default new EventForm();

@@ -113,9 +113,9 @@
             }
         }, 
 
-        computed: {
-            loggedIn() {
-                return this.$store.state.admin.status.loggedIn;
+    computed: {
+    loggedIn() {
+            return this.$store.state.admin.status.loggedIn;
             },
             resultQUery(){
                 return this.Content.filter((row, index) => {

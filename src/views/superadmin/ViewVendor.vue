@@ -67,7 +67,8 @@
                                     {{item.location}}
                                 </td>
                                 <td>
-                                    <button style="color: #000 !important; " class="btn btn-danger btn-sm mx-1 text-dark m-1">
+                                    <button
+                              @click="modalDelete(item.id, item.eventId)" class="btn btn-danger btn-sm mx-1 text-white m-1">
                                         Delete
                                     </button>
                                 </td>
@@ -91,11 +92,14 @@
     import Footer from './dash-footer.vue'
     import EventService from '../../service/event.service'
 import vendorService from '../../service/vendor.service.js'
+import Swal from "sweetalert2";
+
     export default {
       name: "Elfrique",
       components:{
       'dash-header': Header,
-      'dash-footer': Footer,
+          'dash-footer': Footer,
+      Swal
       },
       data(){
             return{
@@ -130,6 +134,7 @@ import vendorService from '../../service/vendor.service.js'
     (
         response => {
             this.content = response.data;
+            console.log(this.content);
             setTimeout(function () {
                     $("#vendorJob").DataTable({
                     dom: "Bfrtip",
@@ -144,7 +149,24 @@ import vendorService from '../../service/vendor.service.js'
     },
 
     methods:{
-        
+      modalDelete(id, eventId) {
+        Swal.fire({
+          title: "Do you want to Delete this Vendor Service?",
+          showDenyButton: true,
+          confirmButtonText: "Yes",
+          denyButtonText: "No",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                vendorService.deleteJob(eventId, id).then((res) => {
+                Swal.fire(res.data.message, "success");
+                }).catch((err) => {
+                Swal.fire(err.response.data.message, "error");
+            })
+          } else if (result.isDenied) {
+            Swal.fire("Could not Delete Contest", "", "info");
+          }
+        });
+      },
      },
       mounted(){
         window.scrollTo(0,0)

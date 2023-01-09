@@ -59,15 +59,17 @@
                     <td>{{ con.id }}</td>
                     <td>{{ con.title }}</td>
                     <td><img :src="con.image" /></td>
-                    <td>{{ new Date(con.startdate).getDate() }}/{{ new Date(con.startdate).getMonth() + 1 }}/{{ new Date(con.startdate).getFullYear() }}</td>
-                    <td>{{con.type}}</td>
-                    <td>{{con.fee}}</td>
+                    <td>
+                      {{ new Date(con.startdate).getDate() }}/{{
+                        new Date(con.startdate).getMonth() + 1
+                      }}/{{ new Date(con.startdate).getFullYear() }}
+                    </td>
+                    <td>{{ con.type }}</td>
+                    <td>{{ con.fee }}</td>
                     <td v-if="con.status == true">Active</td>
                     <td v-else>Inactive</td>
                     <td>
-                      <a :href="'/voting-content/' + con.id"
-                        >Vote Link</a
-                      >
+                      <a :href="'/voting-content/' + con.id">Vote Link</a>
                     </td>
                     <td>
                       <div class="dropdown">
@@ -84,10 +86,22 @@
                           class="dropdown-menu"
                           aria-labelledby="dropdownMenuButton1"
                         >
-                          <li><a class="dropdown-item" href="#">Edit</a></li>
-                          <li><a class="dropdown-item" href="#">Enable</a></li>
-                          <li><a class="dropdown-item" href="#">Disable</a></li>
-                          <li><a class="dropdown-item" href="#">Delete</a></li>
+                          <li>
+                            <a
+                              class="dropdown-item"
+                              style="cursor: pointer"
+                              @click="routeEdit(con.id)"
+                              >Edit</a
+                            >
+                          </li>
+                          <li>
+                            <a
+                              class="dropdown-item"
+                              style="cursor: pointer"
+                              @click="modalDelete(con.id)"
+                              >Delete</a
+                            >
+                          </li>
                         </ul>
                       </div>
                     </td>
@@ -221,18 +235,21 @@
   import Header from "./dash-header.vue";
   import Footer from "./dash-footer.vue";
   import voteService from "../../service/vote.service";
+import Swal from "sweetalert2";
 
   export default {
     name: "Elfrique",
     components: {
       "dash-header": Header,
       "dash-footer": Footer,
+      Swal
     },
 
     data() {
       return {
         items: [],
-        _BASE_URL: ''
+        _BASE_URL: "",
+        voteContent: {},
       };
     },
 
@@ -243,13 +260,51 @@
           console.log(this.items);
         });
       },
+
+      routeEdit(id) {
+        this.items.filter((item) => {
+          if (item.id === id) {
+            this.voteContent.id = id;
+            this.voteContent.type = item.type;
+            this.voteContent.title = item.title;
+            this.voteContent.description = item.description;
+            this.voteContent.startdate = item.startdate;
+            this.voteContent.enddate = item.closedate;
+            this.voteContent.timezone = item.timezone;
+            this.voteContent.votingfee = item.fee;
+            this.voteContent.preferredPaymentGateway = item.paymentgateway;
+            this.voteContent.dailyVoteLimit = item.votelimit;
+
+            this.$store
+              .dispatch("vote/getVoteContent", this.voteContent)
+              .then(() => {
+                this.$router.push("/superadmin/updateContest/" + id);
+              });
+          }
+        });
+      },
+
+      modalDelete(id) {
+        Swal.fire({
+          title: "Do you want to Delete this Voting Contest?",
+          showDenyButton: true,
+          confirmButtonText: "Yes",
+          denyButtonText: "No",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire("Voting Contest Deleted!", "", "success");
+          } else if (result.isDenied) {
+            Swal.fire("Could not Delete Contest", "", "info");
+          }
+        });
+      },
     },
 
     mounted() {
       window.scrollTo(0, 0);
       this.getContest();
-      
-      this._BASE_URL = window.location.protocol + '//' + window.location.host;
+
+      this._BASE_URL = window.location.protocol + "//" + window.location.host;
     },
   };
 </script>

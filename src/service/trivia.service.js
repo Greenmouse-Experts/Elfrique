@@ -56,6 +56,10 @@ class TriviaService {
     return axios.post(API_URL + "trivia-answer/" + id, data);
   }
 
+  getTriviaResult(id) {
+    return axios.get(API_URL + "getTriviaResult/" + id);
+  }
+
   contactUs(data) {
     return axios.post(API_URL + "contact-us/", data);
   }

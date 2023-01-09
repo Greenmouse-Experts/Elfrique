@@ -280,11 +280,11 @@
                         <a><i class="bi bi-circle"></i><span>View Event</span></a>
                     </router-link>
                 </li>
-                <li>
+                <!----<li>
                     <router-link to="/superadmin/event-setting" class="routers">
                         <a><i class="bi bi-circle"></i><span>Event Setting</span></a>
                     </router-link>
-                </li>
+                </li>-->
                 <!-- <li>
                     <router-link to="/superadmin/personal-ticket" class="routers">
                         <a><i class="bi bi-circle"></i><span>Personal Ticket</span></a>
@@ -550,15 +550,15 @@
                 </li>
             </ul>
         </li>
-        <!--Sales Analytics-->
+        <!--Sales Analytics--
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#analytics-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-analytics.png" /><span></span>Sales Analytics<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="analytics-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                <!-- <li>
+                <li>
                     <router-link to="/superadmin/overview-sales-analytics" class="routers">
                         <a><i class="bi bi-circle"></i><span>Overview</span></a>
                     </router-link>
-                </li> -->
+                </li> --
                 <li>
                     <router-link to="/superadmin/voting-analytics" class="routers">
                         <a><i class="bi bi-circle"></i><span>Voting</span></a>
@@ -579,14 +579,14 @@
                         <a><i class="bi bi-circle"></i><span>Trivia</span></a>
                     </router-link>
                 </li>
-                <!-- <li>
+                 <li>
                     <router-link to="/superadmin/vendor-analytics" class="routers">
                         <a><i class="bi bi-circle"></i><span>Vendor</span></a>
                     </router-link>
-                </li> -->
+                </li> 
             </ul>
         </li>
-        <!--SMS Notification-->
+        SMS Notification-->
         <!-- <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#sms-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-sms.png" /><span></span>SMS Notification<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="sms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">

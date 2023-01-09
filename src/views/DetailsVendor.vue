@@ -352,7 +352,6 @@ export default {
         (response) => {
           //this.message = response.data.message;
           Swal.fire({
-            position: "top-end",
             icon: "success",
             title: `${response.data.message}`,
             showConfirmButton: false,
@@ -364,7 +363,6 @@ export default {
         (error) => {
           this.error = error.response.data.message;
           Swal.fire({
-            position: "top-end",
             icon: "error",
             title: `${error.response.data.message}`,
             showConfirmButton: false,

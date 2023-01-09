@@ -35,8 +35,6 @@
                     <th scope="col">Image</th>
                     <th scope="col">Duration</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Options</th>
-                    <th scope="col">Link</th>
                   </tr>
                 </thead>
                 <tbody v-for="(con, index) in content" :key="con.id">
@@ -56,9 +54,7 @@
                       />
                     </td>
                     <td>{{ con.duration }} minutes</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td> {{ con.status ? 'On' : 'Off' }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -85,7 +81,7 @@ import TriviaService from "../../service/trivia.service";
       },
       data() {
     return {
-      content: "",
+      content: [],
     };
   },
   computed: {
@@ -98,8 +94,8 @@ import TriviaService from "../../service/trivia.service";
       this.$router.push("/login");
     }
 
-    TriviaService.getTrivias().then((response) => {
-      this.content = response.data.trivia;
+    TriviaService.getAllTrivias().then((response) => {
+      this.content = response.data.trivias;
       setTimeout(function () {
         $("#example").DataTable({
           dom: "Bfrtip",
