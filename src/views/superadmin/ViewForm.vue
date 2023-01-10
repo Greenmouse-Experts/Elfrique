@@ -59,8 +59,8 @@
                     <th scope="col">Date Added</th>
                     <th scope="col">Starting Date</th>
                     <th scope="col">Closing Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Options</th>
+                    <th scope="col">Payment Type</th>
+                    <!----<th scope="col">Options</th>-->
                     <th scope="col">Form Link</th>
                   </tr>
                 </thead>
@@ -85,8 +85,8 @@
                     <td>{{ format_date(con.createdAt) }}</td>
                     <td>{{ format_date(con.startdate) }}</td>
                     <td>{{ format_date(con.closedate) }}</td>
-                    <td>On</td>
-                    <td>
+                    <td style="text-transform: capitalize">{{ con.type }}</td>
+                    <!----<td>
                       <div class="dropdown">
                         <button
                           class="btn btn-info dropdown-toggle"
@@ -129,7 +129,7 @@
                               >Switch To Flutterwave</a
                             >
                           </li>
-                         <!---- <li>
+                         <li>
                             <a class="dropdown-item" href="#">Open Form</a>
                           </li>-->
                           <!----<li><a class="dropdown-item" href="#">Edit</a></li>--
@@ -140,11 +140,11 @@
                             <a class="dropdown-item" href="#"
                               >Disable Form View</a
                             >
-                          </li>-->
+                          </li>
                           <li><a class="dropdown-item" href="#">Delete</a></li>
                         </ul>
                       </div>
-                    </td>
+                    </td>-->
                     <td>
                       <a :href="'/event-form-content/' + con.id">Form Link</a>
                     </td>

@@ -239,6 +239,7 @@ import SuperAdminTrleVisaApproved from "../views/superadmin/eVisaApproved.vue";
 ///////////////////////////////////////
 import SuperAdminBlgCreateBlogPost from "../views/superadmin/CreateBlogPost.vue";
 import SuperAdminBlgViewBlogs from "../views/superadmin/ViewBlogs.vue";
+import SuperAdminEditBlog from "../views/superadmin/EditBlog.vue";
 ///////////////////////////////////////
 import SuperAdminAnaOverviewSalesAnalytics from "../views/superadmin/OverviewSalesAnalytics.vue";
 import SuperAdminAnaVotingAnalytics from "../views/superadmin/VotingAnalytics.vue";
@@ -983,6 +984,11 @@ const routes = [
     path: "/superadmin/view-faqs",
     name: "SuperAdminGenViewFaq",
     component: SuperAdminGenViewFaq,
+  },
+  {
+    path: "/superadmin/editBlog/:id",
+    name: "SuperAdminEditBlog",
+    component: SuperAdminEditBlog,
   },
   ////////////////////////////////////
   {

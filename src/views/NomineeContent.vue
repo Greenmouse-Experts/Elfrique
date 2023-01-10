@@ -2,6 +2,13 @@
   <title>
     Vote Management System | Elfrique – Complete Event Management System
   </title>
+
+  <template v-if="loading">
+    <LoaderVue loaderImage center /> 
+  </template>
+
+  <template v-else>
+
   <elfrique-header />
 
   <section class="voting-content">
@@ -225,8 +232,10 @@
                           {{ con.fullname }}
                         </p>
                         <p class="card-text card-text-after">
+                          <span class="flex-row">
                           <i class="bi bi-activity"></i>:
                           {{ con.voteCount }} (votes)
+                          </span>
                         </p>
                         <router-link
                           :to="'/nominee-profile/' + con.id"
@@ -328,6 +337,7 @@
                           <input
                             type="text"
                             placeholder="Enter Reference Number"
+                            v-model="payload.reference"
                           />
                           <button type="submit" class="mt-2">Verify</button>
                         </div>
@@ -345,6 +355,7 @@
 
   <elfrique-footer />
 </template>
+</template>
 
 <script>
 import Header from "./elfrique-header.vue";
@@ -353,18 +364,25 @@ import BarChart from "../Chart/BarChart.vue";
 import PieChart from "../Chart/PieChart.vue";
 import PolarChart from "../Chart/PolarChart.vue";
 import moment from "moment";
+import ProgressBarVue from "./components/ProgressBar.vue";
+  import LoaderVue from './components/Loader.vue';
 import VoteService from "../service/vote.service";
+import transactionService from '../service/transaction.service';
+
 export default {
   name: "Elfrique",
   components: {
     "elfrique-header": Header,
     "elfrique-footer": Footer,
+    ProgressBarVue,
+    LoaderVue
   },
   data() {
     return {
       content: "",
       ended: false,
       endDate: "",
+      loading: true,
       countdown: {
         months: 0,
         days: 0,
@@ -374,6 +392,9 @@ export default {
       },
       chartType: "",
       label: 0,
+        payload: {
+          reference: ""
+        }
     };
   },
   computed: {
@@ -385,10 +406,32 @@ export default {
     VoteService.getSingleCategory(this.$route.params.id).then((response) => {
       this.content = response.data.Categories;
       this.endDate = response.data.Categories.awardContest.closedate;
+      this.loading = false;
       this.getCountdown();
     });
   },
   methods: {
+      verifyTransaction() {
+        this.disableBtn = true;
+        transactionService
+          .verifyTransaction(this.payload)
+          .then((response) => {
+            Swal.fire({
+              icon: "success",
+              text: `The status for Your Vote with reference number ${this.payload.reference} is Paid`,
+              confirmButton: 'OK'
+            });
+            this.disableBtn = false;
+          }).catch(err => {
+            Swal.fire({
+              icon: "error",
+              text: err.response.data.message,
+              confirmButton: 'OK'
+            });
+            this.disableBtn = false;
+          })
+      },
+
     getCountdown() {
       var endCount = moment(this.endDate).format("YYYY-MM-DDT11:00:00Z");
 

@@ -83,7 +83,7 @@
                             cols="20"
                             placeholder="Enter your message."
                             rows="3"
-                            :value="q.question"
+                            v-model="q.question"
                           ></textarea>
                         </div>
                       </div>
@@ -116,12 +116,14 @@
   import Header from "./dash-header.vue";
   import Footer from "./dash-footer.vue";
   import triviaService from "../../service/trivia.service";
+  import Swal from "sweetalert2";
 
   export default {
     name: "Elfrique",
     components: {
       "dash-header": Header,
       "dash-footer": Footer,
+      Swal
     },
     data() {
       return {
@@ -201,7 +203,18 @@
 
       updateQuestions() {
         triviaService.updateQuestions(this.triviaId, this.questions).then((response) => {
-        })
+          Swal.fire({
+            icon: "success",
+            text: response.data.message,
+            confirmButtonText: "Ok",
+          });
+        }).catch((err) => {
+          Swal.fire({
+            icon: "error",
+            text: err.response.data.message,
+            confirmButtonText: "Ok",
+          });
+        });
       }
     },
     mounted() {

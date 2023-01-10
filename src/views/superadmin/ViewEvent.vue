@@ -97,11 +97,6 @@
                         >
                           <li>
                             <a class="dropdown-item" href="#"
-                              >Off Email Notification</a
-                            >
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#"
                             @click="switchGateway(con.id, 'interswitch')"
                               >Switch To Interswitch</a
                             >
@@ -494,7 +489,7 @@
           (response) => {
             Swal.fire({
               icon: "success",
-              text: `Event Updated Successfully`,
+              text: `Switched to ${gateway} Payment Gateway`,
               confirmButton: 'OK'
             });
           },

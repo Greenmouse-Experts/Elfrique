@@ -4,171 +4,170 @@
     System
   </title>
 
-        <template v-if="isLoading">
-    <LoaderVue loaderImage center /> 
+  <template v-if="isLoading">
+    <LoaderVue loaderImage center />
   </template>
 
   <template v-else>
+    <elfrique-header />
 
-  <elfrique-header />
-
-  <section class="voting-content event-ticket">
-    <div class="container header-cont">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="img-area">
-            <img :src="event.image" ondragstart="return false;" />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="text-title-area">
-            <h1>{{ event.title }}</h1>
-            <small
-              >Organised by : <span>{{ event.organisation }}</span></small
-            >
-            <div class="details-header">
-              <h5>Location</h5>
-              <p><i class="bi bi-geo-alt-fill"></i> : {{ event.venue }}</p>
-              <h5>Start Date</h5>
-              <p>
-                <i class="bi bi-calendar3"></i> :
-                {{ format_date(event.startdate) }}
-              </p>
-              <h5>End Date</h5>
-              <p>
-                <i class="bi bi-calendar3"></i> :
-                {{ format_date(event.enddate) }}
-              </p>
-            </div>
-            <div class="details-social">
-              <h5>Share on:</h5>
-              <ShareNetwork
-                network="facebook"
-                :url="currentUrl"
-                :title="event.title"
-                :description="event.description"
-                :quote="event.title"
-                :hashtags="'Elfrique, Trivia, Quiz,' + event.title"
-              >
-                <img src="@/assets/images/share-facebook.png" />
-              </ShareNetwork>
-              <ShareNetwork
-                network="whatsapp"
-                :url="currentUrl"
-                :title="event.title"
-                :description="event.description"
-              >
-                <img src="@/assets/images/share-whatsapp.png" />
-              </ShareNetwork>
-              <ShareNetwork
-                network="telegram"
-                :url="currentUrl"
-                :title="event.title"
-                :description="event.description"
-              >
-                <img src="@/assets/images/share-telegram.png" />
-              </ShareNetwork>
-              <ShareNetwork
-                network="twitter"
-                :url="currentUrl"
-                :title="event.title"
-                twitter-user="@elfrique"
-                :hashtags="'Elfrique, Trivia, Quiz,' + event.title"
-              >
-                <img src="@/assets/images/share-twitter.png" />
-              </ShareNetwork>
-              <ShareNetwork
-                network="email"
-                :url="currentUrl"
-                :title="event.title"
-                :description="event.description"
-              >
-                <img src="@/assets/images/share-email.png" />
-              </ShareNetwork>
+    <section class="voting-content event-ticket">
+      <div class="container header-cont">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="img-area">
+              <img :src="event.image" ondragstart="return false;" />
             </div>
           </div>
-        </div>
-        <div class="col-md-2 justify-content-center text-center">
-          <div class="counter-div">
-            <div class="icon">
-              <i class="bi bi-alarm-fill"></i>
+          <div class="col-md-6">
+            <div class="text-title-area">
+              <h1>{{ event.title }}</h1>
+              <small
+                >Organised by : <span>{{ event.organisation }}</span></small
+              >
+              <div class="details-header">
+                <h5>Location</h5>
+                <p><i class="bi bi-geo-alt-fill"></i> : {{ event.venue }}</p>
+                <h5>Start Date</h5>
+                <p>
+                  <i class="bi bi-calendar3"></i> :
+                  {{ format_date(event.startdate) }}
+                </p>
+                <h5>End Date</h5>
+                <p>
+                  <i class="bi bi-calendar3"></i> :
+                  {{ format_date(event.enddate) }}
+                </p>
+              </div>
+              <div class="details-social">
+                <h5>Share on:</h5>
+                <ShareNetwork
+                  network="facebook"
+                  :url="currentUrl"
+                  :title="event.title"
+                  :description="event.description"
+                  :quote="event.title"
+                  :hashtags="'Elfrique, Trivia, Quiz,' + event.title"
+                >
+                  <img src="@/assets/images/share-facebook.png" />
+                </ShareNetwork>
+                <ShareNetwork
+                  network="whatsapp"
+                  :url="currentUrl"
+                  :title="event.title"
+                  :description="event.description"
+                >
+                  <img src="@/assets/images/share-whatsapp.png" />
+                </ShareNetwork>
+                <ShareNetwork
+                  network="telegram"
+                  :url="currentUrl"
+                  :title="event.title"
+                  :description="event.description"
+                >
+                  <img src="@/assets/images/share-telegram.png" />
+                </ShareNetwork>
+                <ShareNetwork
+                  network="twitter"
+                  :url="currentUrl"
+                  :title="event.title"
+                  twitter-user="@elfrique"
+                  :hashtags="'Elfrique, Trivia, Quiz,' + event.title"
+                >
+                  <img src="@/assets/images/share-twitter.png" />
+                </ShareNetwork>
+                <ShareNetwork
+                  network="email"
+                  :url="currentUrl"
+                  :title="event.title"
+                  :description="event.description"
+                >
+                  <img src="@/assets/images/share-email.png" />
+                </ShareNetwork>
+              </div>
             </div>
-            <div class="boxes days">
-              <span class="title">Days</span> <br />
-              <span>{{ countdown.days }}</span>
+          </div>
+          <div class="col-md-2 justify-content-center text-center">
+            <div class="counter-div">
+              <div class="icon">
+                <i class="bi bi-alarm-fill"></i>
+              </div>
+              <div class="boxes days">
+                <span class="title">Days</span> <br />
+                <span>{{ countdown.days }}</span>
+              </div>
+              <div class="boxes hours">
+                <span class="title">Hours</span> <br />
+                <span>{{ countdown.hours }}</span>
+              </div>
+              <div class="boxes minutes">
+                <span class="title">Min</span> <br />
+                <span>{{ countdown.minutes }}</span>
+              </div>
+              <div class="boxes seconds">
+                <span class="title">Sec</span> <br />
+                <span>{{ countdown.seconds }}</span>
+              </div>
+              <div class="clear"></div>
+              <p v-if="ended == true" class="timeUpText" style="color: red">
+                Time is up
+              </p>
             </div>
-            <div class="boxes hours">
-              <span class="title">Hours</span> <br />
-              <span>{{ countdown.hours }}</span>
-            </div>
-            <div class="boxes minutes">
-              <span class="title">Min</span> <br />
-              <span>{{ countdown.minutes }}</span>
-            </div>
-            <div class="boxes seconds">
-              <span class="title">Sec</span> <br />
-              <span>{{ countdown.seconds }}</span>
-            </div>
-            <div class="clear"></div>
-            <p v-if="ended == true" class="timeUpText" style="color: red">
-              Time is up
-            </p>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="container event-form-content mt-4">
-      <div class="row">
-        <div class="col-lg-12">
-          <ul class="nav nav-pills mb-5 mt-2" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link active tabs-button"
-                id="pills-ticket-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#pills-ticket"
-                type="button"
-                role="tab"
-                aria-controls="pills-ticket"
-                aria-selected="true"
+      <div class="container event-form-content mt-4">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="nav nav-pills mb-5 mt-2" id="pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active tabs-button"
+                  id="pills-ticket-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-ticket"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-ticket"
+                  aria-selected="true"
+                >
+                  <i class="bi bi-people-fill"></i> Ticket
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link tabs-button"
+                  id="pills-organ-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-organ"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-organ"
+                  aria-selected="false"
+                >
+                  <i class="fas fa-tv"></i> Organisers
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+              <!--Ticket-->
+              <div
+                class="tab-pane fade show active"
+                id="pills-ticket"
+                role="tabpanel"
+                aria-labelledby="pills-ticket-tab"
               >
-                <i class="bi bi-people-fill"></i> Ticket
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link tabs-button"
-                id="pills-organ-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#pills-organ"
-                type="button"
-                role="tab"
-                aria-controls="pills-organ"
-                aria-selected="false"
-              >
-                <i class="fas fa-tv"></i> Organisers
-              </button>
-            </li>
-          </ul>
-          <div class="tab-content" id="pills-tabContent">
-            <!--Ticket-->
-            <div
-              class="tab-pane fade show active"
-              id="pills-ticket"
-              role="tabpanel"
-              aria-labelledby="pills-ticket-tab"
-            >
-              <div class="event-details" v-if="ended == false">
-                <div class="row">
-                  <div class="col-lg-6">
-                    <h1>Ticket Details</h1>
-                    <h6>{{ event.description }}</h6>
-                  </div>
-                  <div class="col-lg-1"></div>
-                  <div class="col-lg-5">
-                    <h1>Buy Ticket</h1>
-                    <!-- <div class="row">
+                <div class="event-details" v-if="ended == false">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <h1>Ticket Details</h1>
+                      <h6>{{ event.description }}</h6>
+                    </div>
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-5">
+                      <h1>Buy Ticket</h1>
+                      <!-- <div class="row">
                       <div
                         v-for="con in event.eventsTickets"
                         :key="con.id"
@@ -197,219 +196,219 @@
                       </div>
                       </div>
                     </div> -->
-                    <div class="card" v-if="!proceedPayment">
-                      <div class="card-body">
-                        <h5 class="card-title mb-3 muted">Ticket</h5>
-                        <div
-                          class="row mt-4"
-                          v-for="con in event.eventsTickets"
-                          :key="con.id"
-                        >
-                          <div class="col d-flex align-items-center">
-                            <span>{{ con.name.toUpperCase() }}</span>
-                          </div>
-                          <div
-                            class="col text-center d-flex align-items-center"
-                          >
-                            <div v-if="con.price == 'free'">
-                              <span>Free</span>
-                            </div>
-                            <div v-if="con.price != 'free'">
-                              <span v-if="toRate"
-                                >{{ currency_symbol }}
-                                {{ (con.price / toRate).toFixed(2) }}</span
-                              >
-                            </div>
-                          </div>
-                          <div class="col">
-                            <select
-                              disabled
-                              class="form-control"
-                              v-if="parseInt(con.quantity) == 0"
-                            >
-                              <option>0</option>
-                            </select>
-                            <select
-                              @change="selectTicketQty(con, $event)"
-                              class="form-control"
-                              v-else
-                            >
-                              <option value="">0</option>
-                              <option
-                                v-for="(item, i) in parseInt(con.quantity)"
-                                :value="item"
-                                :key="item"
-                              >
-                                {{ i + 1 }}
-                              </option>
-                            </select>
-                            <!-- <input type="number" :max="con.quantity"  @keyup="checkQuantity"
-                            @keypress="isNumber($event)" v-model="tickets" class="form-control" min="1" id=""> -->
-                          </div>
-                        </div>
-                        <div class="col-lg-12 text-center d-grid gap-2">
-                          <button
-                            class="btn btn-buy-ticket btn-block"
-                            type="submit"
-                            :disabled="totalPrice === 0"
-                            @click="showModal"
-                          >
-                            Buy Ticket
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card" v-else>
-                      <form
-                        @submit.prevent="
-                          buyTicket(event.paymentgateway, totalPrice)
-                        "
-                      >
+                      <div class="card" v-if="!proceedPayment">
                         <div class="card-body">
-                          <h5 class="card-title mb-3 muted">Order Summary</h5>
-                          <div v-for="item in newTicket" :key="item.id">
-                            <hr />
-                            <div class="row mt-4">
-                              <div class="col d-flex align-items-center">
-                                <span
-                                  >{{ item.quantity }} x
-                                  {{ item.name.toUpperCase() }}</span
+                          <h5 class="card-title mb-3 muted">Ticket</h5>
+                          <div
+                            class="row mt-4"
+                            v-for="con in event.eventsTickets"
+                            :key="con.id"
+                          >
+                            <div class="col d-flex align-items-center">
+                              <span>{{ con.name.toUpperCase() }}</span>
+                            </div>
+                            <div
+                              class="col text-center d-flex align-items-center"
+                            >
+                              <div v-if="con.price == 'free'">
+                                <span>Free</span>
+                              </div>
+                              <div v-if="con.price != 'free'">
+                                <span v-if="toRate"
+                                  >{{ currency_symbol }}
+                                  {{ (con.price / toRate).toFixed(2) }}</span
                                 >
                               </div>
-                              <div
-                                class="col justify-content-end d-flex align-items-center"
+                            </div>
+                            <div class="col">
+                              <select
+                                disabled
+                                class="form-control"
+                                v-if="parseInt(con.quantity) == 0"
                               >
-                                <div v-if="item.price == 'free'">
-                                  <span>Free</span>
-                                </div>
-                                <div v-if="item.price != 'free'">
-                                  <span
-                                    >{{ currency_symbol }}
-                                    {{ item.price }}</span
-                                  >
-                                </div>
-                              </div>
-                            </div>
-                            <div class="row mt-2">
-                              <div class="col">
-                                <span>Sub-Total:</span>
-                              </div>
-                              <div
-                                class="col justify-content-end d-flex align-items-center"
+                                <option>0</option>
+                              </select>
+                              <select
+                                @change="selectTicketQty(con, $event)"
+                                class="form-control"
+                                v-else
                               >
-                                <span>
-                                  <strong
-                                    >{{ currency_symbol }}
-                                    {{ item.sub_total }}</strong
-                                  >
-                                </span>
-                              </div>
+                                <option value="">0</option>
+                                <option
+                                  v-for="(item, i) in parseInt(con.quantity)"
+                                  :value="item"
+                                  :key="item"
+                                >
+                                  {{ i + 1 }}
+                                </option>
+                              </select>
+                              <!-- <input type="number" :max="con.quantity"  @keyup="checkQuantity"
+                            @keypress="isNumber($event)" v-model="tickets" class="form-control" min="1" id=""> -->
                             </div>
                           </div>
-                          <hr />
-                          <div class="row mt-4">
-                            <div class="col">
-                              <span><strong>Total</strong></span>
-                            </div>
-                            <div class="col d-flex justify-content-end">
-                              <span
-                                ><strong
-                                  >{{ currency_symbol }}
-                                  {{ totalPrice }}</strong
-                                ></span
-                              >
-                            </div>
-                          </div>
-                          <div class="row mt-4">
-                            <div class="col">
-                              <span>Reference NUmber</span>
-                            </div>
-                            <div class="col d-flex justify-content-end">
-                              <span>{{ reference }}</span>
-                            </div>
-                          </div>
-                          <div class="row mt-4">
-                            <div class="col">
-                              <div class="form-group">
-                                <label for="email">Email</label>
-                                <input
-                                  type="email"
-                                  v-model="email"
-                                  class="form-control mt-2"
-                                  id=""
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row mt-4">
-                            <div class="col">
-                              <div class="form-group">
-                                <label for="email">Firstname</label>
-                                <input
-                                  type="text"
-                                  v-model="firstname"
-                                  class="form-control mt-2"
-                                  id=""
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row mt-4">
-                            <div class="col">
-                              <div class="form-group">
-                                <label for="email">Lastname</label>
-                                <input
-                                  type="text"
-                                  v-model="lastname"
-                                  class="form-control mt-2"
-                                  id=""
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row mt-4">
-                            <div class="col">
-                              <div class="form-group">
-                                <label for="email">Phone Number</label>
-                                <input
-                                  type="tel"
-                                  v-model="phone"
-                                  class="form-control mt-2"
-                                  id=""
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row mt-4">
-                            <PaymentGateway
-                              radioStyle
-                              :selected="selectedGateway"
-                              :gateways="paymentMethods"
-                              v-model="event.paymentgateway"
-                              v-if="currency_symbol === 'NGN'"
-                            />
-                          </div>
-                          <div class="col-lg-12 mt-5 d-grid gap-2">
+                          <div class="col-lg-12 text-center d-grid gap-2">
                             <button
-                              style="width: auto"
-                              v-if="currency_symbol == 'NGN'"
+                              class="btn btn-buy-ticket btn-block"
                               type="submit"
+                              :disabled="totalPrice === 0"
+                              @click="showModal"
                             >
-                              Pay Now - Local Only
-                            </button>
-                            <button
-                              v-else
-                              style="width: auto"
-                              class="btn btn-block"
-                              type="submit"
-                            >
-                              Pay Now - International
+                              Buy Ticket
                             </button>
                           </div>
                         </div>
-                      </form>
-                    </div>
-                    <!-- <form v-if="ticketSelected" @submit.prevent="buyTicket(event.paymentgateway, convert_price(1000))">
+                      </div>
+                      <div class="card" v-else>
+                        <form
+                          @submit.prevent="
+                            buyTicket(event.paymentgateway, totalPrice)
+                          "
+                        >
+                          <div class="card-body">
+                            <h5 class="card-title mb-3 muted">Order Summary</h5>
+                            <div v-for="item in newTicket" :key="item.id">
+                              <hr />
+                              <div class="row mt-4">
+                                <div class="col d-flex align-items-center">
+                                  <span
+                                    >{{ item.quantity }} x
+                                    {{ item.name.toUpperCase() }}</span
+                                  >
+                                </div>
+                                <div
+                                  class="col justify-content-end d-flex align-items-center"
+                                >
+                                  <div v-if="item.price == 'free'">
+                                    <span>Free</span>
+                                  </div>
+                                  <div v-if="item.price != 'free'">
+                                    <span
+                                      >{{ currency_symbol }}
+                                      {{ item.price }}</span
+                                    >
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row mt-2">
+                                <div class="col">
+                                  <span>Sub-Total:</span>
+                                </div>
+                                <div
+                                  class="col justify-content-end d-flex align-items-center"
+                                >
+                                  <span>
+                                    <strong
+                                      >{{ currency_symbol }}
+                                      {{ item.sub_total }}</strong
+                                    >
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <hr />
+                            <div class="row mt-4">
+                              <div class="col">
+                                <span><strong>Total</strong></span>
+                              </div>
+                              <div class="col d-flex justify-content-end">
+                                <span
+                                  ><strong
+                                    >{{ currency_symbol }}
+                                    {{ totalPrice }}</strong
+                                  ></span
+                                >
+                              </div>
+                            </div>
+                            <div class="row mt-4">
+                              <div class="col">
+                                <span>Reference NUmber</span>
+                              </div>
+                              <div class="col d-flex justify-content-end">
+                                <span>{{ reference }}</span>
+                              </div>
+                            </div>
+                            <div class="row mt-4">
+                              <div class="col">
+                                <div class="form-group">
+                                  <label for="email">Email</label>
+                                  <input
+                                    type="email"
+                                    v-model="email"
+                                    class="form-control mt-2"
+                                    id=""
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mt-4">
+                              <div class="col">
+                                <div class="form-group">
+                                  <label for="email">Firstname</label>
+                                  <input
+                                    type="text"
+                                    v-model="firstname"
+                                    class="form-control mt-2"
+                                    id=""
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mt-4">
+                              <div class="col">
+                                <div class="form-group">
+                                  <label for="email">Lastname</label>
+                                  <input
+                                    type="text"
+                                    v-model="lastname"
+                                    class="form-control mt-2"
+                                    id=""
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mt-4">
+                              <div class="col">
+                                <div class="form-group">
+                                  <label for="email">Phone Number</label>
+                                  <input
+                                    type="tel"
+                                    v-model="phone"
+                                    class="form-control mt-2"
+                                    id=""
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mt-4">
+                              <PaymentGateway
+                                radioStyle
+                                :selected="selectedGateway"
+                                :gateways="paymentMethods"
+                                v-model="selectedGateway"
+                                v-if="currency_symbol === 'NGN'"
+                              />
+                            </div>
+                            <div class="col-lg-12 mt-5 d-grid gap-2">
+                              <button
+                                style="width: auto"
+                                v-if="currency_symbol == 'NGN'"
+                                type="submit"
+                              >
+                                Pay Now - Local Only
+                              </button>
+                              <button
+                                v-else
+                                style="width: auto"
+                                class="btn btn-block"
+                                type="submit"
+                              >
+                                Pay Now - International
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <!-- <form v-if="ticketSelected" @submit.prevent="buyTicket(event.paymentgateway, convert_price(1000))">
                       <div class="row">
                         <div  v-if="message" class= 'alert-success alert  alert-dismissible fade show' role="alert">
                           {{message}} 
@@ -475,165 +474,165 @@
                         </div>
                       </div>
                     </form> -->
+                    </div>
                   </div>
                 </div>
+                <div class="container" v-if="ended == true">
+                  <h6 style="color: red">
+                    oOps! This event has ended, go to event page to view another
+                    one
+                  </h6>
+                </div>
               </div>
-              <div class="container" v-if="ended == true">
-                <h6 style="color: red">
-                  oOps! This event has ended, go to event page to view another
-                  one
-                </h6>
-              </div>
-            </div>
-            <div
-              style="z-index: 9999"
-              class="modal fade"
-              ref="exampleModal"
-              data-backdrop="static"
-              data-keyboard="false"
-              tabindex="-1"
-              aria-labelledby="exampleModal"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog" style="top: 100px; max-width: 60%">
-                <div class="modal-content">
-                  <div class="modal-header" style="display: block">
-                    <button
-                      type="button"
-                      class="btn-close"
-                      style="float: right"
-                      @click="modal.hide()"
-                      aria-label="Close"
-                    ></button>
-                    <h5 class="modal-title" id="exampleModalLabel">
-                      {{ event.title }}
-                    </h5>
-                    <h6>
-                      {{ event.venue }}
-                    </h6>
-                    <h6>
-                      {{ format_date(event.startdate) }}
-                    </h6>
-                  </div>
-                  <div class="modal-body">
-                    <form @submit.prevent="proceedPay">
-                      <div class="row">
-                        <div class="col">
-                          <div class="px-2">
-                            <div class="form-groug">
-                              <label>Email</label>
-                              <input
-                                type="email"
-                                v-model="email"
-                                class="form-control"
-                                placeholder="Email Required"
-                                required
-                              />
-                            </div>
-                            <div class="form-groug">
-                              <label>FirstName</label>
-                              <input
-                                type="text"
-                                v-model="firstname"
-                                class="form-control"
-                                placeholder="Firstname Required"
-                                required
-                              />
-                            </div>
-                            <div class="form-groug">
-                              <label>Lastname</label>
-                              <input
-                                type="text"
-                                v-model="lastname"
-                                class="form-control"
-                                placeholder="Lastname Required"
-                                required
-                              />
-                            </div>
-                            <div class="form-groug">
-                              <label>Phone Number</label>
-                              <input
-                                type="tel"
-                                v-model="phone"
-                                class="form-control"
-                                placeholder="Phone Required"
-                                required
-                              />
-                            </div>
-                            <div class="form-group mt-3">
-                              <input
-                                type="checkbox"
-                                ref="checkbox"
-                                required
-                                id=""
-                              />
-                              <span>
-                                I accept the
-                                <a href="#">terms and conditions</a>
-                                for using this service.
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col">
-                          <h6>Tickets</h6>
-                          <div v-for="item in newTicket" :key="item">
-                            <hr />
-                            <div class="row">
-                              <div class="col">
-                                <span>{{ item.quantity }}</span>
-                                <span> x </span> <span>{{ item.name }}</span
-                                >:
+              <div
+                style="z-index: 9999"
+                class="modal fade"
+                ref="exampleModal"
+                data-backdrop="static"
+                data-keyboard="false"
+                tabindex="-1"
+                aria-labelledby="exampleModal"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog" style="top: 100px; max-width: 60%">
+                  <div class="modal-content">
+                    <div class="modal-header" style="display: block">
+                      <button
+                        type="button"
+                        class="btn-close"
+                        style="float: right"
+                        @click="modal.hide()"
+                        aria-label="Close"
+                      ></button>
+                      <h5 class="modal-title" id="exampleModalLabel">
+                        {{ event.title }}
+                      </h5>
+                      <h6>
+                        {{ event.venue }}
+                      </h6>
+                      <h6>
+                        {{ format_date(event.startdate) }}
+                      </h6>
+                    </div>
+                    <div class="modal-body">
+                      <form @submit.prevent="proceedPay">
+                        <div class="row">
+                          <div class="col">
+                            <div class="px-2">
+                              <div class="form-groug">
+                                <label>Email</label>
+                                <input
+                                  type="email"
+                                  v-model="email"
+                                  class="form-control"
+                                  placeholder="Email Required"
+                                  required
+                                />
                               </div>
-                              <div class="col">
-                                <span v-if="item.price == 'free'"
-                                  ><strong>{{ item.price }}</strong></span
-                                >
-                                <span v-else
-                                  ><strong>{{ item.price }}</strong></span
-                                >
+                              <div class="form-groug">
+                                <label>FirstName</label>
+                                <input
+                                  type="text"
+                                  v-model="firstname"
+                                  class="form-control"
+                                  placeholder="Firstname Required"
+                                  required
+                                />
                               </div>
-                            </div>
-                            <div class="row mt-2">
-                              <div class="col">
-                                <span>Sub-Total:</span>
+                              <div class="form-groug">
+                                <label>Lastname</label>
+                                <input
+                                  type="text"
+                                  v-model="lastname"
+                                  class="form-control"
+                                  placeholder="Lastname Required"
+                                  required
+                                />
                               </div>
-                              <div class="col">
+                              <div class="form-groug">
+                                <label>Phone Number</label>
+                                <input
+                                  type="tel"
+                                  v-model="phone"
+                                  class="form-control"
+                                  placeholder="Phone Required"
+                                  required
+                                />
+                              </div>
+                              <div class="form-group mt-3">
+                                <input
+                                  type="checkbox"
+                                  ref="checkbox"
+                                  required
+                                  id=""
+                                />
                                 <span>
-                                  <strong>{{ item.sub_total }}</strong>
+                                  I accept the
+                                  <a href="#">terms and conditions</a>
+                                  for using this service.
                                 </span>
                               </div>
                             </div>
                           </div>
-                          <div class="row mt-4">
-                            <div class="col">
-                              <h5>Total:</h5>
+                          <div class="col">
+                            <h6>Tickets</h6>
+                            <div v-for="item in newTicket" :key="item">
+                              <hr />
+                              <div class="row">
+                                <div class="col">
+                                  <span>{{ item.quantity }}</span>
+                                  <span> x </span> <span>{{ item.name }}</span
+                                  >:
+                                </div>
+                                <div class="col">
+                                  <span v-if="item.price == 'free'"
+                                    ><strong>{{ item.price }}</strong></span
+                                  >
+                                  <span v-else
+                                    ><strong>{{ item.price }}</strong></span
+                                  >
+                                </div>
+                              </div>
+                              <div class="row mt-2">
+                                <div class="col">
+                                  <span>Sub-Total:</span>
+                                </div>
+                                <div class="col">
+                                  <span>
+                                    <strong>{{ item.sub_total }}</strong>
+                                  </span>
+                                </div>
+                              </div>
                             </div>
-                            <div class="col">
-                              <h5>
-                                <strong>{{ totalPrice.toFixed(2) }}</strong>
-                              </h5>
+                            <div class="row mt-4">
+                              <div class="col">
+                                <h5>Total:</h5>
+                              </div>
+                              <div class="col">
+                                <h5>
+                                  <strong>{{ totalPrice.toFixed(2) }}</strong>
+                                </h5>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="px-5 text-center">
-                        <button
-                          class="btn"
-                          type="submit"
-                          style="
-                            border: 0px none;
-                            margin: 10px;
-                            margin-top: 3px;
-                            background: #bfddb4;
-                            margin-top: 12px;
-                          "
-                        >
-                          Proceed to Payment
-                        </button>
-                      </div>
-                    </form>
-                    <!-- <div v-else>
+                        <div class="px-5 text-center">
+                          <button
+                            class="btn text-white"
+                            type="submit"
+                            style="
+                              border: 0px none;
+                              margin: 10px;
+                              margin-top: 3px;
+                              background: #bfddb4;
+                              margin-top: 12px;
+                            "
+                          >
+                            Proceed to Payment
+                          </button>
+                        </div>
+                      </form>
+                      <!-- <div v-else>
                       <h3
                         style="
                           text-align: center;
@@ -644,29 +643,30 @@
                         Please fill the above required field and accept terms & conditions to proceed
                       </h3>
                     </div> -->
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <!--Organiser-->
-            <div
-              class="tab-pane fade"
-              id="pills-organ"
-              role="tabpanel"
-              aria-labelledby="pills-organ-tab"
-            >
-              <div class="container organiser-area">
-                <div class="row justify-content-center px-2">
-                  <div class="col-lg-12">
-                    <h1>Organiser Details</h1>
-                    <h4>Name</h4>
-                    <p>{{ event.organisation }}</p>
-                    <h4>Email</h4>
-                    <p>{{ event.adminuser.email }}</p>
-                    <h4>Phone Number</h4>
-                    <p>{{ event.adminuser.phonenumber }}</p>
-                    <h4>About</h4>
-                    <h6>{{ event.adminuser.about }}</h6>
+              <!--Organiser-->
+              <div
+                class="tab-pane fade"
+                id="pills-organ"
+                role="tabpanel"
+                aria-labelledby="pills-organ-tab"
+              >
+                <div class="container organiser-area">
+                  <div class="row justify-content-center px-2">
+                    <div class="col-lg-12">
+                      <h1>Organiser Details</h1>
+                      <h4>Name</h4>
+                      <p>{{ event.organisation }}</p>
+                      <h4>Email</h4>
+                      <p>{{ event.adminuser.email }}</p>
+                      <h4>Phone Number</h4>
+                      <p>{{ event.adminuser.phonenumber }}</p>
+                      <h4>About</h4>
+                      <h6>{{ event.adminuser.about }}</h6>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -674,10 +674,9 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <elfrique-footer></elfrique-footer>
+    <elfrique-footer></elfrique-footer>
   </template>
 </template>
 
@@ -694,7 +693,7 @@
   import { Modal } from "bootstrap";
   import { Store } from "vuex";
   import Swal from "sweetalert2";
-    import LoaderVue from './components/Loader.vue';
+  import LoaderVue from "./components/Loader.vue";
   import PaymentGateway from "./components/PaymentGateway.vue";
 
   export default {
@@ -703,7 +702,7 @@
       "elfrique-header": Header,
       "elfrique-footer": Footer,
       PaymentGateway,
-      LoaderVue
+      LoaderVue,
     },
     data() {
       return {
@@ -752,8 +751,6 @@
       const script = document.createElement("script");
       script.src = "https://newwebpay.interswitchng.com/inline-checkout.js";
       document.getElementsByTagName("head")[0].appendChild(script);
-      const indexItem = this.paymentMethods.indexOf(this.event.paymentgateway);
-      this.paymentMethods.splice(indexItem, 1);
       this.getEvent();
     },
     computed: {
@@ -836,32 +833,32 @@
         }
       },
       convert_price() {
-          axios
-            .get(
-              `https://ipgeolocation.abstractapi.com/v1/?api_key=b7acd834a4b846e9b9476c67e52b76eb`
-            )
-            .then((res) => {
-              let currency = res.data.currency.currency_code;
-              if (
-                currency === "NGN" ||
-                currency === "GHS" ||
-                currency === "KES"
-              ) {
-                axios
-                  .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
-                  .then((res) => {
-                    this.currency_symbol = res.data.base;
-                    this.toRate = res.data.rates["NGN"];
-                  });
-              } else {
-                axios
-                  .get(`https://api.exchangerate-api.com/v4/latest/USD`)
-                  .then((res) => {
-                    this.currency_symbol = res.data.base;
-                    this.toRate = res.data.rates["NGN"];
-                  });
-              }
-            });
+        axios
+          .get(
+            `https://ipgeolocation.abstractapi.com/v1/?api_key=b7acd834a4b846e9b9476c67e52b76eb`
+          )
+          .then((res) => {
+            let currency = res.data.currency.currency_code;
+            if (
+              currency === "NGN" ||
+              currency === "GHS" ||
+              currency === "KES"
+            ) {
+              axios
+                .get(`https://api.exchangerate-api.com/v4/latest/${currency}`)
+                .then((res) => {
+                  this.currency_symbol = res.data.base;
+                  this.toRate = res.data.rates["NGN"];
+                });
+            } else {
+              axios
+                .get(`https://api.exchangerate-api.com/v4/latest/USD`)
+                .then((res) => {
+                  this.currency_symbol = res.data.base;
+                  this.toRate = res.data.rates["NGN"];
+                });
+            }
+          });
       },
       sales_time(value) {
         return moment(value).format();
@@ -873,8 +870,13 @@
           this.endDate = res.data.events.enddate;
           this.convert_price();
           this.getCountdown();
+          const indexItem = this.paymentMethods.indexOf(
+            this.event.paymentgateway
+          );
           this.selectedGateway = this.event.paymentgateway;
-          this.isLoading = false
+          this.paymentMethods.splice(indexItem, 1);
+          this.selectedGateway = this.event.paymentgateway;
+          this.isLoading = false;
         });
       },
       getCountdown() {
