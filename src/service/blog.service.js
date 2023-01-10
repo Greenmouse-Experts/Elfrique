@@ -19,6 +19,14 @@ class BlogService {
     return axios.get(API_URL + "getBlog/" + blogId, { headers: authHeader() });
   }
 
+  editBlog(blogId, payload) {
+    return axios.patch(API_URL + "editBlog/" + blogId, payload, { headers: authHeader() });
+  }
+
+  deleteBlog(blogId) {
+    return axios.delete(API_URL + "deleteBlog/" + blogId, { headers: authHeader() });
+  }
+
   /*  getContests() {
     return axios.get(API_URL + "getallVote", { headers: authHeader() });
   }

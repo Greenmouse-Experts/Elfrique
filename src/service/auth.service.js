@@ -71,6 +71,14 @@ class AuthService {
   getOrganizers() {
     return axios.get(API_URL + "getAllUsers", { headers: spHeader() });
   }
+
+  deleteOrganizer(id) {
+    return axios.delete(API_URL + "deleteUser/" + id, { headers: spHeader() });
+  }
+
+  changeStatusOrganizer(id, payload) {
+    return axios.patch(API_URL + "changeStatus/" + id, payload, { headers: spHeader() });
+  }
 }
 
 export default new AuthService();

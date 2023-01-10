@@ -415,13 +415,13 @@
               ></router-link
             >
           </li>
-          <li>
+          <!----<li>
             <router-link to="/organiser/update-trivia" class="routers"
               ><a
                 ><i class="bi bi-circle"></i><span>Update Trivia</span></a
               ></router-link
             >
-          </li>
+          </li>-->
           <li>
             <router-link to="/organiser/view-result" class="routers"
               ><a
@@ -429,20 +429,20 @@
               ></router-link
             >
           </li>
-          <li>
+          <!----<li>
             <router-link to="/organiser/update-question" class="routers"
               ><a
                 ><i class="bi bi-circle"></i><span>Update Question</span></a
               ></router-link
             >
-          </li>
-          <li>
+          </li>--->
+          <!-----<li>
             <router-link to="/organiser/update-answer" class="routers"
               ><a
                 ><i class="bi bi-circle"></i><span>Update Answer</span></a
               ></router-link
             >
-          </li>
+          </li>--->
           <li>
             <router-link to="/organiser/trivia-sales-analytics" class="routers"
               ><a
@@ -450,13 +450,13 @@
               ></router-link
             >
           </li>
-          <li>
+          <!----<li>
             <router-link to="/organiser/search-trivia" class="routers"
               ><a
                 ><i class="bi bi-circle"></i><span>Search For Trivia</span></a
               ></router-link
             >
-          </li>
+          </li>-->
         </ul>
       </li>
       <!--Vendor-->

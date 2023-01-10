@@ -74,7 +74,7 @@
                                   <td>{{item.title}}</td>
                                   <td>{{item.description}}</td>
                                   <td>{{item.currency}} {{item.fee}}</td>
-                                  <td>{{item.type}}</td>
+                                  <td style="text-transform: capitalize">{{item.type}}</td>
                                   <td>{{item.paymentgateway}}</td>
                                 </tr>
                               </tbody>

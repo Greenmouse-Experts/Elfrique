@@ -292,7 +292,12 @@ import Swal from "sweetalert2";
           denyButtonText: "No",
         }).then((result) => {
           if (result.isConfirmed) {
-            Swal.fire("Voting Contest Deleted!", "", "success");
+            voteService.deleteVoteContest(id).then((res) => {
+              Swal.fire(res.data.message, "", "success");
+              this.getContest();
+            }).catch((err) => {
+            Swal.fire(err.response.data.message, "error");
+            })
           } else if (result.isDenied) {
             Swal.fire("Could not Delete Contest", "", "info");
           }

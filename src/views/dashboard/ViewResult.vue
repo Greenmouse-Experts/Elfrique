@@ -51,7 +51,7 @@
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel"><b>Trivia Result</b></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="ticketBooked = []"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -160,8 +160,6 @@ import Footer from "./dash-footer.vue";
         getTrivia() {
             triviaService.getTriviaResult(this.triviaId).then((response) => {
                 this.ticketBooked.push(response.data.player);
-
-                console.log(this.ticketBooked);
             });
         }
     },

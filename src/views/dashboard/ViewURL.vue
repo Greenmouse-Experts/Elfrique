@@ -51,7 +51,7 @@
                     <td>{{ format_date(con.createdAt) }}</td>
                     <td class="td-link"><a href="#"></a></td>
                     <td>
-                      <button type="button" class="table-delete-button">
+                      <button type="button" class="table-delete-button" @click="modalDelete(con.id)">
                         Delete
                       </button>
                     </td>
@@ -74,11 +74,14 @@ import Footer from "./dash-footer.vue";
 import VendorService from "../../service/vendor.service";
 import moment from "moment";
 import EventService from '../../service/event.service';
+import Swal from "sweetalert2";
+
 export default {
   name: "Elfrique",
   components: {
     "dash-header": Header,
     "dash-footer": Footer,
+    Swal
   },
   data() {
     return {
@@ -96,7 +99,17 @@ export default {
       this.$router.push("/login");
     }
 
-    EventService.getAllUserUrl().then(
+    this.getAllUserUrl();
+  },
+  methods: {
+    format_date(value) {
+      if (value) {
+        return moment(String(value)).format("MM/DD/YYYY hh:mm");
+      }
+    },
+
+    getAllUserUrl() {
+      EventService.getAllUserUrl().then(
       (response) => {
         this.content = response.data.data;
         setTimeout(function () {
@@ -116,13 +129,28 @@ export default {
           error.toString();
       }
     );
-  },
-  methods: {
-    format_date(value) {
-      if (value) {
-        return moment(String(value)).format("MM/DD/YYYY hh:mm");
-      }
     },
+
+      modalDelete(id) {
+        Swal.fire({
+          title: "Do you want to Delete this URL?",
+          showDenyButton: true,
+          confirmButtonText: "Yes",
+          denyButtonText: "No",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            EventService.deleteEvent(id).then((res) => {
+              Swal.fire(res.data.message, "", "success");
+              this.getAllUserUrl();
+            }).catch((err) => {
+            Swal.fire(err.response.data.message, "error");
+            })
+          } else if (result.isDenied) {
+            Swal.fire("Could not Delete URL", "", "info");
+          }
+        });
+      },
+
   },
   mounted() {
     window.scrollTo(0, 0);

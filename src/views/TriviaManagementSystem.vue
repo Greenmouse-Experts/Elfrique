@@ -25,10 +25,11 @@
       </div>
       <div class="row justify-content-center mt-5">
         <div class="col-lg-11 mb-5 search-section text-center">
-          <form>
+          <form @submit.prevent="searchTrivia">
             <input
               class="searchbox-input input"
               type="text"
+              v-model="payload.search"
               placeholder="Search trivia here ..."
             />
             <input
@@ -104,17 +105,23 @@
       return {
         triviaContent: "",
         isLoading: true,
+        payload: {
+          search: ""
+        }
       };
     },
     created() {
       TriviaService.getAllTrivias().then((response) => {
         this.triviaContent = response.data.trivias;
         this.isLoading = false;
-        console.log(this.triviaContent);
       });
     },
 
-    methods: {
+  methods: {
+    searchTrivia() {
+      
+    },
+
       format_date(value) {
         if (value) {
           return moment(String(value)).format("MM/DD/YYYY hh:mm");

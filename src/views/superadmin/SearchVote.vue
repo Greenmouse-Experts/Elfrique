@@ -83,7 +83,7 @@
                     </div>  
                     <div class="analyticsNote">
                         <!-- <p>Total amount : ₦12300</p> -->
-                        <p>Tickets(s):{{ticketBooked.length}}</p>
+                        <p>Vote(s):{{ticketBooked.length}}</p>
                         <!-- <p>Current Online Payment Gateway: PAYSTACK</p> -->
                     </div>
                     <!-- <div class="analyticsLinkBelow">

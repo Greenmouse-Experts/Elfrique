@@ -52,8 +52,8 @@
                         <td>{{format_date(con.createdAt)}}</td>
                         <td><a href="#">View Blog</a></td>
                         <td>
-                            <button class="btn btn-primary btn-sm mx-1 text-dark">Edit</button>
-                            <button class="btn btn-danger btn-sm mx-1 text-dark">Delete</button>
+                            <button class="btn btn-primary btn-sm mx-1 text-dark" @click="editBlog(con.id)">Edit</button>
+                            <button class="btn btn-danger btn-sm mx-1 text-dark" @click="modalDelete(con.id)">Delete</button>
                         </td>
                     </tr>
                     </tbody>
@@ -86,12 +86,15 @@
     import Header from './dash-header.vue'
     import Footer from './dash-footer.vue'
     import BlogService from '../../service/blog.service.js'
-     import moment from 'moment'
+import moment from 'moment'
+  import Swal from "sweetalert2";
+
     export default {
       name: "Elfrique",
       components:{
       'dash-header': Header,
-      'dash-footer': Footer,
+          'dash-footer': Footer,
+      Swal
       },
       data() {
         return {
@@ -123,7 +126,35 @@
                 if (value) {
                      return moment(String(value)).format('MM/DD/YYYY hh:mm')
           }
-    }
+    },
+
+            editBlog(id) {
+                this.$router.push(`/superadmin/editBlog/${id}`);
+            },
+
+        modalDelete(id) {
+        Swal.fire({
+          title: "Do you want to Delete this Blog?",
+          showDenyButton: true,
+          confirmButtonText: "Yes",
+          denyButtonText: "No",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            BlogService.deleteBlog(id).then((res) => {
+              Swal.fire("Blog Deleted Successfully", "", "success");
+            BlogService.getBlogs().then(response => {
+                this.Content = response.data.blogs;
+                console.log(this.Content);
+            })
+            }).catch((err) => {
+            Swal.fire(err.response.data.message, "error");
+            })
+          } else if (result.isDenied) {
+            Swal.fire("Could not Delete Contest", "", "info");
+          }
+        });
+      },
+
       },
       mounted(){
         window.scrollTo(0,0)

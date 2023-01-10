@@ -129,6 +129,10 @@ class VoteService {
   updateVotingContest(id, payload) {
     return axios.patch(API_URL + "updateVote/" + id, payload, { headers: spHeader() })
   }
+
+  deleteVoteContest(id) {
+    return axios.delete(API_URL + "/deleteVoteContest/" + id, { headers: spHeader() })
+  }
 }
 
 export default new VoteService();
