@@ -497,7 +497,7 @@
                 </li>
             </ul>
         </li>-->
-        <!--evisa--
+        <!--evisa-->
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#e-visa" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-travel.png" /><span></span>E-Visa<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="e-visa" class="nav-content collapse" data-bs-parent="#sidebar-nav">
@@ -517,7 +517,7 @@
                     </router-link>
                 </li>
             </ul>
-        </li>-->
+        </li>
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#url-nav" data-bs-toggle="collapse" href="#"> <img src="@/assets/images/menu-url.png" /><span></span>Short URLs<i class="bi bi-chevron-down ms-auto"></i> </a>
             <ul id="url-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">

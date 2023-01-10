@@ -125,7 +125,8 @@ import vendorService from '../../service/vendor.service'
         created() {
      if (!this.loggedIn) {
       this.$router.push('/login');
-    }
+            }
+    
 
     vendorService.getAllSellerJob().then
     (
