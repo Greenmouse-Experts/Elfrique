@@ -15,30 +15,30 @@
         <div class="row">
           <div class="col-md-4">
             <div class="img-area">
-              <img :src="eventContent.image" />
+              <img :src="eventContent.eventform.image" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="text-title-area">
-              <h1>{{ eventContent.title ?? "" }}</h1>
+              <h1>{{ eventContent.eventform.title ?? "" }}</h1>
               <small
                 >Organised by :
-                <span
+                <!----<span
                   >{{ eventContent.adminuser.profile.firstname }}
                   {{ eventContent.adminuser.profile.lastname }}</span
-                ></small
+                >--></small
               >
               <div class="details-header">
                 <h5>Start</h5>
                 <p>
                   <i class="bi bi-calendar3"></i> :
-                  {{ format_date(eventContent.startdate) }}
+                  {{ format_date(eventContent.eventform.startdate) }}
                 </p>
                 <!-- <p><i class="bi bi-alarm"></i> : 00:01</p> -->
                 <h5>End</h5>
                 <p>
                   <i class="bi bi-calendar3"></i> :
-                  {{ format_date(eventContent.closedate) }}
+                  {{ format_date(eventContent.eventform.closedate) }}
                 </p>
                 <!-- <p><i class="bi bi-alarm"></i> : 23:99</p> -->
               </div>
@@ -47,43 +47,43 @@
                 <ShareNetwork
                   network="facebook"
                   :url="currentUrl"
-                  :title="eventContent.title"
-                  :description="eventContent.description"
-                  :quote="eventContent.title"
-                  :hashtags="'Elfrique, Event, Job,' + eventContent.title"
+                  :title="eventContent.eventform.title"
+                  :description="eventContent.eventform.description"
+                  :quote="eventContent.eventform.$eventtitle"
+                  :hashtags="'Elfrique, Event, Job,' + eventContent.eventform.title"
                 >
                   <img src="@/assets/images/share-facebook.png" />
                 </ShareNetwork>
                 <ShareNetwork
                   network="whatsapp"
                   :url="currentUrl"
-                  :title="eventContent.title"
-                  :description="eventContent.description"
+                  :title="eventContent.eventform.title"
+                  :description="eventContent.eventform.description"
                 >
                   <img src="@/assets/images/share-whatsapp.png" />
                 </ShareNetwork>
                 <ShareNetwork
                   network="telegram"
                   :url="currentUrl"
-                  :title="eventContent.title"
-                  :description="eventContent.description"
+                  :title="eventContent.eventform.title"
+                  :description="eventContent.eventform.description"
                 >
                   <img src="@/assets/images/share-telegram.png" />
                 </ShareNetwork>
                 <ShareNetwork
                   network="twitter"
                   :url="currentUrl"
-                  :title="eventContent.title"
+                  :title="eventContent.eventform.title"
                   twitter-user="@elfrique"
-                  :hashtags="'Elfrique, Event, Form,' + eventContent.title"
+                  :hashtags="'Elfrique, Event, Form,' + eventContent.eventform.title"
                 >
                   <img src="@/assets/images/share-twitter.png" />
                 </ShareNetwork>
                 <ShareNetwork
                   network="email"
                   :url="currentUrl"
-                  :title="eventContent.title"
-                  :description="eventContent.description"
+                  :title="eventContent.eventform.title"
+                  :description="eventContent.eventform.description"
                 >
                   <img src="@/assets/images/share-email.png" />
                 </ShareNetwork>
@@ -201,7 +201,7 @@
                               style="text-transform: capitalize"
                             >
                               <i class="bi bi-credit-card-fill"></i> :
-                              {{ eventContent.type }}
+                              {{ eventContent.eventform.type }}
                             </p>
                             <h6>Enter the following details to continue</h6>
                           </div>
@@ -234,7 +234,7 @@
                           </div>
                           <div class="col-lg-12 text-center">
                             <button
-                              v-if="eventContent.type == 'paid'"
+                              v-if="eventContent.eventform.type == 'paid'"
                               @click="proceedPay()"
                             >
                               Proceed
@@ -396,7 +396,7 @@
                 </div>
               </div>
             </div> -->
-              <!--Organiser-->
+              <!--Organiser--
               <div
                 class="tab-pane fade"
                 id="pills-organ"
@@ -421,7 +421,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>-->
               <!--Event Details-->
               <div
                 class="tab-pane fade"
@@ -437,10 +437,9 @@
                         style="
                           max-width: 524px;
                           font-weight: 400;
-                          font-size: 16px;
-                        "
-                      >
-                        {{ eventContent.description }}
+                          font-size: 16px;"
+                          >
+                        {{ eventContent.eventform.description }}
                       </h6>
                     </div>
                   </div>
@@ -516,7 +515,8 @@
   import moment from "moment";
   import axios from "axios";
   import LoaderVue from "./components/Loader.vue";
-  import transactionService from "../service/transaction.service";
+import transactionService from "../service/transaction.service";
+import AuthService from "../service/auth.service";
   import Swal from "sweetalert2";
 
   export default {
@@ -600,14 +600,19 @@
       EventService.getSingleForm(this.$route.params.id).then((response) => {
         this.eventContent = response.data.form;
 
-        this.admin_id = response.data.form.adminuserId;
-        this.method = response.data.form.paymentgateway;
-        this.description = response.data.form.description;
-        this.endDate = response.data.form.closedate;
+        this.admin_id = response.data.form.eventform.adminuserId;
+        this.method = response.data.form.eventform.paymentgateway;
+        this.description = response.data.form.eventform.description;
+        this.endDate = response.data.form.eventform.closedate;
         this.getCountdown();
         //console.log(response.data.form);
         this.loading = false;
       });
+
+      AuthService.getOrganizers().then((response) => {
+        console.log(response.data);
+      });
+
       this.convert_price();
       const script = document.createElement("script");
       script.src =

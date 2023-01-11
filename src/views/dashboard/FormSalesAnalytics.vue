@@ -50,7 +50,7 @@
                         <div class="row">
                             <div class="col-lg-12 mt-4">
                                 <select name="gateway" id="gateway" v-model="formId">
-                                    <option v-for="item in forms" :key="item" :value="item.id" >{{item.title}}</option>
+                                    <option v-for="item in forms" :key="item" :value="item.formSchemas.length > 0 ? item.formSchemas[0].id : 1" >{{item.title}}</option>
                                 </select>
                             </div>
                             <div class="col-lg-12 mt-4">
@@ -98,11 +98,11 @@
                                 <tr v-for="(item, i) in ticketBooked" :key="item.id" v-else>
                                   <th scope="row">{{i + 1}}</th>
                                   <th>{{item.id}}</th>
-                                  <td>{{item.title}}</td>
-                                  <td>{{item.description}}</td>
-                                  <td>{{item.currency}} {{item.fee}}</td>
-                                  <td>{{item.type}}</td>
-                                  <td>{{item.paymentgateway}}</td>
+                                  <td>{{item.eventform.title}}</td>
+                                  <td>{{item.eventform.description}}</td>
+                                  <td>{{item.eventform.fee === '' ? 'Free' : `NGN ${item.eventform.fee}`}}</td>
+                                  <td style="text-transform: capitalize">{{item.eventform.type}}</td>
+                                  <td>{{item.eventform.paymentgateway === '' ? 'N/A' : item.eventform.paymentgateway}}</td>
                                 </tr>
                               </tbody>
                         </table>
@@ -164,7 +164,7 @@ import formService from '../../service/form.service'
       this.$router.push('/login');
     }
 
-    formService.allFormForAdmin().then
+    formService.getFormsUser().then
     (
         response => {
             this.forms = response.data.form;

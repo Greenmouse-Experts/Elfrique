@@ -43,19 +43,19 @@
                 <tbody v-for="con in content" :key="con.id">
                   <tr>
                     <td>{{ con.id }}</td>
-                    <td>{{ con.title }}</td>
+                    <td>{{ con.eventform.title }}</td>
                     <td>
                       <img
-                        :src="con.image"
+                        :src="con.eventform.image"
                         alt="event-pics"
                         contain
                         height="100"
                         width="150"
                       />
                     </td>
-                    <td style="text-transform: capitalize">{{ con.type }}</td>
-                    <td>{{ format_date(con.startdate) }}</td>
-                    <td>{{ format_date(con.closedate) }}</td>
+                    <td style="text-transform: capitalize">{{ con.eventform.type }}</td>
+                    <td>{{ format_date(con.eventform.startdate) }}</td>
+                    <td>{{ format_date(con.eventform.closedate) }}</td>
                     <!-- <td></td>
                         <td></td>
                         <td></td> -->
