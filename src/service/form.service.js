@@ -25,7 +25,20 @@ class EventForm {
 
   getForms() {
     //forms by user
-    return axios.get(API_URL + "getAllForm", { headers: authHeader() });
+    return axios.get(API_URL + "getAllForms", { headers: authHeader() });
+  }
+
+  getFormsUser() {
+    //forms by user
+    return axios.get(API_URL + "getAllFormByUser", { headers: authHeader() });
+  }
+
+  buildForm(id, payload) {
+    return axios.post(API_URL + "buildForm/" + id, payload, { headers: authHeader2() });
+  }
+
+  postResult(eventId, formId, payload) {
+    return axios.post(API_URL + "recordResult/" + eventId + "/" + formId, payload, { headers: authHeader2() })
   }
 
   getContests() {

@@ -249,6 +249,7 @@
                           <div class="col-lg-12 text-center d-grid gap-2">
                             <button
                               class="btn btn-buy-ticket btn-block"
+                              style="background-color: #4c8f35"
                               type="submit"
                               :disabled="totalPrice === 0"
                               @click="showModal"
@@ -261,7 +262,7 @@
                       <div class="card" v-else>
                         <form
                           @submit.prevent="
-                            buyTicket(event.paymentgateway, totalPrice)
+                            buyTicket(selectedGateway, totalPrice)
                           "
                         >
                           <div class="card-body">
@@ -382,7 +383,7 @@
                             <div class="row mt-4">
                               <PaymentGateway
                                 radioStyle
-                                :selected="selectedGateway"
+                                :selected="paymentGateway"
                                 :gateways="paymentMethods"
                                 v-model="selectedGateway"
                                 v-if="currency_symbol === 'NGN'"
@@ -618,13 +619,13 @@
                         </div>
                         <div class="px-5 text-center">
                           <button
-                            class="btn text-white"
+                            class="btn btn-success text-white"
                             type="submit"
                             style="
                               border: 0px none;
                               margin: 10px;
                               margin-top: 3px;
-                              background: #bfddb4;
+                              background: rgb(67 174 74);
                               margin-top: 12px;
                             "
                           >
@@ -714,6 +715,7 @@
         toRate: "",
         salesEnd: false,
         formDatas: "",
+        paymentGateway: "",
         qutty: "",
         email: "",
         admin_id: "",
@@ -873,9 +875,9 @@
           const indexItem = this.paymentMethods.indexOf(
             this.event.paymentgateway
           );
-          this.selectedGateway = this.event.paymentgateway;
+          this.paymentGateway = this.event.paymentgateway;
           this.paymentMethods.splice(indexItem, 1);
-          this.selectedGateway = this.event.paymentgateway;
+          this.selectedGateway = this.paymentGateway;
           this.isLoading = false;
         });
       },
@@ -1143,7 +1145,7 @@
                 );
                 //this.$router.push("/fill-form/" + id);
               },
-              onclose: () => this.onclose(),
+              onclose: () => paymentParams.close(),
             });
 
             // window.FlutterwaveCheckout(paymentParams);

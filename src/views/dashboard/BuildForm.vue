@@ -26,6 +26,7 @@
           <div
             class="start-vote-details alert alert-dismissible fade show"
             role="alert"
+            v-if="!display"
           >
             Select the form name to continue.
             <button
@@ -40,7 +41,7 @@
             class="alert-danger alert alert-dismissible fade show"
             role="alert"
           >
-            {{ error }}}}
+            {{ error }}
             <button
               type="button"
               class="btn-close"
@@ -64,37 +65,55 @@
 
           <form @submit.prevent="buildForm">
             <div class="row">
-              <div class="col-lg-12 mt-4">
+              <div class="col-lg-12 mt-4" v-if="!display">
                 <label for="vote option">Event Form Name</label>
-                <select
-                  v-model="formId"
-                  name="gateway"
-                  @input="changeForm($event)"
-                  id="gateway"
-                  aria-placeholder="Select your event name"
-                  required
-                >
-                  <option value="select vote option" disabled>
-                    Select Your Form Option
-                  </option>
-                  <option
-                    :value="con.id"
-                    v-for="con in selectedContent"
-                    :key="con.id"
+                <form @submit.prevent="changeForm">
+                  <select
+                    v-model="formId"
+                    name="gateway"
+                    id="gateway"
+                    aria-placeholder="Select your event name"
+                    required
                   >
-                    {{ con.title }}
-                  </option>
-                </select>
+                    <option value="select vote option" disabled>
+                      Select Your Form Option
+                    </option>
+                    <option
+                      v-for="con in selectedContent"
+                      :key="con.id"
+                      :value="con.id"
+                    >
+                      {{ con.title }}
+                    </option>
+                  </select>
+                  <div class="col-lg-12 mt-4">
+                    <button type="submit">Start Form Builder</button>
+                  </div>
+                </form>
               </div>
             </div>
 
-            <div class="row justify-content-center" style="margin-top: 2%">
+            <div
+              class="row justify-content-center"
+              v-if="display"
+              style="margin-top: 2%"
+            >
               <div class="col-lg-11 start-voting-inner-div">
                 <div class="row">
-                  <div id="fb-editor" v-if="formId"></div>
-                  <button type="button" v-if="formId" @click="buildForm">
-                    Build Form
-                  </button>
+                  <div id="fb-editor" style="height: 600px"></div>
+                  <div class="col-lg-6 p-2">
+                    <button type="button" @click="buildForm">Build Form</button>
+                  </div>
+                  <div class="col-lg-6 p-2">
+                    <button
+                      type="button"
+                      class="text-black"
+                      style="background-color: #e1e1e1"
+                      @click="display = false"
+                    >
+                      Cancel Form
+                    </button>
+                  </div>
 
                   <!--<form @submit.prevent="submitForm($event)"><div id="render-Container"></div></form>-->
                   <!-- <section v-if="formId"  class="buildForm mt-5">
@@ -220,97 +239,98 @@
 </template>
 <style scoped src="@/assets/css/dashStyle.css"></style>
 <script>
-   import Header from './dash-header.vue'
-    import Footer from './dash-footer.vue'
-    import EventService from '../../service/form.service' ;
+  import Header from "./dash-header.vue";
+  import Footer from "./dash-footer.vue";
+  import EventService from "../../service/form.service";
+  import formService from "../../service/form.service";
+  import Swal from "sweetalert2";
 
-    export default {
-      name: "Elfrique",
-      components:{
-      'dash-header': Header,
-      'dash-footer': Footer,
-      },
-      data(){
-          return{
-            configuration: {},
-              Content:{
-                    title:'',
-                    description:'',
-                    startdate:'',
-                    closedate:'',
-                    timezone:'Africa/Lagos',
-                    type:'',
-                    fee:'',
-                },
-                file: '',
-                error: '',
-                editor: null,
-                loading: false,
-                formCreated: false,
-                formId: '',
-                resultState: [],
-                message: '',
-                selectedContent: '',
-                numberOfOption: 2,
-                QuestionForm: [
-                    {
-                        question: '',
-                        type: '',
-                        options: [],
-                    }
-                ],
-
-
-            }
+  export default {
+    name: "Elfrique",
+    components: {
+      "dash-header": Header,
+      "dash-footer": Footer,
+      Swal,
+    },
+    data() {
+      return {
+        configuration: {},
+        Content: {
+          title: "",
+          description: "",
+          startdate: "",
+          closedate: "",
+          timezone: "Africa/Lagos",
+          type: "",
+          fee: "",
         },
+        file: "",
+        error: "",
+        editor: null,
+        loading: false,
+        display: false,
+        formCreated: false,
+        formId: "",
+        resultState: [],
+        message: "",
+        selectedContent: "",
+        numberOfOption: 2,
+        QuestionForm: [
+          {
+            question: "",
+            type: "",
+            options: [],
+          },
+        ],
+        formData: [],
+      };
+    },
 
     computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
+      loggedIn() {
+        return this.$store.state.auth.status.loggedIn;
+      },
     },
 
+    created() {
+      if (!this.loggedIn) {
+        this.$router.push("/login");
+      }
 
-  },
-
-  created() {
-
-    if (!this.loggedIn) {
-      this.$router.push('/login');
-        }
-
-    EventService.getForms().then
-    (
-        response => {
-            this.selectedContent = response.data.form;
-        }
-    )
+      EventService.getFormsUser().then((response) => {
+        this.selectedContent = response.data.form;
+      });
     },
 
-    methods:{
-        changeForm(value) {
-            setTimeout(function () {
-            this.editor = $("#fb-editor").formBuilder();
-            }, 1000);
-        },
+    methods: {
+      changeForm() {
+        this.display = true;
+        setTimeout(function () {
+          this.editor = $("#fb-editor").formBuilder();
+        }, 1000);
+      },
 
-        buildForm() {
-            this.renderForm();
-            setTimeout(function () {
-                        const result = this.editor.actions.save();
-                        console.log("result:", JSON.stringify(result));
-                        this.resultState = result;
-            }, 1000);
-        },
+      buildForm() {
+        let formPaylod;
+        setTimeout(function () {
+          const result = this.editor.actions.save();
+          formPaylod = { "formData": JSON.stringify(result) };
+        }, 10);
+        
+        setTimeout(() => {
+          this.formData = formPaylod;
+          if (this.display) {
+            formService.buildForm(this.formId, this.formData).then((res) => {
+              Swal.fire(res.data.message, "", "success");
+              this.formData = [];
+              this.formId = "";
+              this.display = false;
+            });
+          }
+        }, 1000);
+      },
 
-        renderForm() {
-            setTimeout(function () {
-                const formRenderOptions = {formData: this.resultState};
-                        $("#render-Container").formRender(formRenderOptions);
-            }, 3000);
-        },
-
-
-       /* buildForm(){
+      /* buildForm(){
             this.loading = true;
             console.log(this.QuestionForm)
 
@@ -346,43 +366,57 @@
 
         }, */
 
-        addQuestion(){
-            this.QuestionForm.push({
-                question: '',
-                type: '',
-                options: [],
-            });
-        },
+      addQuestion() {
+        this.QuestionForm.push({
+          question: "",
+          type: "",
+          options: [],
+        });
+      },
 
-        addOption(){
-            this.numberOfOption++;
-        },
+      addOption() {
+        this.numberOfOption++;
+      },
 
-
-        handleFileUpload(){
+      handleFileUpload() {
         this.file = this.$refs.file.files[0];
-      }
-     },
-      mounted(){
-        window.scrollTo(0,0)
+      },
+    },
+    mounted() {
+      window.scrollTo(0, 0);
 
-        let externalScriptOne = document.createElement('script')
-        let externalScriptTwo = document.createElement('script')
-        let externalScriptThree = document.createElement('script')
-        let externalScriptFour = document.createElement('script')
-        let externalScriptFive = document.createElement('script');
+      let externalScriptOne = document.createElement("script");
+      let externalScriptTwo = document.createElement("script");
+      let externalScriptThree = document.createElement("script");
+      let externalScriptFour = document.createElement("script");
+      let externalScriptFive = document.createElement("script");
 
-        externalScriptOne.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js')
-        externalScriptTwo.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js')
-        externalScriptThree.setAttribute('src', 'https://formbuilder.online/assets/js/form-builder.min.js')
-        externalScriptFour.setAttribute('src', 'https://cdn.statically.io/gh/NathTimi/scripts/main/form.js')
-        externalScriptFive.setAttribute('src', 'https://formbuilder.online/assets/js/form-render.min.js')
+      externalScriptOne.setAttribute(
+        "src",
+        "https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"
+      );
+      externalScriptTwo.setAttribute(
+        "src",
+        "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"
+      );
+      externalScriptThree.setAttribute(
+        "src",
+        "https://formbuilder.online/assets/js/form-builder.min.js"
+      );
+      externalScriptFour.setAttribute(
+        "src",
+        "https://cdn.statically.io/gh/NathTimi/scripts/main/form.js"
+      );
+      externalScriptFive.setAttribute(
+        "src",
+        "https://formbuilder.online/assets/js/form-render.min.js"
+      );
 
-        document.head.appendChild(externalScriptOne)
-        document.head.appendChild(externalScriptTwo)
-        document.head.appendChild(externalScriptThree)
-        document.head.appendChild(externalScriptFour)
-        document.head.appendChild(externalScriptFive)
-      }
-    }
+      document.head.appendChild(externalScriptOne);
+      document.head.appendChild(externalScriptTwo);
+      document.head.appendChild(externalScriptThree);
+      document.head.appendChild(externalScriptFour);
+      document.head.appendChild(externalScriptFive);
+    },
+  };
 </script>

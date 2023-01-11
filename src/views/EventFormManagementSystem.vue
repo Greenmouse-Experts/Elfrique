@@ -50,22 +50,22 @@
       <div class="row">
         <div class="col-md-3 py-2" v-for="con in eventContent" :key="con.id">
           <div class="card">
-            <img :src="con.image" class="card-img-top" />
+            <img :src="con.eventform.image" class="card-img-top" />
             <div class="card-body">
-              <p class="card-text main-text" :title="con.title">
-                <i class="bi bi-award-fill"></i> : {{ con.title }}
+              <p class="card-text main-text" :title="con.eventform.title">
+                <i class="bi bi-award-fill"></i> : {{ con.eventform.title }}
               </p>
               <p class="card-text card-text-after">
-                <i class="bi bi-credit-card-fill"></i> : {{ con.type }}
+                <i class="bi bi-credit-card-fill"></i> : {{ con.eventform.type }}
               </p>
               <p class="card-text card-text-after d-flex">
                 <span class="d-flex">
                 <i class="bi bi-calendar3"></i> <span class="mx-1">:</span>
                 </span>
                 <span class="d-flex">Start({{
-                  reFormatDate(con.startdate)
+                  reFormatDate(con.eventform.startdate)
                 }})<br />
-                End({{ reFormatDate(con.closedate) }})
+                End({{ reFormatDate(con.eventform.closedate) }})
               </span>
               </p>
               <router-link :to="'/event-form-content/' + con.id" class="routers"
@@ -130,7 +130,7 @@
     },
 
     created() {
-      EventService.allForms().then((response) => {
+      EventService.getForms().then((response) => {
         this.eventContent = response.data.form;
         this.isLoading = false;
         console.log(this.eventContent);
